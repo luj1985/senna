@@ -7,6 +7,7 @@
     (body
      {:font-family "Helvetica Neue"
       :font-size   "16px"
+      :padding "16px"
       :line-height 1.5}))
   [:#car {
     :fill "none"
