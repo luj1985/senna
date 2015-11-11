@@ -1,0 +1,4 @@
+{:require  [senna.app]
+ :init-fns [senna.app/init]
+ :compiler-options {:asset-path "js/app.out" 
+                    :externs ["externs/svg.js"]}}
