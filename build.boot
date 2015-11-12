@@ -35,7 +35,9 @@
   identity)
 
 (deftask development []
-  (task-options! cljs {:optimizations :none :source-map true}
+  (task-options! cljs {:optimizations :none 
+                       :source-map true 
+                      :pretty-print true}
                  reload {:on-jsload 'senna.app/init})
   identity)
 
