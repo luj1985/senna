@@ -1,43 +1,36 @@
 (ns senna.styles
-  (:require [garden.def :refer [defrule defstyles]]
-            [garden.stylesheet :refer [rule]]))
+  (:require 
+    [garden.core :refer [css]]
+    [garden.def :refer [defrule defstyles]]
+    [garden.stylesheet :refer [rule]]
+    [garden.units :as u :refer [px pt]]
+    [garden.color :as color :refer [hsl rgb]]))
 
 (defstyles screen
-  (let [body (rule :body)]
-    (body
-     {:font-family "Helvetica Neue"
-      :font-size   "16px"
-      :padding "8px"
-      :margin 0
-      :line-height 1.5}))
-  [:.dashboard {
-    :display "inline-block"
-    :line-height "50px"
-    :width "150px" }]
+  [:body {:font-family "Helvetica Neue"
+          :font-size (px 16)
+          :padding (px 8)
+          :margin 0
+          :line-height 1.5}]
 
-  [:.rounds {
-    :display "inline-block"
-    :line-height "50px"
-    :width "150px" }]
+  [:.dashboard :.rounds { :display :inline-block
+                          :line-height (px 50)
+                          :width (px 150) }]
 
-  [:#statusbar {
-    :position "fixed"
-    :top 0
-    :width "100%" }]
+  [:#statusbar {:position :fixed
+                :top 0
+                :width "100%" }]
 
-  [:#container {
-    :zoom 0.5
-    :margin-top "50px"
-    :background-image "url(track.jpeg)"
-    :background-position "0 20px"
-    :background-repeat "no-repeat"}]
+  [:#container {:zoom 0.5
+                :margin-top (px 50)
+                :background-image "url(track.jpeg)"
+                :background-position "0 20px"
+                :background-repeat "no-repeat"}]
 
-  [:#car {
-    :fill "white"
-    :stroke "#000"
-    :stroke-width "1px" }]
+  [:#car {:fill :none
+          :stroke (rgb 0 0 0)
+          :stroke-width (px 1) }]
 
-  [:#track {
-    :fill "none"
-    :stroke "none"
-    :stroke-width "1px" }])
+  [:#track {:fill :none
+            :stroke :none
+            :stroke-width (px 1) }])
