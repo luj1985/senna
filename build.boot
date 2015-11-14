@@ -6,6 +6,7 @@
                  [adzerk/boot-reload        "0.4.1"      :scope "test"]
                  [pandeiro/boot-http        "0.6.3"      :scope "test"]
                  [org.clojure/clojurescript "1.7.122"]
+                 [org.clojure/core.async "0.2.374"]
                  [reagent "0.5.0"]
                  [org.martinklepsch/boot-garden "1.2.5-3" :scope "test"]])
 
