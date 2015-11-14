@@ -1,5 +1,5 @@
 (ns senna.styles
-  (:require 
+  (:require
     [garden.core :refer [css]]
     [garden.def :refer [defrule defstyles]]
     [garden.stylesheet :refer [rule]]
@@ -23,7 +23,7 @@
 
   [:#container {:zoom 0.5
                 :margin-top (px 50)
-                :background-image "url(track.jpeg)"
+                :background-image "url(../img/game/track.jpg)"
                 :background-position "0 20px"
                 :background-repeat "no-repeat"}]
 

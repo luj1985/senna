@@ -55,7 +55,7 @@
         [:g {:id "car"
              :transform (str "translate(" x "," y ") rotate(" r ",30,30)")
              :dangerouslySetInnerHTML {
-             :__html "<image xlink:href=\"css/car.png\" width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
+             :__html "<image xlink:href=\"../img/game/car.png\" width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
 
 (defn track-spirit []
   [:path {:id "track"
@@ -76,7 +76,7 @@
     [car-spirit]])
 
 (defn init[]
-  (r/render-component [game-board] 
+  (r/render-component [game-board]
     (.getElementById js/document "container"))
   (r/render-component [score-board]
     (.getElementById js/document "statusbar")))

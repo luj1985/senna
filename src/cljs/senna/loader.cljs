@@ -6,18 +6,17 @@
   (:import [goog.net ImageLoader EventType]
            [goog.events.EventType]))
 
-
 (defn preload-images [resources]
   (let [progress (async/chan)
         loader (ImageLoader.)]
     (go
       (listen loader
               goog.events.EventType.LOAD
-              #(async/put! progress "load"))
+              #(async/put! progress :load))
       (listen-once loader
                    goog.net.EventType.COMPLETE
-                   #(async/put! progress "complete"))
-      (doseq [img resources]
-        (.addImage loader img img))
+                   #(async/put! progress :complete))
+      (doseq [[id img] resources]
+        (.addImage loader id img))
       (.start loader))
     progress))
