@@ -45,5 +45,6 @@
       (while true
         (case (<! progress)
           :load (swap! progress-state inc)
-          :complete (do (<! (async/timeout 2000))
+          ;;; for debug purpose, add delay to see the loading page
+          :complete (do (<! (async/timeout 1000))
                         (game/init)))))))
