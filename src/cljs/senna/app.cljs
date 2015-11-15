@@ -47,4 +47,4 @@
           :load (swap! progress-state inc)
           ;;; for debug purpose, add delay to see the loading page
           :complete (do (<! (async/timeout 1000))
-                        (game/init)))))))
+                        #_(game/init)))))))
