@@ -37,8 +37,6 @@
                 :friend-circle "img/social/friend-circle.svg"
                 })
 
-(defn loading []
-  [:.progress-bar])
 
 (defn init []
   ;; May need to handle timeout issues
@@ -47,4 +45,5 @@
       (while true
         (case (<! progress)
           :load (swap! progress-state inc)
-          :complete (game/init))))))
+          :complete (do (<! (async/timeout 2000))
+                        (game/init)))))))

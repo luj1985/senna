@@ -73,10 +73,13 @@
 (defn game-board []
   [:svg {:id "game-board" :width 780 :height 1221}
     [track-spirit]
-    [car-spirit]])
+   [car-spirit]])
+
+(defn game-container []
+  [:div#container
+   [score-board]
+   [game-board]])
 
 (defn init[]
-  (r/render-component [game-board]
-    (.getElementById js/document "container"))
-  (r/render-component [score-board]
-    (.getElementById js/document "statusbar")))
+  (r/render-component [game-container]
+    (.querySelector js/document "body")))
