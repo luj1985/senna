@@ -38,6 +38,7 @@
 
 (defn- scene []
   [:div#scene
+   [game/score-board]
    [:div.main
     [game/game-board]]
 

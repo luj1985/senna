@@ -102,6 +102,54 @@
             :width (percent 100)
             :overflow :hidden}
 
+   [:.score-board {:position :fixed
+                   :top 0
+                   :z-index 2
+                   :width (percent 100)}
+    [:.dashboard {:background-image "url(../img/game/dashboard.png)"
+                  :background-size "100% 100%"
+                  :display :inline-block
+                  :float :left
+                  :width (px 80)
+                  :height (px 80)}]
+
+    [:.pointer {:background-image "url(../img/game/pointer.svg)"
+                :background-size "100% 100%"
+                :position :absolute
+                :transform "rotate(-110deg)"
+                :height (px 80)
+                :width (px 80)}]
+
+    [:.rounds {:display :inline-block
+               :min-width (px 150)}]
+
+    [:.prefix {:background-image "url(../img/game/round.svg)"
+               :background-size "auto 25px"
+               :background-repeat :no-repeat
+               :float :left
+               :margin-top (px 30)
+               :display :inline-block
+               :height (px 50)
+               :width (px 105)}]
+
+    [:.round {:background-size "auto 38px"
+              :background-repeat :no-repeat
+              :margin-top (px 18)
+              :width (px 50)
+              :height (px 50)
+              :display :inline-block}]
+
+    [:.volume {:background-image "url(../img/game/volume.svg)"
+               :background-size "30px 30px"
+               :margin-top (px 25)
+               :margin-right (px 20)
+               :float :right
+               :display :inline-block
+               :height (px 30)
+               :width (px 30)}]
+
+    ]
+
    [:.main {:background-image "url(../img/game/track.png),
                                url(../img/game/background.jpg)"
             :background-size "100% auto"

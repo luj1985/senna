@@ -4,7 +4,7 @@
 ;;; TODO: calculate the initial state from the SVG path
 (def app-state (r/atom {:transform {:x 57.3749 :y 342.897 :r 0}
                         :distance 0
-                        :rounds 0
+                        :rounds 1
                         :rotate 0}))
 
 ;;; TODO: read from file ?
@@ -46,9 +46,9 @@
                                :y (- (.-y to) 30)
                                :r (rotate-along-path from to)}
                    :distance new-distance
-                   :rounds (js/parseInt (/ new-distance total)))))
+                   :rounds (.ceil js/Math (/ new-distance total)))))
 
-(defn car-spirit [l t]
+(defn- car-spirit [l t]
   (fn []
     (js/requestAnimationFrame #(swap! app-state move-forward))
       (let [{:keys [x y r]} (:transform @app-state)]
@@ -58,15 +58,10 @@
              :__html "<image xlink:href=\"../img/game/car.png\"
 width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
 
-(defn track-spirit [l t]
+(defn- track-spirit [l t]
   [:path {:id "track"
           :transform (str "translate(" l "," t ")")
           :d track-path}])
-
-(defn- score-board []
-  [:div {:id "score-board"}
-    [:div.dashboard (str "Speed: " (.toFixed @speed 2)) ]
-    [:div.rounds (str "Rounds: " (:rounds @app-state))]])
 
 (defn game-board []
   (let [w (.-innerWidth js/window)
@@ -85,3 +80,37 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
            :height "100%"}
      [track-spirit l t]
      [car-spirit l t]]))
+
+(defn- range-map [[d1 d2 :as domain] [r1 r2 :as range]]
+  (let [step (/ (- r2 r1) (- d2 d1))]
+    (fn [d]
+      (cond
+        (> d d2) r2
+        (< d d1) r1
+        :else (+ r1 (* d step))))))
+
+(defn- speed-dashboard []
+  (let [f (range-map [0 12] [-110 110])
+        deg (f @speed)]
+    [:div.dashboard
+     [:span.pointer {:style {:transform (str "rotate(" deg "deg)")}}]]))
+
+(defn- round-counter [n]
+  (if (#{1,2,3} n)
+    (str "url(../img/game/" n ".svg)")
+    "url(../img/game/3.svg)"))
+
+(defn- round-dashboard []
+  (let [img (round-counter (:rounds @app-state))]
+    [:div.rounds
+     [:span.prefix]
+     [:span.round {:style {:background-image img}}]]))
+
+(defn- volume-control []
+  [:div.volume])
+
+(defn score-board []
+  [:div.score-board
+   [speed-dashboard]
+   [round-dashboard]
+   [volume-control]])
