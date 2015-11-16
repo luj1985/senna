@@ -6,7 +6,6 @@
    [senna.game :as game])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
-(def progress-state (r/atom 0))
 
 ;; TODO: use macro to read file name at compile time
 (def resources {:round   "img/game/round.svg"
@@ -38,13 +37,9 @@
                 })
 
 
+
 (defn init []
-  ;; May need to handle timeout issues
-  (let [progress (loader/preload-images resources)]
+  (let [loader (loader/init resources)]
     (go
-      (while true
-        (case (<! progress)
-          :load (swap! progress-state inc)
-          ;;; for debug purpose, add delay to see the loading page
-          :complete (do (<! (async/timeout 1000))
-                        #_(game/init)))))))
+      _ (<! loader)
+      (game/init))))
