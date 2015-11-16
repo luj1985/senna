@@ -3,7 +3,7 @@
     [garden.core :refer [css]]
     [garden.def :refer [defrule defstyles]]
     [garden.selectors :as s :refer [defpseudoelement]]
-    [garden.stylesheet :refer [rule]]
+    [garden.stylesheet :refer [rule at-font-face]]
     [garden.units :as u :refer [px pt percent]]
     [garden.color :as color :refer [hsl rgb rgba]]))
 
@@ -88,6 +88,10 @@
 
 
 (defstyles screen
+
+  ["@font-face" {:font-family "UniDreamLED"
+                 :src "url('UnidreamLED.ttf') format('truetype')"}]
+
   [:body {:font-family "Helvetica Neue"
           :font-size (px 16)
           :padding 0
@@ -146,9 +150,19 @@
                :float :right
                :display :inline-block
                :height (px 30)
-               :width (px 30)}]
+               :width (px 30)}]]
 
-    ]
+   [:.timer {:position :absolute
+             :font-family "UniDreamLED"
+             :top (px 150)
+             :left (px 200)
+             :display :inline-block
+             :height (px 40)
+             :width (px 80)
+             :text-align :center
+             :font-size (px 30)
+             :transform "rotate(-13deg)"
+             :background-color :white}]
 
    [:.main {:background-image "url(../img/game/track.png),
                                url(../img/game/background.jpg)"

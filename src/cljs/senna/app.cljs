@@ -41,7 +41,7 @@
    [game/score-board]
    [:div.main
     [game/game-board]]
-
+   [game/game-control]
    [:div.dialog]])
 
 (defn init []

@@ -114,3 +114,22 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
    [speed-dashboard]
    [round-dashboard]
    [volume-control]])
+
+(defn- to-fixed [n]
+  (if (< n 10)
+    (str "0" n)
+    (str n)))
+
+(defn- to-time [n]
+  (let [mins (js/parseInt (/ n 60))
+        secs (mod n 60)]
+    (str (to-fixed mins) ":" (to-fixed secs))))
+
+
+(def time-usage (r/atom 0))
+
+;;; TODO: move to game start control logical
+(js/setInterval #(swap! time-usage inc) 1000)
+
+(defn game-control []
+  [:div.timer (to-time @time-usage) ])
