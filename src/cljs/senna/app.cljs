@@ -17,7 +17,7 @@
                 :dashboard "img/game/dashboard.png"
 
                 :car "img/game/car.png"
-                :track "img/game/track.jpg"
+                :track "img/game/track.png"
                 :background "img/game/background.jpg"
 
                 :got-it "img/rules/got-it.svg"
@@ -36,10 +36,15 @@
                 :friend-circle "img/social/friend-circle.svg"
                 })
 
+(defn- scene []
+  [:div#scene
+   [:div.main
+    [game/game-board]]
 
+   [:div.dialog]])
 
 (defn init []
   (let [loader (loader/init resources)]
     (go
       _ (<! loader)
-      (game/init))))
+      (r/render-component [scene] (.querySelector js/document "body")))))

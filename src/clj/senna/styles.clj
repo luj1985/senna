@@ -86,9 +86,6 @@
    loading-progress-bar])
 
 
-(def rule-page [])
-(def game-page [])
-(def result-page [])
 
 (defstyles screen
   [:body {:font-family "Helvetica Neue"
@@ -98,22 +95,23 @@
           :line-height 1.5}]
 
   loading-page
-  rule-page
-  game-page
-  result-page
 
-  [:.dashboard :.rounds { :display :inline-block
-                          :line-height (px 50)
-                          :width (px 150) }]
+  [:#scene {:position :fixed
+            :top 0
+            :bottom 0
+            :width (percent 100)
+            :overflow :hidden}
 
-  [:#statusbar {:position :fixed
-                :top 0
-                :width (percent 100) }]
+   [:.main {:background-image "url(../img/game/track.png),
+                               url(../img/game/background.jpg)"
+            :background-size "100% auto"
+            :background-repeat :no-repeat
+            :background-position "center center"
+            :position :relative
+            :height (percent 100)
+            }]
 
-  [:#container {:zoom 0.5
-                :background-image "url(../img/game/track.jpg)"
-                :background-position "0 70px"
-                :background-repeat :no-repeat}]
+   [:.dialog {:position :absolute}]]
 
   [:#car {:fill :none
           :stroke (rgb 0 0 0)
@@ -121,4 +119,4 @@
 
   [:#track {:fill :none
             :stroke :none
-            :stroke-width (px 1) }])
+            :stroke-width (px 3) }])
