@@ -178,7 +178,8 @@
             :height (percent 100)
             }]
 
-   [:.dialog {:position :absolute}]]
+   [:.dialog {:display :none}
+    [:&.show {:display :block}]]]
 
   [:#car {:fill :none
           :stroke (rgb 0 0 0)
@@ -191,10 +192,21 @@
             :width (percent 100)
             :height (percent 100)
             :background-color (rgba 0 0 0 0.8)}
-   [:p {:color :white
-        :font-size (px 16)
-        :padding (px 40)}]
-   [:.container {:position :relative
+   [:section {:color :white
+        :font-size "1em"
+        :margin 0
+        :padding (px 35)}
+
+    [:.container {:text-align :center}]
+
+    [:a.got-it {:display :inline-block
+                :height (px 50)
+                :width (px 100)
+                :margin-top (px 20)
+                :background-size "100% 100%"
+                :background-image "url(../img/rules/got-it.svg)"}]]
+
+   [:>.container {:position :relative
                  :height (percent 100)
                  :width (percent 100)
                  :background-image "url(../img/rules/rules.png)"

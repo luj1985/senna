@@ -64,13 +64,14 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
           :d track-path}])
 
 (defn game-board [l t s]
+  [:div.main
     ;;; The size of SVG path is smaller than its viewbox
-  [:svg {:id "game-board"
-         :width "100%"
-         :style {:zoom s}
-         :height "100%"}
-   [track-spirit l t]
-   [car-spirit l t]])
+   [:svg {:id "game-board"
+          :width "100%"
+          :style {:zoom s}
+          :height "100%"}
+    [track-spirit l t]
+    [car-spirit l t]]])
 
 (defn- range-map [[d1 d2 :as domain] [r1 r2 :as range]]
   (let [step (/ (- r2 r1) (- d2 d1))]
@@ -126,7 +127,7 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
 (defn ipad-control [l t s]
   [:div.ipad {:style {:zoom s
                       :top (str (+ 622 t) "px")
-                      :left (str (+ 190 t) "px")}}])
+                      :left (str (+ 188 t) "px")}}])
 
 
 (defn game-control [l t s]
