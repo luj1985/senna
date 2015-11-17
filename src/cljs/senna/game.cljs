@@ -122,6 +122,13 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
 ;;; TODO: move to game start control logical
 (js/setInterval #(swap! time-usage inc) 1000)
 
+
+(defn ipad-control [l t s]
+  [:div.ipad {:style {:zoom s
+                      :top (str (+ 622 t) "px")
+                      :left (str (+ 190 t) "px")}}])
+
+
 (defn game-control [l t s]
   [:div.timer {:style {:zoom s
                        :font-size "60px"

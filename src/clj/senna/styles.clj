@@ -162,6 +162,12 @@
              :text-align :center
              :transform "rotate(-14deg)"
              }]
+   [:.ipad {:position :absolute
+            :background-color :lightblue
+            :display :inline-block
+            :height (px 356)
+            :width (px 465)
+            }]
 
    [:.main {:background-image "url(../img/game/track.png),
                                url(../img/game/background.jpg)"

@@ -54,6 +54,7 @@
      [:div.main
       [game/game-board l t s]]
      [game/game-control l t s]
+     [game/ipad-control l t s]
    [:div.dialog]]))
 
 (defn init []
