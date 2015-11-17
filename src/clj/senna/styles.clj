@@ -184,6 +184,24 @@
           :stroke (rgb 0 0 0)
           :stroke-width (px 1) }]
 
+  [:#rules {:position :fixed
+            :z-index 4
+            :top 0
+            :left 0
+            :width (percent 100)
+            :height (percent 100)
+            :background-color (rgba 0 0 0 0.8)}
+   [:p {:color :white
+        :font-size (px 16)
+        :padding (px 40)}]
+   [:.container {:position :relative
+                 :height (percent 100)
+                 :width (percent 100)
+                 :background-image "url(../img/rules/rules.png)"
+                 :background-repeat :no-repeat
+                 :background-position "center center"
+                 :background-size "100% auto"}]]
+
   [:#track {:fill :none
             :stroke :none
             :stroke-width (px 3) }])

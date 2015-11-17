@@ -3,6 +3,7 @@
    [reagent.core :as r]
    [cljs.core.async :as async :refer [>! <! close!]]
    [senna.loader :as loader]
+   [senna.rules :as rules]
    [senna.game :as game])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
@@ -55,7 +56,8 @@
       [game/game-board l t s]]
      [game/game-control l t s]
      [game/ipad-control l t s]
-   [:div.dialog]]))
+     [:div.dialog
+      [rules/rules-page l t s]]]))
 
 (defn init []
   (let [loader (loader/init resources)]
