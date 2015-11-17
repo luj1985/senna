@@ -61,6 +61,9 @@
                                           transparent 66%,
                                           transparent)"}]])
 
+
+(defn rule-dialog [])
+
 (def loading-page
   [:#loading {:position :fixed
               :top 0
@@ -89,8 +92,8 @@
 
 (defstyles screen
 
-  ["@font-face" {:font-family "UniDreamLED"
-                 :src "url('UnidreamLED.ttf') format('truetype')"}]
+  [(at-font-face {:font-family "digital-7"
+                 :src "url('digital-7/digital-7 (mono).ttf') format('truetype')"})]
 
   [:body {:font-family "Helvetica Neue"
           :font-size (px 16)
@@ -153,16 +156,12 @@
                :width (px 30)}]]
 
    [:.timer {:position :absolute
-             :font-family "UniDreamLED"
-             :top (px 150)
-             :left (px 200)
+             :font-family "digital-7"
+             :background-color :transparent
              :display :inline-block
-             :height (px 40)
-             :width (px 80)
              :text-align :center
-             :font-size (px 30)
-             :transform "rotate(-13deg)"
-             :background-color :white}]
+             :transform "rotate(-14deg)"
+             }]
 
    [:.main {:background-image "url(../img/game/track.png),
                                url(../img/game/background.jpg)"

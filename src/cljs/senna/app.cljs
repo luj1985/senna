@@ -13,6 +13,9 @@
                 :round-2 "img/game/2.svg"
                 :round-3 "img/game/3.svg"
 
+                :loading "img/loading/loading.png"
+                :logo "img/loading/CAFlogo.jpg"
+
                 :volume    "img/game/volume.svg"
                 :dashboard "img/game/dashboard.png"
 
@@ -37,12 +40,21 @@
                 })
 
 (defn- scene []
-  [:div#scene
-   [game/score-board]
-   [:div.main
-    [game/game-board]]
-   [game/game-control]
-   [:div.dialog]])
+  (let [w (.-innerWidth js/window)
+        h (.-innerHeight js/window)
+        s (/ w 768)
+        sh (* 1225 s)
+        l -10
+        t (-> h
+              (- sh)
+              (/ 2)
+              (/ s))]
+    [:div#scene
+     [game/score-board]
+     [:div.main
+      [game/game-board l t s]]
+     [game/game-control l t s]
+   [:div.dialog]]))
 
 (defn init []
   (let [loader (loader/init resources)]

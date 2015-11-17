@@ -63,23 +63,14 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
           :transform (str "translate(" l "," t ")")
           :d track-path}])
 
-(defn game-board []
-  (let [w (.-innerWidth js/window)
-        h (.-innerHeight js/window)
-        s (/ w 768)
-        scaled-height (* 1225 s)
-        l -10
-        t (-> h
-              (- scaled-height)
-              (/ 2)
-              (/ s))]
+(defn game-board [l t s]
     ;;; The size of SVG path is smaller than its viewbox
-    [:svg {:id "game-board"
-           :width "100%"
-           :style {:zoom s}
-           :height "100%"}
-     [track-spirit l t]
-     [car-spirit l t]]))
+  [:svg {:id "game-board"
+         :width "100%"
+         :style {:zoom s}
+         :height "100%"}
+   [track-spirit l t]
+   [car-spirit l t]])
 
 (defn- range-map [[d1 d2 :as domain] [r1 r2 :as range]]
   (let [step (/ (- r2 r1) (- d2 d1))]
@@ -131,5 +122,11 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
 ;;; TODO: move to game start control logical
 (js/setInterval #(swap! time-usage inc) 1000)
 
-(defn game-control []
-  [:div.timer (to-time @time-usage) ])
+(defn game-control [l t s]
+  [:div.timer {:style {:zoom s
+                       :font-size "60px"
+                       :height "80px"
+                       :width "148px"
+                       :top (str (+ 470 t) "px")
+                       :left (str (+ 572 l) "px")}}
+   (to-time @time-usage) ])
