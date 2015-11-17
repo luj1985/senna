@@ -157,17 +157,21 @@
 
    [:.timer {:position :absolute
              :font-family "digital-7"
+             :font-size (px 60)
              :background-color :transparent
              :display :inline-block
              :text-align :center
+             :height (px 80)
+             :width (px 148)
+             :left (px 562)
              :transform "rotate(-14deg)"
              }]
    [:.ipad {:position :absolute
             :background-color :lightblue
-            :display :inline-block
             :height (px 356)
             :width (px 465)
-            }]
+            :left (px 259)
+            :display :inline-block}]
 
    [:.main {:background-image "url(../img/game/track.png),
                                url(../img/game/background.jpg)"

@@ -127,14 +127,11 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
 (defn ipad-control [l t s]
   [:div.ipad {:style {:zoom s
                       :top (str (+ 622 t) "px")
-                      :left (str (+ 188 t) "px")}}])
+                      }}])
 
 
 (defn game-control [l t s]
   [:div.timer {:style {:zoom s
-                       :font-size "60px"
-                       :height "80px"
-                       :width "148px"
                        :top (str (+ 470 t) "px")
-                       :left (str (+ 572 l) "px")}}
+                       }}
    (to-time @time-usage) ])
