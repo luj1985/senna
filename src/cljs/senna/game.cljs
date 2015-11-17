@@ -124,14 +124,16 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
 (js/setInterval #(swap! time-usage inc) 1000)
 
 
-(defn ipad-control [l t s]
-  [:div.ipad {:style {:zoom s
-                      :top (str (+ 622 t) "px")
-                      }}])
-
-
 (defn game-control [l t s]
   [:div.timer {:style {:zoom s
-                       :top (str (+ 470 t) "px")
-                       }}
+                       :top (str (+ 472 t) "px")}}
    (to-time @time-usage) ])
+
+(defn ipad-control [l t s]
+  [:div.ipad {:style {:zoom s
+                      :top (str (+ 622 t) "px")}}
+   [:h4.question "方向盘变得很沉，需要用力才能扳动，需要检查汽车那个部位？"]
+   [:ul.options
+    [:li [:a {:href "#"} "轮胎"]]
+    [:li [:a {:href "#"} "附件皮带"]]
+    [:li [:a {:href "#"} "水箱风扇"]]]])
