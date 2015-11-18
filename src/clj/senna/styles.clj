@@ -123,6 +123,7 @@
     [:.pointer {:background-image "url(../img/game/pointer.svg)"
                 :background-size "100% 100%"
                 :position :absolute
+                :-webkit-transform "rotate(-110deg)"
                 :transform "rotate(-110deg)"
                 :height (px 80)
                 :width (px 80)}]
@@ -164,6 +165,7 @@
              :height (px 80)
              :width (px 148)
              :left (px 562)
+             :-webkit-transform "rotate(-14deg)"
              :transform "rotate(-14deg)"
              }]
    [:.ipad {:position :absolute
@@ -207,20 +209,56 @@
             :height (percent 100)
             }]
 
-   [:.dialog {:display :none}
-    [:&.show {:display :block}]]]
+   [:.dialog {:position :fixed
+              :z-index 4
+              :top 0
+              :left 0
+              :width (percent 100)
+              :height (percent 100)
+              :background-color (rgba 0 0 0 0.7)
+              }]]
 
   [:#car {:fill :none
           :stroke (rgb 0 0 0)
           :stroke-width (px 1) }]
 
-  [:#rules {:position :fixed
-            :z-index 4
-            :top 0
-            :left 0
-            :width (percent 100)
-            :height (percent 100)
-            :background-color (rgba 0 0 0 0.8)}
+  [:#countdown {:position :relative
+                :height (percent 100)
+                :width (percent 100)
+                :display :flex
+                :align-items :center
+                :justify-content :center
+                }
+   [:.container {:background-color (rgb 233 50 40)
+                 :border-radius (percent 50)
+                 :display :flex
+                 :align-items :center
+                 :justify-content :center
+                 :height (px 160)
+                 :width (px 160)
+                 }]
+   [:.seconds {:color :white
+               :border-radius (percent 50)
+               :border "3px solid white"
+               :display :flex
+               :align-items :center
+               :justify-content :center
+               :background-color :black
+               :text-align :center
+               :height (px 60)
+               :width (px 60)
+               :font-size (px 40)}
+
+                 ]]
+
+  [:#rules{:position :relative
+           :height (percent 100)
+           :width (percent 100)
+           :background-image "url(../img/rules/rules.png)"
+           :background-repeat :no-repeat
+           :background-position "center center"
+           :background-size "100% auto"}
+
    [:section {:color :white
         :font-size "1em"
         :margin 0
@@ -228,20 +266,16 @@
 
     [:.container {:text-align :center}]
 
-    [:a.got-it {:display :inline-block
-                :height (px 50)
-                :width (px 100)
-                :margin-top (px 20)
-                :background-size "100% 100%"
-                :background-image "url(../img/rules/got-it.svg)"}]]
+    [:button.got-it {:display :inline-block
+                     :height (px 50)
+                     :width (px 100)
+                     :margin-top (px 50)
+                     :background-color :transparent
+                     :border :none
+                     :background-size "100% 100%"
+                     :background-image "url(../img/rules/got-it.svg)"}]]
 
-   [:>.container {:position :relative
-                 :height (percent 100)
-                 :width (percent 100)
-                 :background-image "url(../img/rules/rules.png)"
-                 :background-repeat :no-repeat
-                 :background-position "center center"
-                 :background-size "100% auto"}]]
+   ]
 
   [:#track {:fill :none
             :stroke :none

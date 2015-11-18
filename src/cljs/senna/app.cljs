@@ -3,7 +3,6 @@
    [reagent.core :as r]
    [cljs.core.async :as async :refer [>! <! close!]]
    [senna.loader :as loader]
-   [senna.rules :as rules]
    [senna.game :as game])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
@@ -40,6 +39,42 @@
                 :friend-circle "img/social/friend-circle.svg"
                 })
 
+
+(def ^:private dialog (r/atom :rule))
+
+(def ^:private rule-text "发挥你的聪明才智，正确答对问题，让小车加速，最快时间到达终点。记住，速度才是王道哦！")
+
+(defn- rules-page [l t s]
+  (let [h (.-innerHeight js/window)
+        h1 (* s 1152)
+        offset (/ (- h h1) 2)]
+    [:div#rules
+     [:section {:style {:padding-top (str (+ 130 offset) "px")}}
+      [:span rule-text]
+      [:div.container
+       [:button.got-it {:href "#"
+                   :on-click #(reset! dialog :countdown)} ""]]]]))
+
+(def countdown (r/atom 3))
+
+(defn- countdown-page [l t s]
+  (if (> @countdown 0)
+    (do
+      (js/setTimeout #(swap! countdown dec) 1000)
+      [:div#countdown
+       [:div.container
+        [:div.seconds @countdown]]])
+    (reset! dialog nil)))
+
+(def ^:private pages {:rule rules-page
+                      :countdown countdown-page})
+
+
+(defn- dialog-component [l t s]
+  (if-let [page (pages @dialog)]
+    [:div.dialog
+     [page l t s]]))
+
 (defn- scene []
   (let [w (.-innerWidth js/window)
         h (.-innerHeight js/window)
@@ -55,8 +90,7 @@
      [game/game-board l t s]
      [game/game-control l t s]
      [game/ipad-control l t s]
-     [:div.dialog
-      [rules/rules-page l t s]]]))
+     [dialog-component l t s]]))
 
 (defn init []
   (let [loader (loader/init resources)]
