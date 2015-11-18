@@ -222,6 +222,7 @@
           :stroke (rgb 0 0 0)
           :stroke-width (px 1) }]
 
+  ;; TODO: extract common styles, like center (horizontal+vertical)
   [:#countdown {:position :relative
                 :height (percent 100)
                 :width (percent 100)
@@ -231,12 +232,28 @@
                 }
    [:.container {:background-color (rgb 233 50 40)
                  :border-radius (percent 50)
+                 :position :relative
                  :display :flex
                  :align-items :center
                  :justify-content :center
                  :height (px 160)
                  :width (px 160)
-                 }]
+                 }
+    ["&.active:before" {}]
+    ["&:before" {:content "''"
+                 :position :absolute
+                 :box-sizing :border-box
+                 :background-color (rgba 0 0 0 0.5)
+                 :width (px 160)
+                 :height (px 160)
+                 :left 0
+                 :top 0
+                 :border-radius (percent 50)
+                 :border-style :solid
+                 :border-width (px 50)
+                 :border-color "#E93228 #EB5412 #E93228 #E93228"
+                 :transform "rotate(-45deg)"
+                 }]]
    [:.seconds {:color :white
                :border-radius (percent 50)
                :border "3px solid white"
@@ -245,6 +262,7 @@
                :justify-content :center
                :background-color :black
                :text-align :center
+               :z-index 5
                :height (px 60)
                :width (px 60)
                :font-size (px 40)}
