@@ -231,20 +231,19 @@
                 :height (percent 100)
                 :width (percent 100)}
    [:svg.loader {:position :absolute
-                 :background-color (rgba 255 255 255 0.5)
                  :width (px 160)
                  :height (px 160)
                  :transform "translate(-50%,-50%)"
                  :top (percent 50)
                  :left (percent 50)
                }]
-   [:path {:stroke-dasharray 251.3627471923828
-           :stroke-dashoffset 251.3627471923828
-           :stroke (rgb 233 50 40)
-           :fill :none
+   [:path {:fill :none
            :box-sizing :border-box
            :stroke-width (px 60)
            :animation [[dash "1s" :linear 3]]}]
+
+   [:circle {:transform "translate(50%,50%)"}]
+
    [:.seconds {:color :white
                :border-radius (percent 50)
                :border "3px solid white"
@@ -260,9 +259,7 @@
                :z-index 5
                :height (px 60)
                :width (px 60)
-               :font-size (px 40)}
-
-                 ]]
+               :font-size (px 40)}]]
 
   [:#rules{:position :relative
            :height (percent 100)

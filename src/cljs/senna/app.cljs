@@ -57,19 +57,29 @@
 
 (def countdown (r/atom 3))
 
-
 (defn- path-circle [rx ry r]
   (str "M" rx "," ry "m" 0 ",-" r
        "a" r "," r ",0,1,1,0," (* 2 r)
        "a" r "," r ",0,1,1,0,-" (* 2 r)))
+
+(defn- circumference [r]
+  (* 2 js/Math.PI r))
+
+(def ^:private loader-colors ["#F9B72B" "#F39900" "#EA5412" "#E93228"])
 
 (defn- countdown-page [l t s]
   (if (> @countdown 0)
     (do
       (js/setTimeout #(swap! countdown dec) 1000)
       [:div#countdown
-       [:svg.loader
-        [:path {:d (path-circle 80 80 40)}]]
+       (let [c (circumference 50)]
+         [:svg.loader
+          [:circle {:r 80
+                    :style {:fill (loader-colors @countdown)}}]
+          [:path {:d (path-circle 80 80 50)
+                  :style {:stroke-dasharray c
+                          :stroke-dashoffset c
+                          :stroke (loader-colors (dec @countdown))}}]])
        [:div.seconds @countdown]])
     (reset! dialog nil)))
 
