@@ -7,7 +7,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 
-;; TODO: use macro to read file name at compile time
+;; todo: use macro to read file name at compile time
 (def resources {:round   "img/game/round.svg"
                 :round-1 "img/game/1.svg"
                 :round-2 "img/game/2.svg"
@@ -57,16 +57,19 @@
 
 (def countdown (r/atom 3))
 
+
+(defn- path-circle [rx ry r]
+  (str "M" rx "," ry "m" 0 ",-" r
+       "a" r "," r ",0,1,1,0," (* 2 r)
+       "a" r "," r ",0,1,1,0,-" (* 2 r)))
+
 (defn- countdown-page [l t s]
   (if (> @countdown 0)
     (do
       (js/setTimeout #(swap! countdown dec) 1000)
       [:div#countdown
        [:svg.loader
-        [:path {:d "M 80,80 m 0,-40
-                    a 40,40 0 1 1 0,80
-                    a 40,40 0 1 1 0,-80"}]
-        ]
+        [:path {:d (path-circle 80 80 40)}]]
        [:div.seconds @countdown]])
     (reset! dialog nil)))
 
