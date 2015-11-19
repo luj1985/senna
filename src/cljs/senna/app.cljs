@@ -62,8 +62,12 @@
     (do
       (js/setTimeout #(swap! countdown dec) 1000)
       [:div#countdown
-       [:div.container
-        [:div.seconds @countdown]]])
+       [:svg.loader
+        [:path {:d "M 80,80 m 0,-40
+                    a 40,40 0 1 1 0,80
+                    a 40,40 0 1 1 0,-80"}]
+        ]
+       [:div.seconds @countdown]])
     (reset! dialog nil)))
 
 (def ^:private pages {:rule rules-page

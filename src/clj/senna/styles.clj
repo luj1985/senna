@@ -1,7 +1,7 @@
 (ns senna.styles
   (:require
     [garden.core :refer [css]]
-    [garden.def :refer [defrule defstyles]]
+    [garden.def :refer [defrule defstyles defkeyframes]]
     [garden.selectors :as s :refer [defpseudoelement]]
     [garden.stylesheet :refer [rule at-font-face]]
     [garden.units :as u :refer [px pt percent]]
@@ -10,6 +10,10 @@
 (defpseudoelement -webkit-progress-bar)
 (defpseudoelement -webkit-progress-value)
 (defpseudoelement -moz-progress-bar)
+
+(defkeyframes dash
+  [:to
+   {:stroke-dashoffset 0}])
 
 (def loading-progress-bar
   [:progress {:position :relative
@@ -225,38 +229,29 @@
   ;; TODO: extract common styles, like center (horizontal+vertical)
   [:#countdown {:position :relative
                 :height (percent 100)
-                :width (percent 100)
-                :display :flex
-                :align-items :center
-                :justify-content :center
-                }
-   [:.container {:background-color (rgb 233 50 40)
-                 :border-radius (percent 50)
-                 :position :relative
-                 :display :flex
-                 :align-items :center
-                 :justify-content :center
-                 :height (px 160)
-                 :width (px 160)
-                 }
-    ["&.active:before" {}]
-    ["&:before" {:content "''"
-                 :position :absolute
-                 :box-sizing :border-box
-                 :background-color (rgba 0 0 0 0.5)
+                :width (percent 100)}
+   [:svg.loader {:position :absolute
+                 :background-color (rgba 255 255 255 0.5)
                  :width (px 160)
                  :height (px 160)
-                 :left 0
-                 :top 0
-                 :border-radius (percent 50)
-                 :border-style :solid
-                 :border-width (px 50)
-                 :border-color "#E93228 #EB5412 #E93228 #E93228"
-                 :transform "rotate(-45deg)"
-                 }]]
+                 :transform "translate(-50%,-50%)"
+                 :top (percent 50)
+                 :left (percent 50)
+               }]
+   [:path {:stroke-dasharray 251.3627471923828
+           :stroke-dashoffset 251.3627471923828
+           :stroke (rgb 233 50 40)
+           :fill :none
+           :box-sizing :border-box
+           :stroke-width (px 60)
+           :animation [[dash "1s" :linear 3]]}]
    [:.seconds {:color :white
                :border-radius (percent 50)
                :border "3px solid white"
+               :position :absolute
+               :transform "translate(-50%,-50%)"
+               :top (percent 50)
+               :left (percent 50)
                :display :flex
                :align-items :center
                :justify-content :center
