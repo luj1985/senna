@@ -8,6 +8,9 @@
                  [org.martinklepsch/boot-garden "1.2.5-3"    :scope "test"]
                  [org.clojure/clojurescript "1.7.122"]
                  [org.clojure/core.async "0.2.374"]
+                 [ring/ring-core "1.4.0"]
+                 [compojure "1.4.0"]
+                 [liberator "0.13"]
                  [reagent "0.5.1"]])
 
 (require

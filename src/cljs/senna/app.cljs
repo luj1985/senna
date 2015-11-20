@@ -8,8 +8,7 @@
 
 
 ;; TODO: use macro to read file name at compile time
-(def resources {
-                :loading "img/loading/loading.png"
+(def resources {:loading "img/loading/loading.jpg"
                 :logo "img/loading/CAFlogo.jpg"
 
                 :round   "img/game/round.svg"
