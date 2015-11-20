@@ -7,14 +7,15 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 
-;; todo: use macro to read file name at compile time
-(def resources {:round   "img/game/round.svg"
+;; TODO: use macro to read file name at compile time
+(def resources {
+                :loading "img/loading/loading.png"
+                :logo "img/loading/CAFlogo.jpg"
+
+                :round   "img/game/round.svg"
                 :round-1 "img/game/1.svg"
                 :round-2 "img/game/2.svg"
                 :round-3 "img/game/3.svg"
-
-                :loading "img/loading/loading.png"
-                :logo "img/loading/CAFlogo.jpg"
 
                 :volume    "img/game/volume.svg"
                 :dashboard "img/game/dashboard.png"
@@ -40,7 +41,10 @@
                 })
 
 
-(def ^:private dialog (r/atom :rule))
+(defonce ^:private dialog (r/atom :rule))
+(defonce ^:private countdown (r/atom 3))
+
+(def ^:private loader-colors ["#F9B72B" "#F39900" "#EA5412" "#E93228"])
 
 (def ^:private rule-text "发挥你的聪明才智，正确答对问题，让小车加速，最快时间到达终点。记住，速度才是王道哦！")
 
@@ -53,9 +57,8 @@
       [:span rule-text]
       [:div.container
        [:button.got-it {:href "#"
-                   :on-click #(reset! dialog :countdown)} ""]]]]))
+                        :on-click #(reset! dialog :countdown)} ""]]]]))
 
-(def countdown (r/atom 3))
 
 (defn- path-circle [rx ry r]
   (str "M" rx "," ry "m" 0 ",-" r
@@ -64,8 +67,6 @@
 
 (defn- circumference [r]
   (* 2 js/Math.PI r))
-
-(def ^:private loader-colors ["#F9B72B" "#F39900" "#EA5412" "#E93228"])
 
 (defn- countdown-page [l t s]
   (if (> @countdown 0)

@@ -123,7 +123,7 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
     (str (to-fixed mins) ":" (to-fixed secs))))
 
 
-(def time-usage (r/atom 0))
+(defonce time-usage (r/atom 0))
 
 ;;; TODO: move to game start control logical
 (js/setInterval #(swap! time-usage inc) 1000)
