@@ -1,6 +1,8 @@
 (ns senna.game
   (:require [reagent.core :as r]))
 
+(defonce time-usage (r/atom 0))
+
 ;;; TODO: calculate the initial state from the SVG path
 (def app-state (r/atom {:transform {:x 57.3749 :y 342.897 :r 0}
                         :distance 0
@@ -123,7 +125,6 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
     (str (to-fixed mins) ":" (to-fixed secs))))
 
 
-(defonce time-usage (r/atom 0))
 
 ;;; TODO: move to game start control logical
 (js/setInterval #(swap! time-usage inc) 1000)

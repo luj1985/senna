@@ -38,6 +38,7 @@
                 :friend-circle "img/social/friend-circle.svg"})
 
 (defonce ^:private dialog (r/atom :rule))
+
 (defonce ^:private countdown (r/atom 3))
 
 (def ^:private loader-colors ["#F9B72B" "#F39900" "#EA5412" "#E93228"])
@@ -54,7 +55,6 @@
       [:div.container
        [:button.got-it {:href "#"
                         :on-click #(reset! dialog :countdown)} ""]]]]))
-
 
 (defn- path-circle [rx ry r]
   (str "M" rx "," ry "m" 0 ",-" r

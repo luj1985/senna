@@ -1,13 +1,17 @@
 (set-env!
  :source-paths    #{"src/server" "src/cljs" "src/clj"}
  :resource-paths  #{"resources"}
- :dependencies '[[adzerk/boot-cljs              "1.7.48-6"   :scope "test"]
-                 [adzerk/boot-cljs-repl         "0.2.0"      :scope "test"]
-                 [adzerk/boot-reload            "0.4.1"      :scope "test"]
-                 [pandeiro/boot-http            "0.6.3"      :scope "test"]
+ :dependencies '[[adzerk/boot-cljs              "1.7.170-3"  :scope "test"]
+                 [adzerk/boot-cljs-repl         "0.3.0"      :scope "test"]
+                 [adzerk/boot-reload            "0.4.2"      :scope "test"]
+                 [pandeiro/boot-http            "0.7.0"      :scope "test"]
                  [org.martinklepsch/boot-garden "1.2.5-7"    :scope "test"]
-                 [org.clojure/clojurescript "1.7.122"]
+                 [com.cemerick/piggieback "0.2.1" :scope "test"]
+                 [org.clojure/tools.nrepl "0.2.12" :scope "test"]
+                 [weasel "0.7.0" :scope "test"]
+                 [org.clojure/clojurescript "1.7.170"]
                  [org.clojure/core.async "0.2.374"]
+                 [org.clojure/java.jdbc "0.4.2"]
                  [ring/ring-core "1.4.0"]
                  [fogus/ring-edn "0.3.0"]
                  [compojure "1.4.0"]

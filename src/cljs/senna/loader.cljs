@@ -7,8 +7,8 @@
   (:import [goog.net ImageLoader EventType]
            [goog.events.EventType]))
 
-(def ^:private loading-state (r/atom {:total 0
-                            :progress 0}))
+(defonce ^:private loading-state (r/atom {:total 0
+                                          :progress 0}))
 
 (defn- loading-page []
   [:div#loading

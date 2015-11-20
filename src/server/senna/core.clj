@@ -10,7 +10,9 @@
 (defroutes routes
   (resources "/")
   (resources "/public")
-  (resources "/" {:root "/META-INF/resources"}))
+  (resources "/" {:root "/META-INF/resources"})
+  (GET "/questions" []
+       "return JSON formatted question"))
 
 (def handler
   (-> routes
