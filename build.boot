@@ -25,10 +25,6 @@
  '[pandeiro.boot-http    :refer [serve]]
  '[org.martinklepsch.boot-garden :refer [garden]])
 
-(task-options! pom {:project 'senna
-                    :version "0.0.1"})
-
-
 (deftask build []
   (comp (speak)
         (cljs)
@@ -54,6 +50,13 @@
                        :pretty-print true}
                  reload {:on-jsload 'senna.app/init})
   identity)
+
+(deftask dist []
+  (comp (production)
+        (build)
+        (web :serve 'senna.core/handler)
+        (uber)
+        (war :file "senna.war")))
 
 (deftask dev
   "Simple alias to run application in development mode"
