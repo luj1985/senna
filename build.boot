@@ -1,14 +1,15 @@
 (set-env!
- :source-paths    #{"src/cljs" "src/clj"}
+ :source-paths    #{"src/server" "src/cljs" "src/clj"}
  :resource-paths  #{"resources"}
  :dependencies '[[adzerk/boot-cljs              "1.7.48-6"   :scope "test"]
                  [adzerk/boot-cljs-repl         "0.2.0"      :scope "test"]
                  [adzerk/boot-reload            "0.4.1"      :scope "test"]
                  [pandeiro/boot-http            "0.6.3"      :scope "test"]
-                 [org.martinklepsch/boot-garden "1.2.5-3"    :scope "test"]
+                 [org.martinklepsch/boot-garden "1.2.5-7"    :scope "test"]
                  [org.clojure/clojurescript "1.7.122"]
                  [org.clojure/core.async "0.2.374"]
                  [ring/ring-core "1.4.0"]
+                 [fogus/ring-edn "0.3.0"]
                  [compojure "1.4.0"]
                  [liberator "0.13"]
                  [reagent "0.5.1"]])
@@ -28,10 +29,11 @@
   (comp (speak)
         (cljs)
         (garden :styles-var 'senna.styles/screen
-                :output-to "css/garden.css")))
+                :output-to "public/css/garden.css")))
 
 (deftask run []
-  (comp (serve)
+  (comp (serve :handler 'senna.core/handler
+               :reload true)
         (watch)
         (cljs-repl)
         (reload)

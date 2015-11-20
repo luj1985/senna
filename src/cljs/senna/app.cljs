@@ -6,7 +6,6 @@
    [senna.game :as game])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
-
 ;; TODO: use macro to read file name at compile time
 (def resources {:loading "img/loading/loading.jpg"
                 :logo "img/loading/CAFlogo.jpg"
@@ -36,9 +35,7 @@
                 :weibo "img/social/weibo.svg"
                 :wechat "img/social/wechat.svg"
                 :qq-space "img/social/qq-space.svg"
-                :friend-circle "img/social/friend-circle.svg"
-                })
-
+                :friend-circle "img/social/friend-circle.svg"})
 
 (defonce ^:private dialog (r/atom :rule))
 (defonce ^:private countdown (r/atom 3))

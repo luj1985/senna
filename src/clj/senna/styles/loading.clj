@@ -57,7 +57,6 @@
                                           transparent 66%,
                                           transparent)"}]])
 
-
 (def loading-page
   [:#loading {:position :fixed
               :top 0
@@ -65,7 +64,7 @@
               :width (percent 100)
               :background-position "top center"
               :background-size "100% auto"
-              :background-image "url(../img/loading/loading.png)"}
+              :background-image "url(../img/loading/loading.jpg)"}
 
    [:.logo {:position :fixed
             :top (px 16)

@@ -16,8 +16,6 @@
   [:to
    {:stroke-dashoffset 0}])
 
-
-
 (defstyles screen
 
   [(at-font-face {:font-family "digital-7"
