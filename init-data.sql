@@ -1,0 +1,14 @@
+insert into questions(question,option1,option2,option3,answer) values ('第一条正时皮带是哪一年用于汽车？','1962年','1972年','1982年', 1);
+insert into questions(question,option1,option2,option3,answer) values ('世界上第一条正时皮带由Richard Case申请专利，于1946年应用于什么机器上？','缝纫机','汽车','拖拉机', 1);
+insert into questions(question,option1,option2,option3,answer) values ('什么材质的正式皮带可以与链条寿命相当？','氢化丁晴橡胶皮带','氯丁橡胶皮带','特氟龙涂层的氢化丁晴橡胶皮带', 3);
+insert into questions(question,option1,option2,option3,answer) values ('油浴环境是否只能使用链条？','是','不是','不确定', 2);
+insert into questions(question,option1,option2,option3,answer) values ('正时皮带系统是否需要按时更换？','是','不是','失效后更换', 1);
+insert into questions(question,option1,option2,option3,answer) values ('弹性皮带是否需要张紧轮？','需要','不需要','都可以', 2);
+insert into questions(question,option1,option2,option3,answer) values ('以下哪种车型不是使用的油浴正时皮带系统？','朗逸2016款 1.6L','C4L 2015款1.2T','新福克斯 2015款1.0T', 1);
+insert into questions(question,option1,option2,option3,answer) values ('附件多楔带是否需要按时更换？','是','不是','失效后更换', 1);
+insert into questions(question,option1,option2,option3,answer) values ('附件多楔带的驱动力一般来自哪里？','曲轴（曲轴皮带轮）','启动电机','发电机', 1);
+insert into questions(question,option1,option2,option3,answer) values ('哪种材质的多楔带耐久性最好？','氯丁橡胶','聚乙烯橡胶','三元乙丙橡胶', 3);
+insert into questions(question,option1,option2,option3,answer) values ('一般康迪泰克售后皮带的指导更换周期是？','2年或6~8万公里','3年或10万公里','5年或12万公里', 1);
+insert into questions(question,option1,option2,option3,answer) values ('一般皮带的寿命是多久？','5年','6年','4年', 1);
+insert into questions(question,option1,option2,option3,answer) values ('正时皮带驱动的是发动机的什么系统？','正时系统','附件系统','以上都可以', 1);
+insert into questions(question,option1,option2,option3,answer) values ('多楔带驱动的是发动机的什么系统？','附件系统','正时系统 ','以上都可以', 1);

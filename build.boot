@@ -12,10 +12,9 @@
                  [org.clojure/clojurescript "1.7.170"]
                  [org.clojure/core.async "0.2.374"]
                  [org.clojure/java.jdbc "0.4.2"]
-                 [fogus/ring-edn "0.3.0"]
                  [ring/ring-core "1.4.0"]
                  [mysql/mysql-connector-java "5.1.37"]
-                 [ring-rewrite "0.1.0"]
+                 [hiccup "1.0.5"]
                  [garden "1.3.0-SNAPSHOT" :scope "provided"]
                  [compojure "1.4.0"]
                  [reagent "0.5.1" :scope "provided"]])
@@ -26,7 +25,6 @@
  '[adzerk.boot-reload    :refer [reload]]
  '[pandeiro.boot-http    :refer [serve]]
  '[org.martinklepsch.boot-garden :refer [garden]])
-
 
 (deftask build []
   (comp (speak)

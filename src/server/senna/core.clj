@@ -1,16 +1,26 @@
 (ns senna.core
   (:require
+   [clojure.java.jdbc :as jdbc]
    [clojure.pprint :refer [pprint]]
-   [compojure.core :refer [defroutes ANY GET]]
+   [compojure.core :refer [defroutes POST GET]]
    [compojure.route :refer [resources not-found]]
    [ring.middleware.params :refer [wrap-params]]
-   [ring.middleware.edn :refer [wrap-edn-params]]
-   [com.ebaxt.ring-rewrite :refer [wrap-rewrite]]
-   [ring.util.response :refer [redirect]])
+   [senna.index :refer [index-page]])
   (:gen-class))
 
+(def mysql-db {:subprotocol "mysql"
+               :subname "//127.0.0.1:3306/senna"
+               :user "root"
+               :password "rootpassword"})
+
+(defn- random-questions [req]
+  (let [r (jdbc/query mysql-db ["select * from questions"])]
+    (pprint r)
+    r))
 
 (defroutes app-routes
+  (GET "/" [] index-page)
+  (GET "/questions" [] random-questions)
   (resources "/")
   (not-found "Page not found"))
 
@@ -25,8 +35,6 @@
 (def handler
   (-> app-routes
       wrap-dump
-      (wrap-rewrite
-       [:rewrite "/" "/index.html"])
       wrap-params))
 
 (defn init []
