@@ -3,6 +3,7 @@
    [reagent.core :as r]
    [cljs.core.async :as async :refer [>! <! close!]]
    [senna.loader :as loader]
+   [senna.countdown :as cd]
    [senna.game :as game])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
@@ -45,7 +46,7 @@
 
 (def ^:private rule-text "发挥你的聪明才智，正确答对问题，让小车加速，最快时间到达终点。记住，速度才是王道哦！")
 
-(defn- rules-page [l t s]
+(defn- rules-page [ch l t s]
   (let [h (.-innerHeight js/window)
         h1 (* s 1152)
         offset (/ (- h h1) 2)]
@@ -56,62 +57,41 @@
        [:button.got-it {:href "#"
                         :on-click #(reset! dialog :countdown)} ""]]]]))
 
-(defn- path-circle [rx ry r]
-  (str "M" rx "," ry "m" 0 ",-" r
-       "a" r "," r ",0,1,1,0," (* 2 r)
-       "a" r "," r ",0,1,1,0,-" (* 2 r)))
-
-(defn- circumference [r]
-  (* 2 js/Math.PI r))
-
-(defn- countdown-page [l t s]
-  (if (> @countdown 0)
-    (do
-      (js/setTimeout #(swap! countdown dec) 1000)
-      [:div#countdown
-       (let [c (circumference 50)]
-         [:svg.loader
-          [:circle {:r 80
-                    :style {:fill (loader-colors @countdown)}}]
-          [:path {:d (path-circle 80 80 50)
-                  :style {:stroke-dasharray c
-                          :stroke-dashoffset c
-                          :stroke (loader-colors (dec @countdown))}}]])
-       [:div.seconds @countdown]])
-    (do
-      (game/start)
-      (reset! dialog nil))))
-
 (def ^:private pages {:rule rules-page
-                      :countdown countdown-page})
+                      :countdown cd/countdown-page})
 
 
-(defn- dialog-component [l t s]
+(defn- dialog-component [ch l t s]
+  (go
+    (let [event (<! ch)]
+      (case event
+        :start (do
+                 (game/start)
+                 (reset! dialog nil)))))
+
   (if-let [page (pages @dialog)]
     [:div.dialog
-     [page l t s]]))
+     [page ch l t s]]))
 
-(defn- scene []
+(defn- scene [ch]
   (let [w (.-innerWidth js/window)
         h (.-innerHeight js/window)
         s (/ w 768)
-        sh (* 1225 s)
         l -10
-        t (-> h
-              (- sh)
-              (/ 2)
-              (/ s))]
-    [:div#scene
-     [game/score-board]
-     [game/game-board l t s]
-     [game/game-control l t s]
-     [game/ipad-control l t s]
-     [dialog-component l t s]]))
+        t (-> h (- (* 1225 s)) (/ 2) (/ s))]
+    (r/create-class
+     {:component-did-mount game/ready
+      :reagent-render (fn []
+                        [:div#scene
+                         [game/score-board]
+                         [game/game-board l t s]
+                         [game/game-control l t s]
+                         [game/ipad-control l t s]
+                         [dialog-component ch l t s]])})))
 
 (defn init []
-  (let [loader (loader/init resources)]
+  (let [loader (loader/init resources)
+        progress (async/chan)]
     (go
       _ (<! loader)
-      (do
-        (r/render-component [scene] (.querySelector js/document "body"))
-        (game/ready)))))
+      (r/render-component [scene progress] (.-body js/document)))))

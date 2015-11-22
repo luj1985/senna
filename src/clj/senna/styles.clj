@@ -166,7 +166,9 @@
 
    [:circle {:transform "translate(50%,50%)"}]
 
-   [:.seconds {:color :white
+   [:.seconds {:font-size (px 40)}]
+   [:.go {:font-size (px 30)}]
+   [:.txt {:color :white
                :border-radius (percent 50)
                :border "3px solid white"
                :position :absolute
@@ -181,7 +183,7 @@
                :z-index 5
                :height (px 60)
                :width (px 60)
-               :font-size (px 40)}]]
+               }]]
 
   [:#rules{:position :relative
            :height (percent 100)
