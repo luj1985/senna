@@ -4,6 +4,7 @@
    [cljs.core.async :as async :refer [>! <! close!]]
    [senna.loader :as loader]
    [senna.countdown :as cd]
+   [senna.rules :as rules]
    [senna.game :as game])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
@@ -40,31 +41,15 @@
 
 (defonce ^:private dialog (r/atom :rule))
 
-(defonce ^:private countdown (r/atom 3))
 
-(def ^:private loader-colors ["#F9B72B" "#F39900" "#EA5412" "#E93228"])
-
-(def ^:private rule-text "发挥你的聪明才智，正确答对问题，让小车加速，最快时间到达终点。记住，速度才是王道哦！")
-
-(defn- rules-page [ch l t s]
-  (let [h (.-innerHeight js/window)
-        h1 (* s 1152)
-        offset (/ (- h h1) 2)]
-    [:div#rules
-     [:section {:style {:padding-top (str (+ 130 offset) "px")}}
-      [:span rule-text]
-      [:div.container
-       [:button.got-it {:href "#"
-                        :on-click #(reset! dialog :countdown)} ""]]]]))
-
-(def ^:private pages {:rule rules-page
+(def ^:private pages {:rule rules/rules-page
                       :countdown cd/countdown-page})
-
 
 (defn- dialog-component [ch l t s]
   (go
     (let [event (<! ch)]
       (case event
+        :countdown (reset! dialog :countdown)
         :start (do
                  (game/start)
                  (reset! dialog nil)))))
