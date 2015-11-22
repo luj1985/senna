@@ -74,7 +74,7 @@
              :height (px 30)
              :width (px 30)}])
 
-(defstyles game-board
+(defstyles game-board-styles
   [(at-font-face
     {:font-family "digital-7"
      :src "url('digital-7/digital-7 (mono).ttf') format('truetype')"})]

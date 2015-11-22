@@ -38,6 +38,6 @@
                     :background-size "100% 100%"
                     :background-image "url(../img/rules/got-it.svg)"}]])
 
-(defstyles dialog
+(defstyles dialog-styles
   dialog-dimmer
   game-rules-dialog)

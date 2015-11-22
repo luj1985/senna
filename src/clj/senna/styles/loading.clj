@@ -1,32 +1,32 @@
 (ns senna.styles.loading
+  (:refer-clojure :exclude [&])
   (:require
-   [garden.selectors :as s :refer [defpseudoelement]]
+   [garden.selectors :as s :refer [& defpseudoelement progress]]
    [garden.def :refer [defstyles]]
    [garden.color :refer [rgb rgba]]
    [garden.units :refer [px percent]])
   (:use
    [senna.styles.extension]))
 
-
 (defstyles loading-progress-bar
-  [(s/progress) {:position :relative
-                 :display :block
-                 :box-sizing :content-box
-                 :border "2px solid rgba(0,0,0,0.8)"
-                 :background-color (rgba 0 0 0 0.8)
-                 :border-radius (px 4)
-                 :-webkit-appearance :none
-                 :appearance :none
-                 :width (percent 60)
-                 :height (px 12)
-                 :margin "0 auto"}
+  [progress {:position :relative
+             :display :block
+             :box-sizing :content-box
+             :border "2px solid rgba(0,0,0,0.8)"
+             :background-color (rgba 0 0 0 0.8)
+             :border-radius (px 4)
+             :-webkit-appearance :none
+             :appearance :none
+             :width (percent 60)
+             :height (px 12)
+             :margin "0 auto"}
 
-   [(s/& -webkit-progress-bar)
+   [(& -webkit-progress-bar)
     {:background-color (rgba 0 0 0 0.8)
      :border-radius (px 2)
      :box-shadow "0 2px 5px rgba(0,0,0,0.25) inset"}]
 
-   [(s/& -webkit-progress-value)
+   [(& -webkit-progress-value)
     {:border-radius (px 2)
      :background-color (rgb 27 154 254)
      :background-repeat :repeat-x
@@ -38,7 +38,7 @@
                                           transparent)"}]
    ;; Android 4.1-4.3 support
    ;; TODO: use auto-prefix ?
-   [(s/& -webkit-progress-value)
+   [(& -webkit-progress-value)
     {:background-image "-webkit-linear-gradient(315deg,transparent,transparent 33%,
                                           rgba(0, 0, 0, 0.12) 33%,
                                           rgba(0, 0, 0, 0.12) 66%,
@@ -47,7 +47,7 @@
 
    ;; Firefox provides a single pseudo class (-moz-progress-bar)
    ;; https://css-tricks.com/html5-progress-element/
-   [(s/& -moz-progress-bar)
+   [(& -moz-progress-bar)
     {:border-radius (px 2)
      :background-color (rgb 27 154 254)
      :background-repeat :repeat-x
@@ -58,7 +58,7 @@
                                           transparent 66%,
                                           transparent)"}]])
 
-(def loading-page
+(defstyles loading-page-styles
   [:#loading {:position :fixed
               :top 0
               :bottom 0

@@ -10,7 +10,7 @@
   [:to
    {:stroke-dashoffset 0}])
 
-(defstyles countdown
+(defstyles countdown-styles
   rotate-animation
 
   [:#countdown {:position :relative

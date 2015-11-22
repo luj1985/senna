@@ -1,18 +1,15 @@
 (ns senna.styles
-  (:refer-clojure :exclude [&])
   (:require
-    [garden.core :refer [css]]
-    [garden.def :refer [defrule defstyles defkeyframes]]
-    [garden.selectors :as s :refer [& defpseudoelement]]
+    [garden.def :refer [defstyles]]
     [garden.stylesheet :refer [rule at-font-face]]
-    [garden.units :as u :refer [px pt percent]]
-    [garden.color :as color :refer [rgb rgba]]
-    [senna.styles.game :as g]
-    [senna.styles.loading :as l]
-    [senna.styles.dialog :as d]
-    [senna.styles.countdown :as c]))
+    [garden.units :refer [px pt percent]]
+    [garden.color :refer [rgb rgba]]
+    [senna.styles.game :refer [game-board-styles]]
+    [senna.styles.loading :refer [loading-page-styles]]
+    [senna.styles.dialog :refer [dialog-styles]]
+    [senna.styles.countdown :refer [countdown-styles]]))
 
-(defstyles base
+(defstyles base-styles
   [:body {:font-family "Helvetica Neue"
           :font-size (px 16)
           :padding 0
@@ -20,11 +17,11 @@
           :line-height 1.5}])
 
 (defstyles screen
-  base
-  d/dialog
-  l/loading-page
-  c/countdown
-  g/game-board
+  base-styles
+  dialog-styles
+  countdown-styles
+  loading-page-styles
+  game-board-styles
 
   [:#scene {:position :fixed
             :top 0
