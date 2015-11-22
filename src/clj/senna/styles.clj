@@ -7,14 +7,10 @@
     [garden.stylesheet :refer [rule at-font-face]]
     [garden.units :as u :refer [px pt percent]]
     [garden.color :as color :refer [rgb rgba]]
+    [senna.styles.game :as g]
     [senna.styles.loading :as l]
     [senna.styles.dialog :as d]
     [senna.styles.countdown :as c]))
-
-(defpseudoelement -webkit-progress-bar)
-(defpseudoelement -webkit-progress-value)
-(defpseudoelement -moz-progress-bar)
-
 
 (defstyles base
   [:body {:font-family "Helvetica Neue"
@@ -24,14 +20,11 @@
           :line-height 1.5}])
 
 (defstyles screen
-
-  [(at-font-face {:font-family "digital-7"
-                 :src "url('digital-7/digital-7 (mono).ttf') format('truetype')"})]
-
   base
   d/dialog
   l/loading-page
   c/countdown
+  g/game-board
 
   [:#scene {:position :fixed
             :top 0
@@ -39,65 +32,6 @@
             :width (percent 100)
             :overflow :hidden}
 
-   [:.score-board {:position :fixed
-                   :top 0
-                   :z-index 2
-                   :width (percent 100)}
-    [:.dashboard {:background-image "url(../img/game/dashboard.png)"
-                  :background-size "100% 100%"
-                  :display :inline-block
-                  :float :left
-                  :width (px 80)
-                  :height (px 80)}]
-
-    [:.pointer {:background-image "url(../img/game/pointer.svg)"
-                :background-size "100% 100%"
-                :position :absolute
-                :-webkit-transform "rotate(-110deg)"
-                :transform "rotate(-110deg)"
-                :height (px 80)
-                :width (px 80)}]
-
-    [:.rounds {:display :inline-block
-               :min-width (px 150)}]
-
-    [:.prefix {:background-image "url(../img/game/round.svg)"
-               :background-size "auto 25px"
-               :background-repeat :no-repeat
-               :float :left
-               :margin-top (px 30)
-               :display :inline-block
-               :height (px 50)
-               :width (px 105)}]
-
-    [:.round {:background-size "auto 38px"
-              :background-repeat :no-repeat
-              :margin-top (px 18)
-              :width (px 50)
-              :height (px 50)
-              :display :inline-block}]
-
-    [:.volume {:background-image "url(../img/game/volume.svg)"
-               :background-size "30px 30px"
-               :margin-top (px 25)
-               :margin-right (px 20)
-               :float :right
-               :display :inline-block
-               :height (px 30)
-               :width (px 30)}]]
-
-   [:.timer {:position :absolute
-             :font-family "digital-7"
-             :font-size (px 60)
-             :background-color :transparent
-             :display :inline-block
-             :text-align :center
-             :height (px 80)
-             :width (px 148)
-             :left (px 562)
-             :-webkit-transform "rotate(-14deg)"
-             :transform "rotate(-14deg)"
-             }]
    [:.ipad {:position :absolute
             :height (px 356)
             :width (px 465)

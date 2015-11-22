@@ -6,14 +6,13 @@
    [garden.units :refer [px percent em]]
    [garden.color :refer [rgba rgb]]))
 
-(defkeyframes dash
+(defkeyframes rotate-animation
   [:to
    {:stroke-dashoffset 0}])
 
 (defstyles countdown
+  rotate-animation
 
-  dash
-  ;; TODO: extract common styles, like center (horizontal+vertical)
   [:#countdown {:position :relative
                 :height (percent 100)
                 :width (percent 100)}
@@ -22,30 +21,29 @@
                  :height (px 160)
                  :transform "translate(-50%,-50%)"
                  :top (percent 50)
-                 :left (percent 50)
-               }]
+                 :left (percent 50)}]
    [:path {:fill :none
-           :box-sizing :border-box
            :stroke-width (px 60)
-           :animation [[dash "1s" :linear 3]]}]
+           :animation [[rotate-animation "1s" :linear 3]]}]
 
    [:circle {:transform "translate(50%,50%)"}]
 
    [:.seconds {:font-size (px 40)}]
+
    [:.go {:font-size (px 30)}]
+
    [:.txt {:color :white
-               :border-radius (percent 50)
-               :border "3px solid white"
-               :position :absolute
-               :transform "translate(-50%,-50%)"
-               :top (percent 50)
-               :left (percent 50)
-               :display :flex
-               :align-items :center
-               :justify-content :center
-               :background-color :black
-               :text-align :center
-               :z-index 5
-               :height (px 60)
-               :width (px 60)
-               }]])
+           :border-radius (percent 50)
+           :border "3px solid white"
+           :position :absolute
+           :transform "translate(-50%,-50%)"
+           :top (percent 50)
+           :left (percent 50)
+           :height (px 60)
+           :width (px 60)
+           :display :flex
+           :align-items :center
+           :justify-content :center
+           :background-color :black
+           :text-align :center
+           :z-index 5}]])

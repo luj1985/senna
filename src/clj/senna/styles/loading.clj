@@ -7,6 +7,7 @@
   (:use
    [senna.styles.extension]))
 
+
 (defstyles loading-progress-bar
   [(s/progress) {:position :relative
                  :display :block
