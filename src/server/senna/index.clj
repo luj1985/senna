@@ -2,7 +2,7 @@
   (:use
    [hiccup.page]))
 
-(defn index-page [data]
+(defn index-page [_]
   (html5
    [:head
     [:meta {:http-equiv "content-type" :content "text/html; charset=utf-8"}]
@@ -26,6 +26,6 @@
      [:div#loading
       [:div.logo]
       [:div.progress-bar
-       [:progress]]]]
+       [:progress {:max 100 :value 1}]]]]
     [:div#dialog]
     (include-js "js/app.js")]))

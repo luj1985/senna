@@ -165,11 +165,18 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
 
      (to-time used) ]))
 
-(defn ipad-control [l t s]
-  [:div.ipad {:style {:zoom s
-                      :top (str (+ 622 t) "px")}}
-   [:h4.question "方向盘变得很沉，需要用力才能扳动，需要检查汽车那个部位？"]
-   [:ul.options
-    [:li [:a {:href "#"} "轮胎"]]
-    [:li [:a {:href "#"} "附件皮带"]]
-    [:li [:a {:href "#"} "水箱风扇"]]]])
+(defonce ^:private candidates
+  (r/atom {:questions []
+           :current -1}))
+
+(defn ipad-control [ctrl questions l t s]
+  (reset! candidates {:questions questions :current 0})
+  (let [{:keys [questions current]} @candidates
+        question (get questions current)]
+    [:div.ipad {:style {:zoom s
+                        :top (str (+ 622 t) "px")}}
+     [:h4.question (:question question)]
+     [:ul.options
+      [:li [:a {:href "#"} (:option1 question)]]
+      [:li [:a {:href "#"} (:option2 question)]]
+      [:li [:a {:href "#"} (:option3 question)]]]]))

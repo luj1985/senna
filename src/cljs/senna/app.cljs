@@ -1,7 +1,7 @@
 (ns senna.app
   (:require
    [reagent.core :as r]
-   [cljs.core.async :as async :refer [>! <! close!]]
+   [cljs.core.async :as async :refer [chan >! <! close!]]
    [senna.loader :as loader]
    [senna.countdown :as cd]
    [senna.rules :as rules]
@@ -41,7 +41,6 @@
 
 (defonce ^:private dialog (r/atom :rule))
 
-
 (def ^:private pages {:rule rules/rules-page
                       :countdown cd/countdown-page})
 
@@ -58,7 +57,8 @@
     [:div.dimmer
      [page ch l t s]]))
 
-(defn- scene [ch l t s]
+(defn- scene [ch tasks l t s]
+  (let [ctrl (chan)]
   (r/create-class
    {:component-did-mount game/ready
     :reagent-render (fn []
@@ -66,7 +66,7 @@
                        [game/score-board]
                        [game/game-board l t s]
                        [game/game-control l t s]
-                       [game/ipad-control l t s]])}))
+                       [game/ipad-control ctrl tasks l t s]])})))
 
 (defn init []
   (let [loader (loader/init resources)
@@ -77,9 +77,8 @@
         l -10
         t (-> h (- (* 1225 s)) (/ 2) (/ s))]
     (go
-      _ (<! loader)
-      (do
-        (r/render-component [scene progress l t s]
+      (let [tasks (<! loader)]
+        (r/render-component [scene progress tasks l t s]
                             (.querySelector js/document "#main"))
         (r/render-component [popup progress l t s]
                             (.querySelector js/document "#dialog"))))))

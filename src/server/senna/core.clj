@@ -5,6 +5,9 @@
    [compojure.core :refer [defroutes POST GET]]
    [compojure.route :refer [resources not-found]]
    [ring.middleware.params :refer [wrap-params]]
+   [ring.middleware.json :refer [wrap-json-response]]
+   [ring.middleware.keyword-params :refer [wrap-keyword-params]]
+   [ring.util.response :refer [response]]
    [senna.index :refer [index-page]])
   (:gen-class))
 
@@ -13,14 +16,12 @@
                :user "root"
                :password "rootpassword"})
 
-(defn- random-questions [req]
-  (let [r (jdbc/query mysql-db ["select * from questions"])]
-    (pprint r)
-    r))
+(defn- random-questions [_]
+  (response
+   (jdbc/query mysql-db ["select * from questions"])))
 
 (defroutes app-routes
-  (GET "/" [] (fn [_]
-                (index-page {})))
+  (GET "/" [] index-page)
   (GET "/questions" [] random-questions)
   (resources "/")
   (not-found "Page not found"))
@@ -36,6 +37,8 @@
 (def handler
   (-> app-routes
       wrap-dump
+      wrap-keyword-params
+      wrap-json-response
       wrap-params))
 
 (defn init []

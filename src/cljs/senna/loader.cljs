@@ -1,14 +1,15 @@
 (ns senna.loader
   (:require
-    [reagent.core :as r]
-    [cljs.core.async :as async :refer [>! <!]]
-    [clojure.browser.event :as event :refer [listen-once listen]])
+   [reagent.core :as r]
+   [cljs-http.client :as http]
+   [cljs.core.async :as async :refer [>! <! chan]]
+   [clojure.browser.event :as event :refer [listen-once listen]])
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:import [goog.net ImageLoader EventType]
            [goog.events.EventType]))
 
-(defonce ^:private loading-state (r/atom {:total 0
-                                          :progress 0}))
+(defonce ^:private loading-state (r/atom {:total 100
+                                          :progress 1}))
 
 (defn- loading-page []
   [:div#loading
@@ -31,17 +32,24 @@
     (doseq [[id img] resources]
       (.addImage loader id img))
     (.start loader)
-  progress))
+    progress))
+(defonce myqs (r/atom nil))
 
 
 (defn init [resources]
-  (swap! loading-state assoc :total (count resources))
+  ;; one additional resource is for questions loading
+  (swap! loading-state assoc
+         :total (inc (count resources))
+         :progress 1)
   (r/render-component [loading-page] (.querySelector js/document "#main"))
   (let [progress (preload-images resources)
+        qch (http/get "/questions")
         ch (async/chan)]
     (go
       (while true
         (case (<! progress)
           :load (swap! loading-state update-in [:progress] inc)
-          :complete (>! ch :complete))))
+          :complete (let [{questions :body} (<! qch)]
+                      (>! ch questions)))))
+
     ch))
