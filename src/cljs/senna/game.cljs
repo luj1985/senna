@@ -1,5 +1,7 @@
 (ns senna.game
-  (:require [reagent.core :as r]))
+  (:require
+   [reagent.core :as r]
+   [cljs.core.async :as async :refer [>! <! put!]]))
 
 (defonce time-usage (r/atom 0))
 
@@ -102,7 +104,19 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
           :transform (str "translate(" l "," t ")")
           :d track-path}])
 
-(defn game-board [l t s]
+(defn- get-time-usage []
+  (let [{:keys [start-at current-time]} @app-state
+        used (- current-time start-at)]
+    (js/parseInt (/ used 1000))))
+
+(defn game-board [ctrl l t s]
+  (let [{status :status} @app-state]
+    (when (= status :finished)
+      (put! ctrl {:next :finished
+                  :params {:time (get-time-usage)
+                           :global 1596
+                           :best 1000}})))
+
   [:div.main
     ;;; The size of SVG path is smaller than its viewbox
    [:svg {:id "game-board"
@@ -169,7 +183,7 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
   (r/atom {:questions []
            :current -1}))
 
-(defn ipad-control [ctrl questions l t s]
+(defn ipad-control [questions l t s]
   (reset! candidates {:questions questions :current 0})
   (let [{:keys [questions current]} @candidates
         question (get questions current)]

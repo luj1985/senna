@@ -19,7 +19,7 @@
 (defn- circumference [r]
   (* 2 js/Math.PI r))
 
-(defn countdown-page [chan _ _ _]
+(defn countdown-page [chan _ _ _ _]
   (let [s @countdown
         c (circumference inner)
         bg (colors s)
@@ -27,7 +27,7 @@
 
     (if (pos? s)
       (js/setTimeout #(swap! countdown dec) 1000)
-      (js/setTimeout #(put! chan :start) 300))
+      (js/setTimeout #(put! chan {:next :start}) 300))
 
     [:div#countdown
      [:svg.loader

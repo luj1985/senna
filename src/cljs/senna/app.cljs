@@ -5,6 +5,7 @@
    [senna.loader :as loader]
    [senna.countdown :as cd]
    [senna.rules :as rules]
+   [senna.results :as result]
    [senna.game :as game])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
@@ -39,34 +40,38 @@
                 :qq-space "img/social/qq-space.svg"
                 :friend-circle "img/social/friend-circle.svg"})
 
-(defonce ^:private dialog (r/atom :rule))
+(defonce ^:private dialog (r/atom {:dialog :rule}))
 
 (def ^:private pages {:rule rules/rules-page
+                      :results result/result-page
                       :countdown cd/countdown-page})
 
 (defn- popup [ch l t s]
   (go
-    (let [event (<! ch)]
-      (case event
-        :countdown (reset! dialog :countdown)
+    (let [{:keys [next params]} (<! ch)]
+      (case next
+        :countdown (reset! dialog {:dialog :countdown})
+        :finished (reset! dialog {:dialog :results
+                                  :params params})
         :start (do
                  (game/start)
                  (reset! dialog nil)))))
 
-  (if-let [page (pages @dialog)]
-    [:div.dimmer
-     [page ch l t s]]))
+  ;; TODO: rename variables ...
+  (let [{dialog :dialog params :params} @dialog]
+    (if-let [page (pages dialog)]
+      [:div.dimmer
+       [page ch params l t s]])))
 
 (defn- scene [ch tasks l t s]
-  (let [ctrl (chan)]
   (r/create-class
    {:component-did-mount game/ready
     :reagent-render (fn []
                       [:div#scene
                        [game/score-board]
-                       [game/game-board l t s]
+                       [game/game-board ch l t s]
                        [game/game-control l t s]
-                       [game/ipad-control ctrl tasks l t s]])})))
+                       [game/ipad-control tasks l t s]])}))
 
 (defn init []
   (let [loader (loader/init resources)

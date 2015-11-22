@@ -2,7 +2,7 @@
   (:require
    [garden.def :refer [defstyles]]
    [garden.units :refer [px percent em]]
-   [garden.color :refer [rgba]]))
+   [garden.color :refer [rgba rgb]]))
 
 (defstyles dialog-dimmer
   [:.dimmer {:position :fixed
@@ -12,6 +12,31 @@
              :width (percent 100)
              :height (percent 100)
              :background-color (rgba 0 0 0 0.7)}])
+
+(defstyles game-score-dialog
+  [:#score{:position :relative
+           :height (percent 100)
+           :width (percent 100)
+           :background-image "url(../img/score/achievement.png)"
+           :background-repeat :no-repeat
+           :background-position "center center"
+           :background-size "100% auto"}]
+  [:.usage {:text-align :center}
+   [:span {:color :white
+           :padding "5px 20px 5px 20px"
+           :background-color (rgb 230 1 18)
+           :font-size (px 20)}]]
+
+  [:.rank {:padding-top (px 30)
+           :text-align :center}]
+
+  [:.global {:color :white
+             :font-size (px 20)}]
+  [:.best {:color :white
+           :font-size (px 20)}]
+  )
+
+
 
 (defstyles game-rules-dialog
   [:#rules{:position :relative
@@ -40,4 +65,5 @@
 
 (defstyles dialog-styles
   dialog-dimmer
+  game-score-dialog
   game-rules-dialog)
