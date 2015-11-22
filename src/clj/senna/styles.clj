@@ -36,29 +36,31 @@
             :display :inline-block}]
    [:.message {:color :white
                :padding (px 10)
-               :font-size (px 50)}]
+               :font-size (px 60)}]
+
    [:.question {:padding "20px 10px 30px 10px"
                 :margin 0
                 :height (px 120)
                 :background-color (rgb 243 205 1)
                 :font-size (px 32)}]
+
    [:.options {:margin 0
                :padding 0
                :display :flex
                :height (px 186)
-               :list-style :none
-               }
+               :list-style :none}
+
+    [:a {:font-size (px 30)
+         :text-decoration :none
+         :padding (px 10)
+         :color :white}]
 
     [:li {:height (percent 100)
-          :box-sizing :border-box
-          :padding (px 10)
-          :font-size (px 30)
-          :color :white
           :min-width (px 100)
           :display :flex
           :align-items :center
           :justify-content :center
-          :flex-grow 1}
+          :width (percent 33.33333)}
      ["&:nth-of-type(1)" {:background-color (rgb 180 0 139)}]
      ["&:nth-of-type(2)" {:background-color (rgb 18 117 185)}]
      ["&:nth-of-type(3)" {:background-color (rgb 0 82 156)}]

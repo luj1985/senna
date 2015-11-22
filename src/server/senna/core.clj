@@ -1,7 +1,6 @@
 (ns senna.core
   (:require
    [clojure.java.jdbc :as jdbc]
-   [clojure.pprint :refer [pprint]]
    [compojure.core :refer [defroutes POST GET]]
    [compojure.route :refer [resources not-found]]
    [ring.middleware.params :refer [wrap-params]]
@@ -26,17 +25,8 @@
   (resources "/")
   (not-found "Page not found"))
 
-(defn dump-request [request]
-  (pprint request))
-
-(defn wrap-dump [handler]
-  (fn [request]
-    (dump-request request)
-    (handler request)))
-
 (def handler
   (-> app-routes
-      wrap-dump
       wrap-keyword-params
       wrap-json-response
       wrap-params))

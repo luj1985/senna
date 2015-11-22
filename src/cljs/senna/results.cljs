@@ -1,8 +1,6 @@
 (ns senna.results)
 
-
 (defn result-page [chan params l t s]
-  (js/console.log (clj->js params))
   (let [h (.-innerHeight js/window)
         h1 (* s 1152)
         offset (/ (- h h1) 2)
