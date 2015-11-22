@@ -45,7 +45,7 @@
 (def ^:private pages {:rule rules/rules-page
                       :countdown cd/countdown-page})
 
-(defn- dialog-component [ch l t s]
+(defn- popup [ch l t s]
   (go
     (let [event (<! ch)]
       (case event
@@ -55,31 +55,31 @@
                  (reset! dialog nil)))))
 
   (if-let [page (pages @dialog)]
-    [:div.dialog
+    [:div.dimmer
      [page ch l t s]]))
 
-(defn- scene [ch]
-  (let [w (.-innerWidth js/window)
+(defn- scene [ch l t s]
+  (r/create-class
+   {:component-did-mount game/ready
+    :reagent-render (fn []
+                      [:div#scene
+                       [game/score-board]
+                       [game/game-board l t s]
+                       [game/game-control l t s]
+                       [game/ipad-control l t s]])}))
+
+(defn init []
+  (let [loader (loader/init resources)
+        progress (async/chan)
+        w (.-innerWidth js/window)
         h (.-innerHeight js/window)
         s (/ w 768)
         l -10
         t (-> h (- (* 1225 s)) (/ 2) (/ s))]
-    (r/create-class
-     {:component-did-mount game/ready
-      :reagent-render (fn []
-                        [:div#scene
-                         [game/score-board]
-                         [game/game-board l t s]
-                         [game/game-control l t s]
-                         [game/ipad-control l t s]
-                         [dialog-component ch l t s]])})))
-
-(defn- popup [ch]
-  [:div])
-
-(defn init []
-  (let [loader (loader/init resources)
-        progress (async/chan)]
     (go
       _ (<! loader)
-      (r/render-component [scene progress] (.querySelector js/document "#main")))))
+      (do
+        (r/render-component [scene progress l t s]
+                            (.querySelector js/document "#main"))
+        (r/render-component [popup progress l t s]
+                            (.querySelector js/document "#dialog"))))))

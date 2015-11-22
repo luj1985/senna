@@ -1,33 +1,37 @@
 (ns senna.styles
+  (:refer-clojure :exclude [&])
   (:require
     [garden.core :refer [css]]
     [garden.def :refer [defrule defstyles defkeyframes]]
-    [garden.selectors :as s :refer [defpseudoelement]]
+    [garden.selectors :as s :refer [& defpseudoelement]]
     [garden.stylesheet :refer [rule at-font-face]]
     [garden.units :as u :refer [px pt percent]]
     [garden.color :as color :refer [rgb rgba]]
-    [senna.styles.loading :as l]))
+    [senna.styles.loading :as l]
+    [senna.styles.dialog :as d]
+    [senna.styles.countdown :as c]))
 
 (defpseudoelement -webkit-progress-bar)
 (defpseudoelement -webkit-progress-value)
 (defpseudoelement -moz-progress-bar)
 
-(defkeyframes dash
-  [:to
-   {:stroke-dashoffset 0}])
+
+(defstyles base
+  [:body {:font-family "Helvetica Neue"
+          :font-size (px 16)
+          :padding 0
+          :margin 0
+          :line-height 1.5}])
 
 (defstyles screen
 
   [(at-font-face {:font-family "digital-7"
                  :src "url('digital-7/digital-7 (mono).ttf') format('truetype')"})]
 
-  [:body {:font-family "Helvetica Neue"
-          :font-size (px 16)
-          :padding 0
-          :margin 0
-          :line-height 1.5}]
-
+  base
+  d/dialog
   l/loading-page
+  c/countdown
 
   [:#scene {:position :fixed
             :top 0
@@ -135,81 +139,11 @@
             :height (percent 100)
             }]
 
-   [:.dialog {:position :fixed
-              :z-index 4
-              :top 0
-              :left 0
-              :width (percent 100)
-              :height (percent 100)
-              :background-color (rgba 0 0 0 0.7)
-              }]]
+   ]
 
   [:#car {:fill :none
           :stroke (rgb 0 0 0)
           :stroke-width (px 1) }]
-
-  ;; TODO: extract common styles, like center (horizontal+vertical)
-  [:#countdown {:position :relative
-                :height (percent 100)
-                :width (percent 100)}
-   [:svg.loader {:position :absolute
-                 :width (px 160)
-                 :height (px 160)
-                 :transform "translate(-50%,-50%)"
-                 :top (percent 50)
-                 :left (percent 50)
-               }]
-   [:path {:fill :none
-           :box-sizing :border-box
-           :stroke-width (px 60)
-           :animation [[dash "1s" :linear 3]]}]
-
-   [:circle {:transform "translate(50%,50%)"}]
-
-   [:.seconds {:font-size (px 40)}]
-   [:.go {:font-size (px 30)}]
-   [:.txt {:color :white
-               :border-radius (percent 50)
-               :border "3px solid white"
-               :position :absolute
-               :transform "translate(-50%,-50%)"
-               :top (percent 50)
-               :left (percent 50)
-               :display :flex
-               :align-items :center
-               :justify-content :center
-               :background-color :black
-               :text-align :center
-               :z-index 5
-               :height (px 60)
-               :width (px 60)
-               }]]
-
-  [:#rules{:position :relative
-           :height (percent 100)
-           :width (percent 100)
-           :background-image "url(../img/rules/rules.png)"
-           :background-repeat :no-repeat
-           :background-position "center center"
-           :background-size "100% auto"}
-
-   [:section {:color :white
-        :font-size "1em"
-        :margin 0
-        :padding (px 35)}
-
-    [:.container {:text-align :center}]
-
-    [:button.got-it {:display :inline-block
-                     :height (px 50)
-                     :width (px 100)
-                     :margin-top (px 50)
-                     :background-color :transparent
-                     :border :none
-                     :background-size "100% 100%"
-                     :background-image "url(../img/rules/got-it.svg)"}]]
-
-   ]
 
   [:#track {:fill :none
             :stroke :none

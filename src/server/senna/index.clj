@@ -16,15 +16,7 @@
     [:link {:href "css/garden.css"
             :rel "stylesheet"
             :type "text/css"
-            :media "screen"}]
-    ;;; TODO: move to garden css generation script
-    [:style {:type "text/css"}
-     "@keyframes dash {
-       to {
-        stroke-dashoffset: 0;
-       }
-     }"]
-    ]
+            :media "screen"}]]
 
    [:body
     [:div#main
