@@ -34,6 +34,9 @@
             :width (px 465)
             :left (px 259)
             :display :inline-block}]
+   [:.message {:color :white
+               :padding (px 10)
+               :font-size (px 50)}]
    [:.question {:padding "20px 10px 30px 10px"
                 :margin 0
                 :height (px 120)
@@ -45,12 +48,12 @@
                :height (px 186)
                :list-style :none
                }
-    [:a {:text-decoration :none
-         :font-size (px 30)
-         :display :block
-         :color :white}]
 
     [:li {:height (percent 100)
+          :box-sizing :border-box
+          :padding (px 10)
+          :font-size (px 30)
+          :color :white
           :min-width (px 100)
           :display :flex
           :align-items :center

@@ -181,16 +181,25 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
 
 (defonce ^:private candidates
   (r/atom {:questions []
-           :current -1}))
+           :current 0}))
 
 (defn ipad-control [questions l t s]
-  (reset! candidates {:questions questions :current 0})
+  (swap! candidates assoc :questions questions)
+
   (let [{:keys [questions current]} @candidates
-        question (get questions current)]
-    [:div.ipad {:style {:zoom s
-                        :top (str (+ 622 t) "px")}}
-     [:h4.question (:question question)]
-     [:ul.options
-      [:li [:a {:href "#"} (:option1 question)]]
-      [:li [:a {:href "#"} (:option2 question)]]
-      [:li [:a {:href "#"} (:option3 question)]]]]))
+        question (get questions current)
+        nav-next (fn [_]
+                   (swap! candidates assoc :current (inc current)))]
+    (if (nil? question)
+      [:div.ipad {:style {:zoom s
+                          :top (str (+ 622 t) "px")}}
+       [:div.message "没有了"]]
+
+
+      [:div.ipad {:style {:zoom s
+                          :top (str (+ 622 t) "px")}}
+       [:h4.question (:question question)]
+       [:ul.options
+        [:li {:on-click nav-next} (:option1 question)]
+        [:li {:on-click nav-next} (:option2 question)]
+        [:li {:on-click nav-next} (:option3 question)]]])))
