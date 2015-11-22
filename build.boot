@@ -9,15 +9,20 @@
                  [com.cemerick/piggieback       "0.2.1"      :scope "test"]
                  [org.clojure/tools.nrepl       "0.2.12"     :scope "test"]
                  [weasel                        "0.7.0"      :scope "test"]
-                 [org.clojure/clojurescript "1.7.170"]
-                 [org.clojure/core.async "0.2.374"]
+
+                 ;; after build, clojurescript/garden will be translated
+                 ;; into assets, no need to include them in war file
+                 [garden "1.3.0-SNAPSHOT" :scope "test"]
+                 [reagent "0.5.1" :scope "test"]
+                 [org.clojure/clojurescript "1.7.170" :scope "test"]
+                 [org.clojure/core.async "0.2.374" :scope "test"]
+
                  [org.clojure/java.jdbc "0.4.2"]
                  [ring/ring-core "1.4.0"]
                  [mysql/mysql-connector-java "5.1.37"]
                  [hiccup "1.0.5"]
-                 [garden "1.3.0-SNAPSHOT" :scope "provided"]
                  [compojure "1.4.0"]
-                 [reagent "0.5.1" :scope "provided"]])
+                 ])
 
 (require
  '[adzerk.boot-cljs      :refer [cljs]]
