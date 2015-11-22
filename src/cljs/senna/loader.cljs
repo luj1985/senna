@@ -36,7 +36,7 @@
 
 (defn init [resources]
   (swap! loading-state assoc :total (count resources))
-  (r/render-component [loading-page] (.querySelector js/document "body"))
+  (r/render-component [loading-page] (.querySelector js/document "#main"))
   (let [progress (preload-images resources)
         ch (async/chan)]
     (go

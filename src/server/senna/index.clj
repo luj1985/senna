@@ -2,7 +2,7 @@
   (:use
    [hiccup.page]))
 
-(defn index-page [request]
+(defn index-page [data]
   (html5
    [:head
     [:meta {:http-equiv "content-type" :content "text/html; charset=utf-8"}]
@@ -27,6 +27,13 @@
     ]
 
    [:body
-    [:script {:type "text/javascript"
-              :src "js/app.js"
-              :charset "utf-8"}]]))
+    [:div#main
+     ;; This "loading" html fragment will be replaced by React loader component
+     ;; after javascript file was loaded.
+     ;; Here is used to prevent initial blank page.
+     [:div#loading
+      [:div.logo]
+      [:div.progress-bar
+       [:progress]]]]
+    [:div#dialog]
+    (include-js "js/app.js")]))

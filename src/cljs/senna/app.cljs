@@ -74,9 +74,12 @@
                          [game/ipad-control l t s]
                          [dialog-component ch l t s]])})))
 
+(defn- popup [ch]
+  [:div])
+
 (defn init []
   (let [loader (loader/init resources)
         progress (async/chan)]
     (go
       _ (<! loader)
-      (r/render-component [scene progress] (.-body js/document)))))
+      (r/render-component [scene progress] (.querySelector js/document "#main")))))

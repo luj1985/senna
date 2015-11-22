@@ -19,7 +19,8 @@
     r))
 
 (defroutes app-routes
-  (GET "/" [] index-page)
+  (GET "/" [] (fn [_]
+                (index-page {})))
   (GET "/questions" [] random-questions)
   (resources "/")
   (not-found "Page not found"))
