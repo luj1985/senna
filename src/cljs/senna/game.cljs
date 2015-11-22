@@ -3,11 +3,15 @@
 
 (defonce time-usage (r/atom 0))
 
+
 ;;; TODO: calculate the initial state from the SVG path
-(def app-state (r/atom {:transform {:x 57.3749 :y 342.897 :r 0}
-                        :distance 0
-                        :rounds 1
-                        :rotate 0}))
+(defonce app-state (r/atom {:position {:x 0 :y 0 :r 0}
+                            :start-at 0
+                            :current-time 0
+                            :status :ready
+                            :distance 0
+                            :rounds 1}))
+(defonce speed (r/atom 0))
 
 ;;; TODO: read from file ?
 (def ^:private track-path "M167,880l-50.194-136.857
@@ -35,35 +39,63 @@
       (/ Math/PI)
       (+ 90))))
 
-(def speed (r/atom 0))
 
 (defn- motion [position]
   (if (< @speed 8.5)
     (swap! speed #(+ .2 %)))
   (+ position @speed))
 
-(defn- move-forward [state]
+(defn- move [p1 p2]
   (let [track (.getElementById js/document "track")
         total (.getTotalLength track)
-        old-distance (:distance state)
-        new-distance (motion old-distance)
-        from (.getPointAtLength track (mod old-distance total))
-        to (.getPointAtLength track (mod new-distance total))]
-      (assoc state :transform {:x (- (.-x to) 30)
-                               :y (- (.-y to) 30)
-                               :r (rotate-along-path from to)}
-                   :distance new-distance
-                   :rounds (.ceil js/Math (/ new-distance total)))))
+        from (.getPointAtLength track (mod p1 total))
+        to (.getPointAtLength track (mod p2 total))]
+    {:x (- (.-x from) 30)
+     :y (- (.-y from) 30)
+     :r (rotate-along-path from to)}))
+
+
+(defn ready []
+  (swap! app-state assoc :position (move 0 1)))
+
+(defn- timestamp []
+  (.getTime (js/Date.)))
+
+(defn- move-forward []
+  (let [{:keys [status distance]} @app-state
+        track (.getElementById js/document "track")
+        total (.getTotalLength track)
+        from distance
+        to (motion from)]
+
+    (when (= status :running)
+      (let [rounds (js/Math.ceil (/ to total))
+            status (if (<= rounds 3) :running :finished )]
+        (swap! app-state assoc
+               :status status
+               :position (move from to)
+               :current-time (timestamp)
+               :distance to
+               :rounds rounds)
+        (js/requestAnimationFrame move-forward)))))
+
+(defn start []
+  (let [moment (timestamp)]
+    (swap! app-state assoc
+           :status :running
+           :current-time moment
+           :start-at moment)
+    (move-forward)))
+
+(defn stop []
+  (swap! app-state assoc :status :finished))
 
 (defn- car-spirit [l t]
-  (fn []
-    (js/requestAnimationFrame #(swap! app-state move-forward))
-      (let [{:keys [x y r]} (:transform @app-state)]
-        [:g {:id "car"
-             :transform (str "translate(" (+ x l) "," (+ y t) ") rotate(" r ",30,30)")
-             :dangerouslySetInnerHTML {
-             :__html "<image xlink:href=\"../img/game/car.png\"
-width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
+  (let [{:keys [x y r]} (:position @app-state)]
+    [:g {:id "car"
+         :transform (str "translate(" (+ x l) "," (+ y t) ") rotate(" r ",30,30)")
+         :dangerouslySetInnerHTML {:__html "<image xlink:href=\"../img/game/car.png\"
+width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
 
 (defn- track-spirit [l t]
   [:path {:id "track"
@@ -119,21 +151,19 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}])))
     (str "0" n)
     (str n)))
 
-(defn- to-time [n]
-  (let [mins (js/parseInt (/ n 60))
-        secs (mod n 60)]
-    (str (to-fixed mins) ":" (to-fixed secs))))
-
-
-
-;;; TODO: move to game start control logical
-(js/setInterval #(swap! time-usage inc) 1000)
-
+(defn- to-time [ms]
+  (let [secs (/ ms 1000)
+        m (js/parseInt (/ secs 60))
+        s (js/parseInt (mod secs 60))]
+    (str (to-fixed m) ":" (to-fixed s))))
 
 (defn game-control [l t s]
-  [:div.timer {:style {:zoom s
-                       :top (str (+ 472 t) "px")}}
-   (to-time @time-usage) ])
+  (let [{:keys [status start-at current-time]} @app-state
+        used (- current-time start-at)]
+    [:div.timer {:style {:zoom s
+                         :top (str (+ 472 t) "px")}}
+
+     (to-time used) ]))
 
 (defn ipad-control [l t s]
   [:div.ipad {:style {:zoom s

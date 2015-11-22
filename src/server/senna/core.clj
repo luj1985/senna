@@ -14,7 +14,6 @@
   (resources "/")
   (not-found "Page not found"))
 
-
 (defn dump-request [request]
   (pprint request))
 
@@ -27,9 +26,7 @@
   (-> app-routes
       wrap-dump
       (wrap-rewrite
-       [:rewrite "/" "/index.html"]
-       #_[:rewrite #"/senna/?$" "/index.html"]
-       #_[:rewrite #"/senna/(.+)" "$1"])
+       [:rewrite "/" "/index.html"])
       wrap-params))
 
 (defn init []

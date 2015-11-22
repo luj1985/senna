@@ -78,7 +78,9 @@
                           :stroke-dashoffset c
                           :stroke (loader-colors (dec @countdown))}}]])
        [:div.seconds @countdown]])
-    (reset! dialog nil)))
+    (do
+      (game/start)
+      (reset! dialog nil))))
 
 (def ^:private pages {:rule rules-page
                       :countdown countdown-page})
@@ -110,4 +112,6 @@
   (let [loader (loader/init resources)]
     (go
       _ (<! loader)
-      (r/render-component [scene] (.querySelector js/document "body")))))
+      (do
+        (r/render-component [scene] (.querySelector js/document "body"))
+        (game/ready)))))
