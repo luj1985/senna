@@ -43,8 +43,8 @@
 
 
 (defn- motion [position]
-  (if (< @speed 8.5)
-    (swap! speed #(+ .2 %)))
+  (if (< @speed 8)
+    (swap! speed #(+ .1 %)))
   (+ position @speed))
 
 (defn- move [p1 p2]

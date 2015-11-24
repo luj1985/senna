@@ -24,13 +24,13 @@
                 :car "img/game/car.png"
                 :background "img/game/background.jpg"
 
-                :got-it "img/rules/got-it.svg"
-                :rules  "img/rules/rules.png"
-
                 :again "img/score/again.svg"
                 :close "img/score/close.svg"
                 :share "img/score/share.svg"
-                :achievement "img/score/achievement.png"
+
+                :rules "img/dialog/rules.png"
+                :scores "img/dialog/scores.png"
+                :achievement "img/dialog/achieve.png"
 
                 :qq "img/social/qq.svg"
                 :link "img/social/copy-link.svg"
@@ -40,6 +40,10 @@
                 :friend-circle "img/social/friend-circle.svg"})
 
 (defonce ^:private dialog (r/atom {:dialog :rule}))
+#_(defonce ^:private dialog (r/atom {:dialog :results
+                                   :params {:time 29
+                                            :global 2000
+                                            :best 1000}}))
 
 (def ^:private pages {:rule rules/rules-page
                       :results result/result-page

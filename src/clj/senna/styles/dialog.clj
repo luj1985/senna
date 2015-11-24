@@ -1,10 +1,22 @@
 (ns senna.styles.dialog
   (:require
    [garden.def :refer [defstyles]]
+   [garden.selectors :refer [& before]]
    [garden.units :refer [px percent em]]
    [garden.color :refer [rgba rgb]]))
 
 (defstyles dialog-dimmer
+  [:.dimmer {:text-align :center}
+   [:.content {:display :inline-block
+               :color :white
+               :margin-top (percent 25)
+               :padding "50px 25px 0 25px"
+               :width (percent 85)
+               :height (percent 100)
+               :border-radius (px 30)
+               :box-sizing :border-box
+               :text-align :left}]]
+
   [:.dimmer {:position :fixed
              :z-index 4
              :top 0
@@ -14,14 +26,21 @@
              :background-color (rgba 0 0 0 0.7)}])
 
 (defstyles game-score-dialog
-  [:#score{:position :relative
-           :height (percent 100)
-           :width (percent 100)
-           :background-image "url(../img/score/achievement.png)"
-           :background-repeat :no-repeat
-           :background-position "center center"
-           :background-size "100% auto"}]
+  [:#score {:background-image "url(../img/dialog/scores.png)"
+            :background-size "100% auto"
+            :background-repeat :no-repeat
+            :background-position "top center"
+            :text-align :center}]
+
   [:.usage {:text-align :center}
+   [(& before) {:content "''"
+                :background-image "url(../img/dialog/achieve.png)"
+                :background-size "100% 100%"
+                :position :absolute
+                :transform "translate(-40px,-15px)"
+                :display :inline-block
+                :width (px 60)
+                :height (px 60)}]
    [:span {:color :white
            :padding "5px 20px 5px 20px"
            :background-color (rgb 230 1 18)
@@ -37,31 +56,38 @@
   )
 
 
-
 (defstyles game-rules-dialog
-  [:#rules{:position :relative
-           :height (percent 100)
-           :width (percent 100)
-           :background-image "url(../img/rules/rules.png)"
-           :background-repeat :no-repeat
-           :background-position "center center"
-           :background-size "100% auto"}
 
-   [:section {:color :white
-              :font-size (em 1)
-              :margin 0
-              :padding (px 35)}]
+  [:#rules {:background-image "url(../img/dialog/rules.png)"
+            :background-size "100% auto"
+            :background-repeat :no-repeat
+            :background-position "top center"
+            :text-align :center}
 
-   [:.container {:text-align :center}]
+   [:.got-it {:background-color (rgb 234 2 3)
+              :color (rgb 255 255 0)
+              :padding "5px 10px"
+              :font-size (px 16)
+              :outline :none
+              :border "2px solid yellow"
+              :border-radius (px 30)}]
 
-   [:button.got-it {:display :inline-block
-                    :height (px 50)
-                    :width (px 100)
-                    :margin-top (px 50)
-                    :background-color :transparent
-                    :border :none
-                    :background-size "100% 100%"
-                    :background-image "url(../img/rules/got-it.svg)"}]])
+   [:section {:text-align :left
+              :display :block
+              :margin-bottom (px 50)}]
+
+   [(& before) {:content "attr(title) ' '"
+                :position :absolute
+                :display :inline-block
+                :width (px 64)
+                :height (px 24)
+                :transform "translate(-50%,-70px)"
+                :background-color (rgb 234 2 3)
+                :padding "5px 30px"
+                :border-radius (px 30)
+                :border-style :dashed}]])
+
+
 
 (defstyles dialog-styles
   dialog-dimmer
