@@ -12,10 +12,10 @@
 
                  ;; after build, clojurescript/garden will be translated
                  ;; into assets, no need to include them in war file
-                 [garden "1.3.0-SNAPSHOT" :scope "test"]
-                 [reagent "0.5.1" :scope "test"]
-                 [org.clojure/clojurescript "1.7.170" :scope "test"]
-                 [org.clojure/core.async "0.2.374" :scope "test"]
+                 [garden "1.3.0-SNAPSHOT" :scope "client"]
+                 [reagent "0.5.1" :scope "cli ent"]
+                 [org.clojure/clojurescript "1.7.170" :scope "client"]
+                 [org.clojure/core.async "0.2.374" :scope "client"]
                  [cljs-http "0.1.38"]
 
                  [org.clojure/java.jdbc "0.4.2"]

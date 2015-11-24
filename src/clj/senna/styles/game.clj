@@ -55,12 +55,12 @@
 (defstyles timer
   [:.timer {:position :absolute
             :font-family "digital-7"
-            :font-size (px 60)
+            :font-size (px 40)
             :background-color :transparent
             :display :inline-block
             :text-align :center
             :height (px 80)
-            :width (px 148)
+            :width (px 150)
             :left (px 562)
             :transform "rotate(-14deg)"}])
 

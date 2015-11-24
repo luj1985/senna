@@ -168,8 +168,9 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
 (defn- to-time [ms]
   (let [secs (/ ms 1000)
         m (js/parseInt (/ secs 60))
-        s (js/parseInt (mod secs 60))]
-    (str (to-fixed m) ":" (to-fixed s))))
+        s (js/parseInt (mod secs 60))
+        ms (js/parseInt (/ (mod ms 1000) 10))]
+    (str (to-fixed m) ":" (to-fixed s) "." (to-fixed ms))))
 
 (defn game-control [l t s]
   (let [{:keys [status start-at current-time]} @app-state

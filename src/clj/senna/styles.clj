@@ -66,8 +66,7 @@
      ["&:nth-of-type(3)" {:background-color (rgb 0 82 156)}]
      ]]
 
-   [:.main {:background-image "url(../img/game/track.png),
-                               url(../img/game/background.jpg)"
+   [:.main {:background-image "url(../img/game/background.jpg)"
             :background-size "100% auto"
             :background-repeat :no-repeat
             :background-position "center center"

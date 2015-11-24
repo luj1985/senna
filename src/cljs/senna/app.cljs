@@ -22,7 +22,6 @@
                 :dashboard "img/game/dashboard.png"
 
                 :car "img/game/car.png"
-                :track "img/game/track.png"
                 :background "img/game/background.jpg"
 
                 :got-it "img/rules/got-it.svg"
