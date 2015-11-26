@@ -55,14 +55,15 @@
 (defstyles timer
   [:.timer {:position :absolute
             :font-family "digital-7"
-            :font-size (px 40)
+            :font-size (px 45)
             :background-color :transparent
             :display :inline-block
             :text-align :center
             :height (px 80)
-            :width (px 150)
-            :left (px 562)
-            :transform "rotate(-14deg)"}])
+            :width (px 160)
+            :left (px 555)
+            :transform "rotate(-14deg)"}
+   [:.ms {:font-size (px 36)}]])
 
 (defstyles volume
   [:.volume {:background-image "url(../img/game/volume.svg)"

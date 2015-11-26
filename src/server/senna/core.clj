@@ -10,10 +10,11 @@
    [senna.index :refer [index-page]])
   (:gen-class))
 
+;; TODO: read password from environment variable ?
 (def mysql-db {:subprotocol "mysql"
                :subname "//127.0.0.1:3306/senna"
                :user "root"
-               :password "rootpassword"})
+               :password "vote*demo"})
 
 (defn- random-questions [_]
   (response

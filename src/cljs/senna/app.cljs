@@ -22,7 +22,7 @@
                 :dashboard "img/game/dashboard.png"
 
                 :car "img/game/car.png"
-                :background "img/game/background.jpg"
+                :background "img/game/background.png"
 
                 :again "img/score/again.svg"
                 :close "img/score/close.svg"

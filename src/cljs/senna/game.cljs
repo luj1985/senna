@@ -43,8 +43,8 @@
 
 
 (defn- motion [position]
-  (if (< @speed 8)
-    (swap! speed #(+ .1 %)))
+  (if (< @speed 3)
+    (swap! speed #(+ .03 %)))
   (+ position @speed))
 
 (defn- move [p1 p2]
@@ -165,20 +165,21 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
     (str "0" n)
     (str n)))
 
-(defn- to-time [ms]
-  (let [secs (/ ms 1000)
+(defn game-control [l t scale]
+  (let [{:keys [status start-at current-time]} @app-state
+        used (- current-time start-at)
+        secs (/ used 1000)
         m (js/parseInt (/ secs 60))
         s (js/parseInt (mod secs 60))
-        ms (js/parseInt (/ (mod ms 1000) 10))]
-    (str (to-fixed m) ":" (to-fixed s) "." (to-fixed ms))))
-
-(defn game-control [l t s]
-  (let [{:keys [status start-at current-time]} @app-state
-        used (- current-time start-at)]
-    [:div.timer {:style {:zoom s
+        ms (js/parseInt (/ (mod used 1000) 10))]
+    [:div.timer {:style {:zoom scale
                          :top (str (+ 472 t) "px")}}
+       [:span.m (to-fixed m)]
+       [:span ":"]
+       [:span.s (to-fixed s)]
+       [:span "."]
+       [:span.ms (to-fixed ms)]]))
 
-     (to-time used) ]))
 
 (defonce ^:private candidates
   (r/atom {:questions []
