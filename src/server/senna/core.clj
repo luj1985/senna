@@ -1,5 +1,6 @@
 (ns senna.core
   (:require
+   [clojure.pprint :refer [pprint]]
    [clojure.java.jdbc :as jdbc]
    [compojure.core :refer [defroutes POST GET]]
    [compojure.route :refer [resources not-found]]
@@ -16,6 +17,11 @@
                :user "root"
                :password "vote*demo"})
 
+(defn- dump-request-params [handler]
+  (fn [request]
+    (pprint request)
+    (handler request)))
+
 (defn- random-questions [_]
   (response
    (jdbc/query mysql-db ["select * from questions"])))
@@ -31,6 +37,7 @@
       wrap-keyword-params
       wrap-json-response
       wrap-params))
+
 
 (defn init []
   (println "initializing data"))

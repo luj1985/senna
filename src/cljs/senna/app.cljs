@@ -40,10 +40,12 @@
                 :friend-circle "img/social/friend-circle.svg"})
 
 (defonce ^:private dialog (r/atom {:dialog :rule}))
+
+;; debug timer
 #_(defonce ^:private dialog (r/atom {:dialog :results
-                                   :params {:time 29
-                                            :global 2000
-                                            :best 1000}}))
+                                     :params {:time 29
+                                              :global 2000
+                                              :best 1000}}))
 
 (def ^:private pages {:rule rules/rules-page
                       :results result/result-page
