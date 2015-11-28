@@ -64,22 +64,22 @@
   (.getTime (js/Date.)))
 
 (defn- move-forward []
-  (let [{:keys [status distance]} @app-state
-        track (.getElementById js/document "track")
-        total (.getTotalLength track)
-        from distance
-        to (motion from)]
-
-    (when (= status :running)
-      (let [rounds (js/Math.ceil (/ to total))
-            status (if (<= rounds 3) :running :finished )]
-        (swap! app-state assoc
-               :status status
-               :position (move from to)
-               :current-time (timestamp)
-               :distance to
-               :rounds rounds)
-        (js/requestAnimationFrame move-forward)))))
+  ;; XXX: for figwheel reloading, sometimes the dom may not ready
+  (when-let [track (.getElementById js/document "track")]
+    (let [{:keys [status distance]} @app-state]
+      (when (= status :running)
+        (let [total (.getTotalLength track)
+              from distance
+              to (motion from)
+              rounds (js/Math.ceil (/ to total))
+              status (if (<= rounds 3) :running :finished )]
+          (swap! app-state assoc
+                 :status status
+                 :position (move from to)
+                 :current-time (timestamp)
+                 :distance to
+                 :rounds rounds)))))
+    (js/requestAnimationFrame move-forward))
 
 (defn start []
   (let [moment (timestamp)]
@@ -197,7 +197,6 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
       [:div.ipad {:style {:zoom s
                           :top (str (+ 622 t) "px")}}
        [:div.message "没有了"]]
-
 
       [:div.ipad {:style {:zoom s
                           :top (str (+ 622 t) "px")}}

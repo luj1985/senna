@@ -68,15 +68,16 @@
       [:div.dimmer
        [page ch params l t s]])))
 
-(defn- scene [ch tasks l t s]
-  (r/create-class
-   {:component-did-mount game/ready
-    :reagent-render (fn []
-                      [:div#scene
-                       [game/score-board]
-                       [game/game-board ch l t s]
-                       [game/game-control l t s]
-                       [game/ipad-control tasks l t s]])}))
+(defn- layout [ch tasks l t s]
+  [:div#scene
+   [game/score-board]
+   [game/game-board ch l t s]
+   [game/game-control l t s]
+   [game/ipad-control tasks l t s]])
+
+(def ^:private scene
+  (with-meta layout
+    {:component-did-mount game/ready}))
 
 (defn init []
   (let [loader (loader/init resources)
