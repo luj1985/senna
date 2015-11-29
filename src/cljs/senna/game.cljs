@@ -5,7 +5,7 @@
 
 (enable-console-print!)
 
-(def ^:const MAX-ROUNDS 3)
+(def ^:const MAX-ROUNDS 100)
 
 (defonce app-state (r/atom {:status :ready
                             :position {:x 0 :y 0 :r 0}

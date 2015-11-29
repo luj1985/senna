@@ -47,5 +47,6 @@
               :start (do
                        (game/start)
                        (reset! dialog nil))
-              :finished (reset! dialog {:dialog :results :params params})))))
+              :finished (reset! dialog {:dialog :results :params params})
+              (js/console.warn "unhandled event:" event)))))
     (loader/init ch)))

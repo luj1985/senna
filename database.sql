@@ -11,6 +11,7 @@ set character_set_server='utf8';
 
 create table if not exists questions (
   id int not null auto_increment,
+  brand varchar(100) not null,
   question varchar(1024) not null,
   option1 varchar(200) not null,
   option2 varchar(200) not null,

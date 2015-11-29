@@ -20,7 +20,7 @@
   (* 2 js/Math.PI r))
 
 (defn rules-page [ch _]
-  [:div#rules.content {:title "游戏规则"}
+  [:div#rules.content {:title "游戏玩法"}
    [:section rule-text]
    [:button
     {:href "#"
