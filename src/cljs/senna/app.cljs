@@ -68,17 +68,6 @@
       [:div.dimmer
        [page ch params l t s]])))
 
-(defn- layout [ch tasks l t s]
-  [:div#scene
-   [game/score-board]
-   [game/game-board ch l t s]
-   [game/game-control l t s]
-   [game/ipad-control tasks l t s]])
-
-(def ^:private scene
-  (with-meta layout
-    {:component-did-mount game/ready}))
-
 (defn init []
   (let [loader (loader/init resources)
         progress (async/chan)
@@ -89,7 +78,7 @@
         t (-> h (- (* 1225 s)) (/ 2) (/ s))]
     (go
       (let [tasks (<! loader)]
-        (r/render-component [scene progress tasks l t s]
+        (r/render-component [game/scene progress tasks l t s]
                             (.querySelector js/document "#main"))
         (r/render-component [popup progress l t s]
                             (.querySelector js/document "#dialog"))))))

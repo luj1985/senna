@@ -3,17 +3,89 @@
    [reagent.core :as r]
    [cljs.core.async :as async :refer [>! <! put!]]))
 
-(defonce time-usage (r/atom 0))
+(def ^:const MAX-ROUNDS 3)
 
-
-;;; TODO: calculate the initial state from the SVG path
-(defonce app-state (r/atom {:position {:x 0 :y 0 :r 0}
-                            :start-at 0
-                            :current-time 0
-                            :status :ready
+(defonce app-state (r/atom {:status :ready
+                            :position {:x 0 :y 0 :r 0}
                             :distance 0
-                            :rounds 1}))
-(defonce speed (r/atom 0))
+                            :rounds 1
+                            :speed 0
+                            :start-at 0
+                            :current-time 0}))
+
+
+(defn- timestamp []
+  (.getTime (js/Date.)))
+
+(defn- rotate-along-path [from to]
+  (let [x0 (.-x from) y0 (.-y from)
+        x1 (.-x to)   y1 (.-y to)]
+    (-> (Math/atan2 (- y1 y0) (- x1 x0))
+      (* 180)
+      (/ Math/PI)
+      (+ 90))))
+
+(defn- move-along [track p1 p2 total]
+  (let [from (.getPointAtLength track (mod p1 total))
+        to (.getPointAtLength track (mod p2 total))]
+    {:x (- (.-x from) 30)
+     :y (- (.-y from) 30)
+     :r (rotate-along-path from to)}))
+
+(defn- initialize-game-board
+  "Used to set initial state of the game, update the car position.
+   At this time, the game is not started yet."
+  []
+  (let [track (.getElementById js/document "track")
+        total (.getTotalLength track)]
+    (swap! app-state assoc
+           :track track
+           :total total
+           :position (move-along track 0 1 total))))
+
+(defmulti transit :status)
+
+(defmethod transit :running [state]
+  (let [{:keys [total distance track speed]} state
+        ;; TODO: speed can change at any time
+        new-speed (if (< speed 3) (+ 0.03 speed) speed)
+        to (+ distance (* 1 new-speed))
+        position (move-along track distance to total)
+        rounds (js/Math.ceil (/ to total))]
+    (assoc state
+           :speed new-speed
+           :status (if (<= rounds MAX-ROUNDS) :running :finished )
+           :position position
+           :current-time (timestamp)
+           :distance to
+           :rounds rounds)))
+
+(defmethod transit :default [state]
+  state)
+
+(defn- game-loop []
+  (swap! app-state transit)
+  ;; 'requestAnimationFrame' will pause when stay in background.
+  ;; And its frame-rate is uncertain, may need setTimeout to control it.
+  #_(js/setTimeout game-loop 20)
+  (js/requestAnimationFrame game-loop))
+
+
+(defn start []
+  (let [moment (timestamp)]
+    (swap! app-state assoc
+           :status :running
+           :current-time moment
+           :start-at moment)
+    (game-loop)))
+
+(def ^:private car-img
+  "<image xlink:href=\"../img/game/car.png\" width=\"60\" height=\"60\" x=\"0\" y=\"0\">")
+
+(defn- car-spirit [l t]
+  (let [{:keys [x y r]} (:position @app-state)]
+    [:g {:transform (str "translate(" (+ x l) "," (+ y t) ") rotate(" r ",30,30)")
+         :dangerouslySetInnerHTML {:__html car-img}}]))
 
 ;;; TODO: read from file ?
 (def ^:private track-path "M167,880l-50.194-136.857
@@ -33,72 +105,6 @@
   100.579-86.871c61.742,22.854,89.18,3.57,76.697-30.018c0,0-14.227-47.354-123.729-27.106
   l-313.541,12.557C254.977,1035.157,208.306,1029.831,199.599,995.858z")
 
-(defn- rotate-along-path [from to]
-  (let [x0 (.-x from) y0 (.-y from)
-        x1 (.-x to)   y1 (.-y to)]
-    (-> (Math/atan2 (- y1 y0) (- x1 x0))
-      (* 180)
-      (/ Math/PI)
-      (+ 90))))
-
-
-(defn- motion [position]
-  (if (< @speed 3)
-    (swap! speed #(+ .03 %)))
-  (+ position @speed))
-
-(defn- move [p1 p2]
-  (let [track (.getElementById js/document "track")
-        total (.getTotalLength track)
-        from (.getPointAtLength track (mod p1 total))
-        to (.getPointAtLength track (mod p2 total))]
-    {:x (- (.-x from) 30)
-     :y (- (.-y from) 30)
-     :r (rotate-along-path from to)}))
-
-
-(defn ready []
-  (swap! app-state assoc :position (move 0 1)))
-
-(defn- timestamp []
-  (.getTime (js/Date.)))
-
-(defn- move-forward []
-  ;; XXX: for figwheel reloading, sometimes the dom may not ready
-  (when-let [track (.getElementById js/document "track")]
-    (let [{:keys [status distance]} @app-state]
-      (when (= status :running)
-        (let [total (.getTotalLength track)
-              from distance
-              to (motion from)
-              rounds (js/Math.ceil (/ to total))
-              status (if (<= rounds 3) :running :finished )]
-          (swap! app-state assoc
-                 :status status
-                 :position (move from to)
-                 :current-time (timestamp)
-                 :distance to
-                 :rounds rounds)))))
-    (js/requestAnimationFrame move-forward))
-
-(defn start []
-  (let [moment (timestamp)]
-    (swap! app-state assoc
-           :status :running
-           :current-time moment
-           :start-at moment)
-    (move-forward)))
-
-(defn stop []
-  (swap! app-state assoc :status :finished))
-
-(defn- car-spirit [l t]
-  (let [{:keys [x y r]} (:position @app-state)]
-    [:g {:id "car"
-         :transform (str "translate(" (+ x l) "," (+ y t) ") rotate(" r ",30,30)")
-         :dangerouslySetInnerHTML {:__html "<image xlink:href=\"../img/game/car.png\"
-width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
-
 (defn- track-spirit [l t]
   [:path {:id "track"
           :transform (str "translate(" l "," t ")")
@@ -109,7 +115,7 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
         used (- current-time start-at)]
     (js/parseInt (/ used 1000))))
 
-(defn game-board [ctrl l t s]
+(defn- game-board [ctrl l t s]
   (let [{status :status} @app-state]
     (when (= status :finished)
       (put! ctrl {:next :finished
@@ -119,10 +125,9 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
 
   [:div.main
     ;;; The size of SVG path is smaller than its viewbox
-   [:svg {:id "game-board"
-          :width "100%"
-          :style {:zoom s}
-          :height "100%"}
+   [:svg {:width "100%"
+          :height "100%"
+          :style {:zoom s}}
     [track-spirit l t]
     [car-spirit l t]]])
 
@@ -136,7 +141,7 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
 
 (defn- speed-dashboard []
   (let [f (range-map [0 12] [-110 110])
-        deg (f @speed)]
+        deg (:speed @app-state)]
     [:div.dashboard
      [:span.pointer {:style {:transform (str "rotate(" deg "deg)")}}]]))
 
@@ -154,7 +159,7 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
 (defn- volume-control []
   [:div.volume])
 
-(defn score-board []
+(defn- score-board []
   [:div.score-board
    [speed-dashboard]
    [round-dashboard]
@@ -165,7 +170,7 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
     (str "0" n)
     (str n)))
 
-(defn game-control [l t scale]
+(defn- game-control [l t scale]
   (let [{:keys [status start-at current-time]} @app-state
         used (- current-time start-at)
         secs (/ used 1000)
@@ -185,7 +190,7 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
   (r/atom {:questions []
            :current 0}))
 
-(defn ipad-control [questions l t s]
+(defn- ipad-control [questions l t s]
   (swap! candidates assoc :questions questions)
 
   (let [{:keys [questions current]} @candidates
@@ -205,3 +210,14 @@ width=\"60\" height=\"60\" x=\"0\" y=\"0\">"}}]))
         [:li [:a {:href "#" :on-click nav-next} (:option1 question)]]
         [:li [:a {:href "#" :on-click nav-next} (:option2 question)]]
         [:li [:a {:href "#" :on-click nav-next} (:option3 question)]]]])))
+
+(defn- game-layout [ch tasks l t s]
+  [:div#scene
+   [score-board]
+   [game-board ch l t s]
+   [game-control l t s]
+   [ipad-control tasks l t s]])
+
+(def scene
+  (with-meta game-layout
+    {:component-did-mount initialize-game-board}))

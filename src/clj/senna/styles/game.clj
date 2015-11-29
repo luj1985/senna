@@ -32,8 +32,7 @@
             :margin-top (px 18)
             :width (px 50)
             :height (px 50)
-            :display :inline-block}]
-  )
+            :display :inline-block}])
 
 
 (defstyles round-prefix

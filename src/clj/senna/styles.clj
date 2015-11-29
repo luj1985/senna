@@ -4,6 +4,7 @@
     [garden.stylesheet :refer [rule at-font-face]]
     [garden.units :refer [px pt percent]]
     [garden.color :refer [rgb rgba]]
+    [garden.selectors :refer [& nth-of-type]]
     [senna.styles.game :refer [game-board-styles]]
     [senna.styles.loading :refer [loading-page-styles]]
     [senna.styles.dialog :refer [dialog-styles]]
@@ -34,6 +35,7 @@
             :width (px 465)
             :left (px 259)
             :display :inline-block}]
+
    [:.message {:color :white
                :padding (px 10)
                :font-size (px 60)}]
@@ -63,22 +65,14 @@
           :width (percent 33.33333)}
      ["&:nth-of-type(1)" {:background-color (rgb 180 0 139)}]
      ["&:nth-of-type(2)" {:background-color (rgb 18 117 185)}]
-     ["&:nth-of-type(3)" {:background-color (rgb 0 82 156)}]
-     ]]
+     ["&:nth-of-type(3)" {:background-color (rgb 0 82 156)}]]]
 
    [:.main {:background-image "url(../img/game/background.png)"
             :background-size "100% auto"
             :background-repeat :no-repeat
             :background-position "center center"
             :position :relative
-            :height (percent 100)
-            }]
-
-   ]
-
-  [:#car {:fill :none
-          :stroke (rgb 0 0 0)
-          :stroke-width (px 1) }]
+            :height (percent 100)}]]
 
   [:#track {:fill :none
             :stroke :none
