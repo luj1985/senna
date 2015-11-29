@@ -2,7 +2,7 @@
   (:require
    [reagent.core :as r]))
 
-(defonce mute-state (r/atom false))
+(defonce mute-state (r/atom true))
 
 (defn play-sound [id]
   (if (not @mute-state)

@@ -7,6 +7,8 @@
 
 (enable-console-print!)
 
+(declare caculate-speed)
+
 (def ^:const MAX-ROUNDS 100)
 (def ^:const FPS 60)
 ;; Used to indidate the speed dashboard
@@ -19,7 +21,6 @@
                             :rounds 1
                             :speed 0
                             :start-at 0
-                            :volume true
                             :current-time 0}))
 
 (defn- timestamp []
@@ -51,16 +52,14 @@
            :total total
            :position (move-along track 0 1 total))))
 
-(defn- speed-control [speed]
-  (if (< speed SPEED-NORMAL) (+ 0.05 speed) speed))
 
 (defmulti transit :status)
 
 (defmethod transit :running [state]
   (let [{:keys [total distance track speed]} state
         ;; TODO: speed can change at any time
-        new-speed (speed-control speed)
-        to (+ distance (* 1 new-speed))
+        new-speed (caculate-speed speed)
+        to (+ distance (min new-speed SPEED-LIMIT))
         position (move-along track distance to total)
         rounds (js/Math.ceil (/ to total))]
     (assoc state
@@ -200,16 +199,52 @@
            :status :normal}))
 
 (defn- navigate-next [ch correct?]
-  (let [status (if correct? :correct :wrong)]
+  (let [status (if correct? :correct :wrong)
+        delay (if correct? 500 3000)]
     (go
       (swap! candidates assoc :status status)
-      (<! (timeout 1000))
+      (<! (timeout delay))
       (swap! candidates assoc :status :normal)
       (swap! candidates update-in [:current] inc))))
+
+(defn- normal-speed [speed]
+  (if (< speed SPEED-NORMAL) (+ speed 0.05) speed))
+
+(defonce accumulators (atom []))
+
+(defn- accelerate-speed [speed]
+  (let [results (->> @accumulators
+                     (map (fn [{:keys [remain total delta]}]
+                            (let [d (cond
+                                      (and (< 160 remain) (<= remain 240)) 0.1
+                                      (<= 0 remain 160) -0.05
+                                      :else 0)]
+
+                          {:remain (dec remain) :delta d}))))
+        delta (->> (map :delta results)
+                   (reduce +))
+        remains (filter #(pos? (:remain %)) results)]
+    (reset! accumulators remains)
+    (+ speed delta)))
+
+(defn- caculate-speed [speed]
+  (-> speed
+      (normal-speed)
+      (accelerate-speed)))
+
+
+
+
+(defn- speedup-effect [ch correct?]
+  (when correct?
+    (let [r (swap! accumulators conj {:remain 240 :delta 0})]
+
+      r)))
 
 (defn- answer-effect [responser correct?]
   (let [sound (if correct? "m-correct" "m-wrong")]
     (sound/play-sound sound))
+  (speedup-effect responser correct?)
   (navigate-next responser correct?))
 
 (defn- ipad-control [questions l t s]
@@ -220,7 +255,9 @@
         {:keys [question option1 option2 option3 answer]} (get questions current)
         choice-handler #(fn [e]
                           (.preventDefault e)
-                          (answer-effect responser (= answer %)))]
+                          ;; to prevent non-sense click
+                          (if (= (:status @candidates) :normal)
+                            (answer-effect responser (= answer %))))]
     (if (nil? question)
       [:div.ipad {:style {:zoom s :top (str (+ 622 t) "px")}}
        [:div.message "没有了"]]
