@@ -7,6 +7,9 @@
 
 (def ^:const MAX-ROUNDS 100)
 (def ^:const FPS 60)
+;; Used to indidate the speed dashboard
+(def ^:const SPEED-LIMIT 10)
+(def ^:const SPEED-NORMAL 3)
 
 (defonce app-state (r/atom {:status :ready
                             :position {:x 0 :y 0 :r 0}
@@ -46,7 +49,7 @@
            :position (move-along track 0 1 total))))
 
 (defn- speed-control [speed]
-  (if (< speed 3) (+ 0.05 speed) speed))
+  (if (< speed SPEED-NORMAL) (+ 0.05 speed) speed))
 
 (defmulti transit :status)
 
@@ -144,10 +147,12 @@
         :else (+ r1 (* d step))))))
 
 (defn- speed-dashboard []
-  (let [f (range-map [0 12] [-110 110])
-        deg (:speed @app-state)]
+  (let [f (range-map [0 SPEED-LIMIT] [-110 110])
+        speed (:speed @app-state)
+        deg (f speed)]
     [:div.dashboard
-     [:span.pointer {:style {:transform (str "rotate(" deg "deg)")}}]]))
+     [:span.pointer {:style {:-webkit-transform (str "rotate(" deg "deg)")
+                             :transform (str "rotate(" deg "deg)")}}]]))
 
 (defn- round-counter [n]
   (if (#{1,2,3} n)

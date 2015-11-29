@@ -61,6 +61,7 @@
             :height (px 80)
             :width (px 160)
             :left (px 555)
+            :-webkit-transform "rotate(-14deg)"
             :transform "rotate(-14deg)"}
    [:.ms {:font-size (px 36)}]])
 

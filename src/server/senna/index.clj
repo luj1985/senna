@@ -16,7 +16,15 @@
     [:link {:href "css/garden.css"
             :rel "stylesheet"
             :type "text/css"
-            :media "screen"}]]
+            :media "screen"}]
+    ;; This is just a workaround, seems like auto-prefix in garden doesnt' work.
+    ;; Have not time to investigate, just provide the prefixed animation
+    [:style {:type "text/css"}
+"@-webkit-keyframes countdown {
+  to {
+    stroke-dashoffset: 0;
+  }
+}"]]
 
    [:body
     [:div#main

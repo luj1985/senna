@@ -49,6 +49,7 @@
                 :background-image "url(../img/dialog/achieve.png)"
                 :background-size "100% 100%"
                 :position :absolute
+                :-webkit-transform "translate(-40px,-15px)"
                 :transform "translate(-40px,-15px)"
                 :display :inline-block
                 :width (px 60)
@@ -82,6 +83,7 @@
                 :padding "5px 30px"
                 :border-radius (px 32)
                 :border-style :dashed
+                :-webkit-transform "translate(-50%,-70px)"
                 :transform "translate(-50%,-70px)"
                 :background-color (rgb 234 2 3)
                 :background "linear-gradient(180deg,rgb(244,3,2) 0%, rgb(128,15,16) 100%)"}]])
