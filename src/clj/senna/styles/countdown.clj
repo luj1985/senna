@@ -6,12 +6,12 @@
    [garden.units :refer [px percent em]]
    [garden.color :refer [rgba rgb]]))
 
-(defkeyframes rotate-animation
+(defkeyframes countdown
   [:to
    {:stroke-dashoffset 0}])
 
 (defstyles countdown-styles
-  rotate-animation
+  countdown
 
   [:#countdown {:position :relative
                 :height (percent 100)
@@ -22,9 +22,10 @@
                  :transform "translate(-50%,-50%)"
                  :top (percent 50)
                  :left (percent 50)}]
+
    [:path {:fill :none
            :stroke-width (px 60)
-           :animation [[rotate-animation "1s" :linear 3]]}]
+           :animation [[countdown "1s" :linear 3]]}]
 
    [:circle {:transform "translate(50%,50%)"}]
 

@@ -1,13 +1,15 @@
+--- drop database senna;
+-- drop table questions;
+-- drop table users;
+-- drop table results;
+
 create database senna character set 'utf8' collate 'utf8_general_ci';
 
+use senna;
 set character_set_client='utf8';
 set character_set_connection='utf8';
 set character_set_results='utf8';
 set character_set_server='utf8';
--- use senna;
--- drop table questions;
--- drop table users;
--- drop table results;
 
 create table if not exists questions (
   id int not null auto_increment,

@@ -1,11 +1,12 @@
 (ns senna.game
   (:require
    [reagent.core :as r]
-   [cljs.core.async :as async :refer [>! <! put!]]))
+   [cljs.core.async :as async :refer [>! <! put! chan]]))
 
 (enable-console-print!)
 
 (def ^:const MAX-ROUNDS 100)
+(def ^:const FPS 60)
 
 (defonce app-state (r/atom {:status :ready
                             :position {:x 0 :y 0 :r 0}
@@ -44,12 +45,15 @@
            :total total
            :position (move-along track 0 1 total))))
 
+(defn- speed-control [speed]
+  (if (< speed 3) (+ 0.05 speed) speed))
+
 (defmulti transit :status)
 
 (defmethod transit :running [state]
   (let [{:keys [total distance track speed]} state
         ;; TODO: speed can change at any time
-        new-speed (if (< speed 3) (+ 0.03 speed) speed)
+        new-speed (speed-control speed)
         to (+ distance (* 1 new-speed))
         position (move-along track distance to total)
         rounds (js/Math.ceil (/ to total))]
@@ -67,10 +71,9 @@
 (defn- game-loop []
   (swap! app-state transit)
   ;; 'requestAnimationFrame' will pause when stay in background.
-  ;; And its frame-rate is uncertain, may need setTimeout to control it.
-  #_(js/setTimeout game-loop 20)
-  (js/requestAnimationFrame game-loop))
-
+  ;; And device may have different frame-rate, use setTimeout instead
+  ;; http://creativejs.com/resources/requestanimationframe/
+  (js/setTimeout game-loop (/ 1000 FPS)))
 
 (defn start []
   (let [moment (timestamp)]
@@ -85,7 +88,8 @@
 
 (defn- car-spirit [l t]
   (let [{:keys [x y r]} (:position @app-state)]
-    [:g {:transform (str "translate(" (+ x l) "," (+ y t) ") rotate(" r ",30,30)")
+    [:g {:id "car"
+         :transform (str "translate(" (+ x l) "," (+ y t) ") rotate(" r ",30,30)")
          :dangerouslySetInnerHTML {:__html car-img}}]))
 
 ;;; TODO: read from file ?
@@ -194,22 +198,25 @@
   (swap! candidates assoc :questions questions)
 
   (let [{:keys [questions current]} @candidates
-        question (get questions current)
-        nav-next (fn [e]
-                   (.preventDefault e)
-                   (swap! candidates assoc :current (inc current)))]
+        {:keys [question option1 option2 option3 answer]} (get questions current)
+        responser (async/chan)
+        choice-handler #(fn [e]
+                          (.preventDefault e)
+                          (println % "has been clicked")
+                          (swap! candidates assoc :current (inc current)))]
     (if (nil? question)
-      [:div.ipad {:style {:zoom s
-                          :top (str (+ 622 t) "px")}}
+      [:div.ipad {:style {:zoom s :top (str (+ 622 t) "px")}}
        [:div.message "没有了"]]
 
-      [:div.ipad {:style {:zoom s
-                          :top (str (+ 622 t) "px")}}
-       [:h4.question (:question question)]
-       [:ul.options
-        [:li [:a {:href "#" :on-click nav-next} (:option1 question)]]
-        [:li [:a {:href "#" :on-click nav-next} (:option2 question)]]
-        [:li [:a {:href "#" :on-click nav-next} (:option3 question)]]]])))
+      [:div.ipad {:style {:zoom s :top (str (+ 622 t) "px")}}
+       [:table
+        [:tr
+         [:td.question {:colSpan 3} (str question " (" answer ")")]]
+        [:tr.options
+         [:td.option1 [:a {:href "#" :on-click (choice-handler 1)} option1]]
+         [:td.option2 [:a {:href "#" :on-click (choice-handler 2)} option2]]
+         [:td.option3 [:a {:href "#" :on-click (choice-handler 3)} option3]]
+         ]]])))
 
 (defn- game-layout [ch tasks l t s]
   [:div#scene

@@ -12,10 +12,10 @@
 
                  ;; after build, clojurescript/garden will be translated
                  ;; into assets, no need to include them in war file
-                 [garden "1.3.0-SNAPSHOT" :scope "provided"]
-                 [reagent "0.5.1" :scope "provided"]
+                 [garden "1.3.0-SNAPSHOT"             :scope "provided"]
+                 [reagent "0.5.1"                     :scope "provided"]
                  [org.clojure/clojurescript "1.7.170" :scope "provided"]
-                 [org.clojure/core.async "0.2.374" :scope "provided"]
+                 [org.clojure/core.async "0.2.374"    :scope "provided"]
                  [cljs-http "0.1.38"]
 
                  [org.clojure/java.jdbc "0.4.2"]
@@ -26,16 +26,19 @@
                  [compojure "1.4.0"]])
 
 (require
- '[adzerk.boot-cljs      :refer [cljs]]
- '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
- '[adzerk.boot-reload    :refer [reload]]
- '[pandeiro.boot-http    :refer [serve]]
+ '[adzerk.boot-cljs              :refer [cljs]]
+ '[adzerk.boot-cljs-repl         :refer [cljs-repl start-repl]]
+ '[adzerk.boot-reload            :refer [reload]]
+ '[pandeiro.boot-http            :refer [serve]]
  '[org.martinklepsch.boot-garden :refer [garden]])
+
 
 (deftask build []
   (comp (speak)
         (cljs)
         (garden :styles-var 'senna.styles/screen
+                :veners ["webkit"]
+                :auto-prefix #{:transform :animation}
                 :output-to "public/css/garden.css")))
 
 (deftask run []
@@ -55,6 +58,7 @@
   (task-options! cljs {:optimizations :none
                        :source-map true
                        :pretty-print true}
+                 garden {:pretty-print true}
                  reload {:on-jsload 'senna.app/init
                          :asset-path "public"})
   identity)
