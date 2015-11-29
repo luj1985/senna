@@ -41,13 +41,12 @@
               :style {:stroke-dasharray c
                       :stroke-dashoffset c
                       :stroke fg}}]]
-     (if (pos? s)
+     (if (> s 1)
        (do
          (js/setTimeout #(swap! countdown dec) 1000)
          [:div.txt.seconds s])
        (do
-         ;; To make "Go!" message appears
-         (js/setTimeout #(put! chan {:event :start}) 200)
+         (js/setTimeout #(put! chan {:event :start}) 500)
          [:div.txt.go "GO!"]))]))
 
 (defn- two-digit-millisecond [time]

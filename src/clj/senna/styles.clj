@@ -46,11 +46,16 @@
                :font-size (px 60)}]
 
    [:.question {:padding "20px 10px 30px 10px"
+                :-webkit-transition "background-color cubic-bezier(.62,.28,.23,.99) .9s"
+                :transition "background-color cubic-bezier(.62,.28,.23,.99) .9s"
                 :vertical-align :top
                 :margin 0
                 :height (px 120)
-                :background-color (rgb 243 205 1)
-                :font-size (px 32)}]
+                :font-size (px 32)}
+
+    ["&.normal" {:background-color (rgb 243 205 1)}]
+    ["&.correct" {:background-color (rgb 0 178 78)}]
+    ["&.wrong" {:background-color (rgb 233 21 49)}]]
 
    [:.options {:margin 0
                :padding 0

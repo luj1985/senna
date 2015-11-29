@@ -1,7 +1,9 @@
 (ns senna.game
   (:require
    [reagent.core :as r]
-   [cljs.core.async :as async :refer [>! <! put! chan]]))
+   [senna.sound :as sound]
+   [cljs.core.async :as async :refer [>! <! put! chan timeout]])
+  (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (enable-console-print!)
 
@@ -9,14 +11,15 @@
 (def ^:const FPS 60)
 ;; Used to indidate the speed dashboard
 (def ^:const SPEED-LIMIT 10)
-(def ^:const SPEED-NORMAL 3)
+(def ^:const SPEED-NORMAL 3.6)
 
-(defonce app-state (r/atom {:status :ready
+(defonce game-state (r/atom {:status :ready
                             :position {:x 0 :y 0 :r 0}
                             :distance 0
                             :rounds 1
                             :speed 0
                             :start-at 0
+                            :volume true
                             :current-time 0}))
 
 (defn- timestamp []
@@ -43,7 +46,7 @@
   []
   (let [track (.getElementById js/document "track")
         total (.getTotalLength track)]
-    (swap! app-state assoc
+    (swap! game-state assoc
            :track track
            :total total
            :position (move-along track 0 1 total))))
@@ -72,7 +75,7 @@
   state)
 
 (defn- game-loop []
-  (swap! app-state transit)
+  (swap! game-state transit)
   ;; 'requestAnimationFrame' will pause when stay in background.
   ;; And device may have different frame-rate, use setTimeout instead
   ;; http://creativejs.com/resources/requestanimationframe/
@@ -80,7 +83,7 @@
 
 (defn start []
   (let [moment (timestamp)]
-    (swap! app-state assoc
+    (swap! game-state assoc
            :status :running
            :current-time moment
            :start-at moment)
@@ -90,7 +93,7 @@
   "<image xlink:href=\"../img/game/car.png\" width=\"60\" height=\"60\" x=\"0\" y=\"0\">")
 
 (defn- car-spirit [l t]
-  (let [{:keys [x y r]} (:position @app-state)]
+  (let [{:keys [x y r]} (:position @game-state)]
     [:g {:id "car"
          :transform (str "translate(" (+ x l) "," (+ y t) ") rotate(" r ",30,30)")
          :dangerouslySetInnerHTML {:__html car-img}}]))
@@ -119,11 +122,11 @@
           :d track-path}])
 
 (defn- get-time-usage []
-  (let [{:keys [start-at current-time]} @app-state]
+  (let [{:keys [start-at current-time]} @game-state]
     (- current-time start-at)))
 
 (defn- game-board [ctrl l t s]
-  (let [{status :status} @app-state]
+  (let [{status :status} @game-state]
     (when (= status :finished)
       (put! ctrl {:event :finished
                   :params {:time (get-time-usage)
@@ -148,7 +151,7 @@
 
 (defn- speed-dashboard []
   (let [f (range-map [0 SPEED-LIMIT] [-110 110])
-        speed (:speed @app-state)
+        speed (:speed @game-state)
         deg (f speed)]
     [:div.dashboard
      [:span.pointer {:style {:-webkit-transform (str "rotate(" deg "deg)")
@@ -160,19 +163,16 @@
     "url(../img/game/3.svg)"))
 
 (defn- round-dashboard []
-  (let [img (round-counter (:rounds @app-state))]
+  (let [img (round-counter (:rounds @game-state))]
     [:div.rounds
      [:span.prefix]
      [:span.round {:style {:background-image img}}]]))
-
-(defn- volume-control []
-  [:div.volume])
 
 (defn- score-board []
   [:div.score-board
    [speed-dashboard]
    [round-dashboard]
-   [volume-control]])
+   [sound/volume-control]])
 
 (defn- to-fixed [n]
   (if (< n 10)
@@ -180,7 +180,7 @@
     (str n)))
 
 (defn- game-control [l t scale]
-  (let [{:keys [status start-at current-time]} @app-state
+  (let [{:keys [status start-at current-time]} @game-state
         used (- current-time start-at)
         secs (/ used 1000)
         m (js/parseInt (/ secs 60))
@@ -194,21 +194,33 @@
        [:span "."]
        [:span.ms (to-fixed ms)]]))
 
-
 (defonce ^:private candidates
   (r/atom {:questions []
-           :current 0}))
+           :current 0
+           :status :normal}))
+
+(defn- navigate-next [ch correct?]
+  (let [status (if correct? :correct :wrong)]
+    (go
+      (swap! candidates assoc :status status)
+      (<! (timeout 1000))
+      (swap! candidates assoc :status :normal)
+      (swap! candidates update-in [:current] inc))))
+
+(defn- answer-effect [responser correct?]
+  (let [sound (if correct? "m-correct" "m-wrong")]
+    (sound/play-sound sound))
+  (navigate-next responser correct?))
 
 (defn- ipad-control [questions l t s]
   (swap! candidates assoc :questions questions)
 
-  (let [{:keys [questions current]} @candidates
+  (let [responser (async/chan)
+        {:keys [questions current status]} @candidates
         {:keys [question option1 option2 option3 answer]} (get questions current)
-        responser (async/chan)
         choice-handler #(fn [e]
                           (.preventDefault e)
-                          (println % "has been clicked")
-                          (swap! candidates assoc :current (inc current)))]
+                          (answer-effect responser (= answer %)))]
     (if (nil? question)
       [:div.ipad {:style {:zoom s :top (str (+ 622 t) "px")}}
        [:div.message "没有了"]]
@@ -216,12 +228,14 @@
       [:div.ipad {:style {:zoom s :top (str (+ 622 t) "px")}}
        [:table
         [:tr
-         [:td.question {:colSpan 3} (str question " (" answer ")")]]
+         [:td.question
+          {:colSpan 3
+           :className (name status)}
+          (str question " (" answer ")")]]
         [:tr.options
          [:td.option1 [:a {:href "#" :on-click (choice-handler 1)} option1]]
          [:td.option2 [:a {:href "#" :on-click (choice-handler 2)} option2]]
-         [:td.option3 [:a {:href "#" :on-click (choice-handler 3)} option3]]
-         ]]])))
+         [:td.option3 [:a {:href "#" :on-click (choice-handler 3)} option3]]]]])))
 
 (defn- game-layout [ch tasks l t s]
   [:div#scene

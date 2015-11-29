@@ -4,7 +4,8 @@
    [reagent.core :as r]
    [senna.loader :as loader]
    [senna.dialog :as dialog]
-   [senna.game :as game])
+   [senna.game :as game]
+   [senna.sound :as sound])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defonce ^:private dialog (r/atom {:dialog :rule}))
@@ -14,6 +15,8 @@
                                      :params {:time 0
                                               :global 2000
                                               :best 1000}}))
+
+(defonce app-state (r/atom {:status :initial}))
 
 (def ^:private pages {:rule dialog/rules-page
                       :results dialog/result-page
@@ -42,8 +45,13 @@
           (let [{:keys [event params]} (<! ch)]
             (case event
               ;; display game board when all resources loaded
-              :loaded (draw-scene ch params)
-              :ready (reset! dialog {:dialog :countdown})
+              :loaded (do
+                        (draw-scene ch params)
+                        (if (= (:status @app-state) :initial)
+                          (sound/play-sound "m-start")))
+              :ready (do
+                       (reset! dialog {:dialog :countdown})
+                       (sound/play-sound "m-countdown"))
               :start (do
                        (game/start)
                        (reset! dialog nil))

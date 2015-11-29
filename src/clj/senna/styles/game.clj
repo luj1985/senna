@@ -66,14 +66,22 @@
    [:.ms {:font-size (px 36)}]])
 
 (defstyles volume
-  [:.volume {:background-image "url(../img/game/volume.svg)"
-             :background-size "30px 30px"
-             :margin-top (px 25)
+  [:.volume {:margin-top (px 25)
              :margin-right (px 20)
              :float :right
              :display :inline-block
              :height (px 30)
-             :width (px 30)}])
+             :width (px 30)}
+   [:.control {:display :inline-block
+               :height (percent 100)
+               :width (percent 100)}
+    ["&.unmuted" {:background-image "url(../img/game/volume.svg)"
+                  :background-size "30px 30px"}]
+    ["&.muted"
+     ["&:before" {:content "'静音'"
+                  :color :white
+                  :display :inline-block
+                  :width (px 80)}]]]])
 
 (defstyles game-board-styles
   [(at-font-face

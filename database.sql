@@ -1,4 +1,4 @@
---- drop database senna;
+-- drop database senna;
 -- drop table questions;
 -- drop table users;
 -- drop table results;
