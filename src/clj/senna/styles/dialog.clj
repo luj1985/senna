@@ -52,12 +52,10 @@
   [:.global {:color :white
              :font-size (px 20)}]
   [:.best {:color :white
-           :font-size (px 20)}]
-  )
+           :font-size (px 20)}])
 
 
 (defstyles game-rules-dialog
-
   [:#rules {:background-image "url(../img/dialog/rules.png)"
             :background-size "100% auto"
             :background-repeat :no-repeat
@@ -86,8 +84,6 @@
                 :padding "5px 30px"
                 :border-radius (px 30)
                 :border-style :dashed}]])
-
-
 
 (defstyles dialog-styles
   dialog-dimmer

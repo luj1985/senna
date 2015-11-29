@@ -3,6 +3,8 @@
    [reagent.core :as r]
    [cljs.core.async :as async :refer [>! <! put!]]))
 
+(enable-console-print!)
+
 (def ^:const MAX-ROUNDS 3)
 
 (defonce app-state (r/atom {:status :ready
@@ -111,9 +113,8 @@
           :d track-path}])
 
 (defn- get-time-usage []
-  (let [{:keys [start-at current-time]} @app-state
-        used (- current-time start-at)]
-    (js/parseInt (/ used 1000))))
+  (let [{:keys [start-at current-time]} @app-state]
+    (- current-time start-at)))
 
 (defn- game-board [ctrl l t s]
   (let [{status :status} @app-state]

@@ -38,7 +38,7 @@
 
     (if (pos? s)
       (js/setTimeout #(swap! countdown dec) 1000)
-      ;; make "Go!" message appears
+      ;; To make "Go!" message appears
       (js/setTimeout #(put! chan {:next :start}) 300))
 
     [:div#countdown
@@ -53,18 +53,29 @@
        [:div.txt.seconds s]
        [:div.txt.go "GO!"])]))
 
+(defn- two-digit-millisecond [time]
+  (let [milliseconds (mod time 1000)]
+    (js/parseInt (/ milliseconds 10))))
+
+(defn- parse-time [time]
+  (let [mins (js/parseInt (/ time 60000))
+        secs (-> (/ time 1000)
+                 (js/parseInt)
+                 (mod 60))
+        millis (two-digit-millisecond time)]
+    {:mins mins
+     :secs (str secs "." millis) }))
+
 (defn result-page [chan params l t s]
   (let [h (.-innerHeight js/window)
         h1 (* s 1152)
         offset (/ (- h h1) 2)
-        time (:time params)
-        min (js/parseInt (/ time 60))
-        secs (js/parseInt (mod time 60))]
+        {:keys [time global best]} params
+        {:keys [mins secs]} (parse-time time)]
     [:div#score.content
      [:section
       [:div.usage
-       [:span (str "用时："min "分" secs "秒")]]
+       [:span (str "用时："mins "分" secs "秒")]]
       [:div.rank
-       [:div.global "全球排名：" (:global params)]
-       [:div.best "历史最好：" (:best params)]]
-      [:div.container]]]))
+       [:div.global "全球排名：" global]
+       [:div.best "历史最好：" best]]]]))

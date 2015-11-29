@@ -11,7 +11,7 @@
 
 ;; debug timer
 #_(defonce ^:private dialog (r/atom {:dialog :results
-                                     :params {:time 29
+                                     :params {:time 0
                                               :global 2000
                                               :best 1000}}))
 
