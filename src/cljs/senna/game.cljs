@@ -9,7 +9,7 @@
 
 (declare caculate-speed)
 
-(def ^:const MAX-ROUNDS 100)
+(def ^:const MAX-ROUNDS 3)
 (def ^:const FPS 60)
 ;; Used to indidate the speed dashboard
 (def ^:const SPEED-LIMIT 10)

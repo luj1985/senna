@@ -1,6 +1,6 @@
 (ns senna.app
   (:require
-   [cljs.core.async :as async :refer [chan >! <!]]
+   [cljs.core.async :as async :refer [chan >! <! timeout]]
    [reagent.core :as r]
    [senna.loader :as loader]
    [senna.dialog :as dialog]
@@ -55,6 +55,9 @@
               :start (do
                        (game/start)
                        (reset! dialog nil))
-              :finished (reset! dialog {:dialog :results :params params})
+              :finished (do
+                          (reset! dialog {:dialog :results :params params})
+                          (sound/stop-sound "m-running")
+                          (sound/play-sound "m-finished"))
               (js/console.warn "unhandled event:" event)))))
     (loader/init ch)))

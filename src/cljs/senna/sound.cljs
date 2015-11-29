@@ -2,7 +2,7 @@
   (:require
    [reagent.core :as r]))
 
-(defonce mute-state (r/atom true))
+(defonce mute-state (r/atom false))
 
 (defn play-sound [id]
   (if (not @mute-state)
@@ -36,6 +36,7 @@
    [:audio {:id "m-correct" :src "audio/correct.mp3"}]
    [:audio {:id "m-wrong" :src "audio/wrong.mp3"}]
    [:audio {:id "m-start" :src "audio/start.mp3"}]
+   [:audio {:id "m-finished" :src "audio/finished.mp3"}]
    [:audio {:id "m-bgm" :src "audio/bgm.mp3" :autoPlay true :loop true}]])
 
 (def volume-control
