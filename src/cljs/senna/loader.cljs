@@ -11,6 +11,35 @@
 (defonce ^:private loading-state (r/atom {:total 100
                                           :progress 1}))
 
+;; TODO: use macro to read file name at compile time
+(def resources {:loading "img/loading/loading.jpg"
+                :logo "img/loading/CAFlogo.jpg"
+
+                :round   "img/game/round.svg"
+                :round-1 "img/game/1.svg"
+                :round-2 "img/game/2.svg"
+                :round-3 "img/game/3.svg"
+
+                :volume    "img/game/volume.svg"
+                :dashboard "img/game/dashboard.png"
+
+                :car "img/game/car.png"
+                :background "img/game/background.png"
+
+                :again "img/score/again.svg"
+                :close "img/score/close.svg"
+                :share "img/score/share.svg"
+
+                :rules "img/dialog/rules.png"
+                :scores "img/dialog/scores.png"
+                :achievement "img/dialog/achieve.png"
+
+                :qq "img/social/qq.svg"
+                :link "img/social/copy-link.svg"
+                :weibo "img/social/weibo.svg"
+                :wechat "img/social/wechat.svg"
+                :qq-space "img/social/qq-space.svg"
+                :friend-circle "img/social/friend-circle.svg"})
 (defn- loading-page []
   [:div#loading
    [:div.logo]
@@ -36,7 +65,7 @@
 (defonce myqs (r/atom nil))
 
 
-(defn init [resources]
+(defn init []
   ;; one additional resource is for questions loading
   (swap! loading-state assoc
          :total (inc (count resources))
