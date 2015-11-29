@@ -6,24 +6,35 @@
    [garden.color :refer [rgba rgb]]))
 
 (defstyles dialog-dimmer
-  [:.dimmer {:text-align :center}
-   [:.content {:display :inline-block
-               :color :white
-               :margin-top (percent 25)
-               :padding "50px 25px 0 25px"
-               :width (percent 85)
-               :height (percent 100)
-               :border-radius (px 30)
-               :box-sizing :border-box
-               :text-align :left}]]
-
   [:.dimmer {:position :fixed
-             :z-index 4
+             :text-align :center
              :top 0
              :left 0
              :width (percent 100)
              :height (percent 100)
-             :background-color (rgba 0 0 0 0.7)}])
+             :background-color (rgba 0 0 0 0.7)}]
+
+  [:.content {:display :inline-block
+              :color :white
+              :margin-top (percent 25)
+              :padding "50px 25px 0 25px"
+              :width (percent 85)
+              :height (percent 100)
+              :border-radius (px 30)
+              :box-sizing :border-box
+              :text-align :left}
+
+   [:section {:text-align :left
+              :display :block
+              :margin-bottom (px 50)}]
+
+   [:button {:background-color (rgb 234 2 3)
+             :color (rgb 255 255 0)
+             :padding "5px 10px"
+             :font-size (px 16)
+             :outline :none
+             :border "2px solid yellow"
+             :border-radius (px 30)}]])
 
 (defstyles game-score-dialog
   [:#score {:background-image "url(../img/dialog/scores.png)"
@@ -61,18 +72,6 @@
             :background-repeat :no-repeat
             :background-position "top center"
             :text-align :center}
-
-   [:.got-it {:background-color (rgb 234 2 3)
-              :color (rgb 255 255 0)
-              :padding "5px 10px"
-              :font-size (px 16)
-              :outline :none
-              :border "2px solid yellow"
-              :border-radius (px 30)}]
-
-   [:section {:text-align :left
-              :display :block
-              :margin-bottom (px 50)}]
 
    [(& before) {:content "attr(title) ' '"
                 :position :absolute

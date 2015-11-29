@@ -19,34 +19,33 @@
                       :results dialog/result-page
                       :countdown dialog/countdown-page})
 
-(defn- popup [ch l t s]
-  (go
-    (let [{:keys [next params]} (<! ch)]
-      (case next
-        :countdown (reset! dialog {:dialog :countdown})
-        :finished (reset! dialog {:dialog :results
-                                  :params params})
-        :start (do
-                 (game/start)
-                 (reset! dialog nil)))))
-
-  ;; TODO: rename variables ...
-  (let [{dialog :dialog params :params} @dialog]
+(defn- popup [ch]
+  (let [{:keys [dialog params]} @dialog]
     (if-let [page (pages dialog)]
       [:div.dimmer
-       [page ch params l t s]])))
+       [page ch params]])))
 
-(defn init []
-  (let [loader (loader/init)
-        evbus (async/chan)
-        w (.-innerWidth js/window)
+(defn- draw-scene [ch params]
+  (let [w (.-innerWidth js/window)
         h (.-innerHeight js/window)
         s (/ w 768)
         l -10
         t (-> h (- (* 1225 s)) (/ 2) (/ s))]
-    (go
-      (let [tasks (<! loader)]
-        (r/render-component [game/scene evbus tasks l t s]
-                            (.querySelector js/document "#main"))
-        (r/render-component [popup evbus l t s]
-                            (.querySelector js/document "#dialog"))))))
+    (r/render-component [game/scene ch params l t s]
+                        (.querySelector js/document "#main"))
+    (r/render-component [popup ch]
+                        (.querySelector js/document "#dialog"))))
+
+(defn init []
+  (let [ch (async/chan)]
+    (go (while true
+          (let [{:keys [event params]} (<! ch)]
+            (case event
+              ;; display game board when all resources loaded
+              :loaded (draw-scene ch params)
+              :ready (reset! dialog {:dialog :countdown})
+              :start (do
+                       (game/start)
+                       (reset! dialog nil))
+              :finished (reset! dialog {:dialog :results :params params})))))
+    (loader/init ch)))

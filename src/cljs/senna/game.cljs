@@ -15,7 +15,6 @@
                             :start-at 0
                             :current-time 0}))
 
-
 (defn- timestamp []
   (.getTime (js/Date.)))
 
@@ -119,7 +118,7 @@
 (defn- game-board [ctrl l t s]
   (let [{status :status} @app-state]
     (when (= status :finished)
-      (put! ctrl {:next :finished
+      (put! ctrl {:event :finished
                   :params {:time (get-time-usage)
                            :global 1596
                            :best 1000}})))

@@ -40,12 +40,6 @@
                 :wechat "img/social/wechat.svg"
                 :qq-space "img/social/qq-space.svg"
                 :friend-circle "img/social/friend-circle.svg"})
-(defn- loading-page []
-  [:div#loading
-   [:div.logo]
-   [:div.progress-bar
-    [:progress {:max (:total @loading-state)
-                :value (:progress @loading-state)}]]])
 
 (defn- preload-images [resources]
   (let [progress (async/chan)
@@ -62,23 +56,26 @@
       (.addImage loader id img))
     (.start loader)
     progress))
-(defonce myqs (r/atom nil))
 
+(defn loading-page []
+  [:div#loading
+   [:div.logo]
+   [:div.progress-bar
+    [:progress {:max (:total @loading-state)
+                :value (:progress @loading-state)}]]])
 
-(defn init []
+(defn init [ch]
   ;; one additional resource is for questions loading
   (swap! loading-state assoc
          :total (inc (count resources))
          :progress 1)
   (r/render-component [loading-page] (.querySelector js/document "#main"))
   (let [progress (preload-images resources)
-        qch (http/get "/questions")
-        ch (async/chan)]
+        qch (http/get "/questions")]
     (go
       (while true
         (case (<! progress)
           :load (swap! loading-state update-in [:progress] inc)
           :complete (let [{questions :body} (<! qch)]
-                      (>! ch questions)))))
-
-    ch))
+                      (>! ch {:event :loaded
+                              :params questions})))))))
