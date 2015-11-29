@@ -52,6 +52,11 @@
               :ready (do
                        (reset! dialog {:dialog :countdown})
                        (sound/play-sound "m-countdown"))
+              :reset (do
+                       (game/reset)
+                       (dialog/reset-countdown)
+                       (reset! dialog {:dialog :countdown})
+                       (sound/play-sound "m-countdown"))
               :start (do
                        (game/start)
                        (reset! dialog nil))

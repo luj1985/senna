@@ -16,12 +16,14 @@
 (def ^:const SPEED-NORMAL 3.6)
 
 (defonce game-state (r/atom {:status :ready
-                            :position {:x 0 :y 0 :r 0}
-                            :distance 0
-                            :rounds 1
-                            :speed 0
-                            :start-at 0
-                            :current-time 0}))
+                             :position {:x 0 :y 0 :r 0}
+                             :distance 0
+                             :rounds 1
+                             :speed 0
+                             :start-at 0
+                             :current-time 0}))
+
+(defonce accelerators (r/atom []))
 
 (defn- timestamp []
   (.getTime (js/Date.)))
@@ -75,10 +77,21 @@
 
 (defn- game-loop []
   (swap! game-state transit)
-  ;; 'requestAnimationFrame' will pause when stay in background.
-  ;; And device may have different frame-rate, use setTimeout instead
-  ;; http://creativejs.com/resources/requestanimationframe/
-  (js/setTimeout game-loop (/ 1000 FPS)))
+
+  (if (= (:status @game-state) :running)
+    ;; 'requestAnimationFrame' will pause when stay in background.
+    ;; And device may have different frame-rate, use setTimeout instead
+    ;; http://creativejs.com/resources/requestanimationframe/
+    (js/setTimeout game-loop (/ 1000 FPS))))
+
+(defn reset []
+  (swap! game-state assoc
+         :status :ready
+         :distance 0
+         :speed 0
+         :rounds 1)
+  (reset! accelerators [])
+  (initialize-game-board))
 
 (defn start []
   (let [moment (timestamp)]
@@ -198,6 +211,8 @@
            :current 0
            :status :normal}))
 
+(def ^:const ACC-TIME 57)
+
 (defn- navigate-next [ch correct?]
   (let [status (if correct? :correct :wrong)
         delay (if correct? 500 3000)]
@@ -210,21 +225,21 @@
 (defn- normal-speed [speed]
   (if (< speed SPEED-NORMAL) (+ speed 0.05) speed))
 
-(defonce accumulators (atom []))
+#_(defn- debug-log [obj]
+  (js/console.log (.stringify js/JSON (clj->js obj)) ))
 
 (defn- accelerate-speed [speed]
-  (let [results (->> @accumulators
-                     (map (fn [{:keys [remain total delta]}]
+  (let [results (->> @accelerators
+                     (map (fn [{:keys [remain delta]}]
                             (let [d (cond
-                                      (and (< 160 remain) (<= remain 240)) 0.1
-                                      (<= 0 remain 160) -0.05
+                                      (and (< (* 2 ACC-TIME) remain)
+                                           (<= remain (* 3 ACC-TIME))) 0.1
+                                      (<= 0 remain (* 2 ACC-TIME)) -0.05
                                       :else 0)]
-
-                          {:remain (dec remain) :delta d}))))
-        delta (->> (map :delta results)
-                   (reduce +))
+                              {:remain (dec remain) :delta d}))))
+        delta (->> (map :delta results) (reduce +))
         remains (filter #(pos? (:remain %)) results)]
-    (reset! accumulators remains)
+    (reset! accelerators remains)
     (+ speed delta)))
 
 (defn- caculate-speed [speed]
@@ -232,14 +247,9 @@
       (normal-speed)
       (accelerate-speed)))
 
-
-
-
 (defn- speedup-effect [ch correct?]
   (when correct?
-    (let [r (swap! accumulators conj {:remain 240 :delta 0})]
-
-      r)))
+    (swap! accelerators conj {:remain (* 3 ACC-TIME) :delta 0})))
 
 (defn- answer-effect [responser correct?]
   (let [sound (if correct? "m-correct" "m-wrong")]

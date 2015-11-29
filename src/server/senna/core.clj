@@ -26,9 +26,14 @@
   (response
    (jdbc/query mysql-db ["select * from questions"])))
 
+(defn- rank-score [body]
+  (println body)
+  (response {}))
+
 (defroutes app-routes
   (GET "/" [] index-page)
   (GET "/questions" [] random-questions)
+  (POST "/score" {body :body} (rank-score body))
   (resources "/")
   (not-found "Page not found"))
 

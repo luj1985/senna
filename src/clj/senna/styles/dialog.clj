@@ -28,14 +28,19 @@
               :display :block
               :margin-bottom (px 50)}]
 
-   [:button {:background-color (rgb 214 11 12)
-             :background "linear-gradient(180deg,rgb(214,11,12) 0%, rgb(126,16,16) 100%)"
-             :color (rgb 251 235 14)
-             :padding "5px 10px"
+   [:button {:padding "5px 10px"
+             :margin (px 10)
              :font-size (px 16)
              :outline :none
-             :border "2px solid yellow"
-             :border-radius (px 30)}]])
+             :border-radius (px 30)}
+
+    ["&.red" {:background-color (rgb 214 11 12)
+              :background "linear-gradient(180deg,rgb(214,11,12) 0%, rgb(126,16,16) 100%)"
+              :border "1px solid yellow"
+              :color (rgb 251 235 14)}]
+    ["&.yellow" {:background-color (rgb 255 218 115)
+                 :border "1px solid rgb(226,120,3)"
+                 :color (rgb 180 0 1)}]]])
 
 (defstyles game-score-dialog
   [:#score {:background-image "url(../img/dialog/scores.png)"
