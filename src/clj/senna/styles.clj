@@ -64,7 +64,7 @@
                :padding 0
                :height (px 186)}
     [:td {:text-align :center
-          :vertical-align :center
+          :border "1px solid black"
           :background-color (rgb 89 90 91)}]
 
     [:a {:font-size (px 30)

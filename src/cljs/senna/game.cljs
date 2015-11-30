@@ -271,10 +271,10 @@
                           (if (= (:status @candidates) :normal)
                             (answer-effect responser (= answer %))))]
     (if (nil? question)
-      [:div.ipad {:style {:zoom s :top (str (+ 622 t) "px")}}
+      [:div.ipad {:style {:zoom s :top (str (+ 626 t) "px")}}
        [:div.message "没有了"]]
 
-      [:div.ipad {:style {:zoom s :top (str (+ 622 t) "px")}}
+      [:div.ipad {:style {:zoom s :top (str (+ 626 t) "px")}}
        [:table
         [:tr
          [:td.question
