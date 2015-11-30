@@ -88,6 +88,8 @@
   (swap! game-state assoc
          :status :ready
          :distance 0
+         :start-at 0
+         :current-time 0
          :speed 0
          :rounds 1)
   (reset! accelerators [])

@@ -1,6 +1,7 @@
 (ns senna.app
   (:require
    [cljs.core.async :as async :refer [chan >! <! timeout]]
+   [cljs-http.client :as http]
    [reagent.core :as r]
    [senna.loader :as loader]
    [senna.dialog :as dialog]
@@ -39,6 +40,12 @@
     (r/render-component [popup ch]
                         (.querySelector js/document "#dialog"))))
 
+(defn- save-score [{time :time}]
+  (go
+    (let [resp (<! (http/post "/score" {:json-params {:score time}}))
+          model (assoc (:body resp) :time time)]
+      (reset! dialog {:dialog :results :params model}))))
+
 (defn init []
   (let [ch (async/chan)]
     (go (while true
@@ -61,8 +68,7 @@
                        (game/start)
                        (reset! dialog nil))
               :finished (do
-                          (reset! dialog {:dialog :results :params params})
-                          (sound/stop-sound "m-running")
+                          (save-score params)
                           (sound/play-sound "m-finished"))
               (js/console.warn "unhandled event:" event)))))
     (loader/init ch)))

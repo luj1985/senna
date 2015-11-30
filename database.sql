@@ -24,13 +24,14 @@ create table if not exists questions (
 
 create table if not exists users (
  id int not null auto_increment,
+ uid varchar(200),
  name varchar(200),
  primary key (id)
 ) engine=innodb default charset=utf8;
 
 create table if not exists results (
   id int not null auto_increment,
-  user_id int not null,
+  uid varchar(200) not null,
   result float not null,
   primary key (id)
 ) engine=innodb default charset=utf8;
