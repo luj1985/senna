@@ -57,19 +57,11 @@
     (.start loader)
     progress))
 
-(defn loading-page []
-  [:div#loading
-   [:div.logo]
-   [:div.progress-bar
-    [:progress {:max (:total @loading-state)
-                :value (:progress @loading-state)}]]])
-
 (defn init [ch]
   ;; one additional resource is for questions loading
   (swap! loading-state assoc
          :total (inc (count resources))
          :progress 1)
-  (r/render-component [loading-page] (.querySelector js/document "#main"))
   (let [progress (preload-images resources)
         qch (http/get "/questions")]
     (go

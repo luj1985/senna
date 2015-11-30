@@ -10,6 +10,7 @@
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defonce ^:private dialog (r/atom {:dialog :rule}))
+#_(defonce ^:private dialog (r/atom {:dialog :countdown}))
 
 ;; debug timer
 #_(defonce ^:private dialog (r/atom {:dialog :results

@@ -32,8 +32,6 @@
      ;; after javascript file was loaded.
      ;; Here is used to prevent initial blank page.
      [:div#loading
-      [:div.logo]
-      [:div.progress-bar
-       [:progress {:max 100 :value 1}]]]]
+      [:div.logo]]]
     [:div#dialog]
     (include-js "js/app.js")]))
