@@ -280,7 +280,7 @@
          [:td.question
           {:colSpan 3
            :className (name status)}
-          (str question " (" answer ")")]]
+          question]]
         [:tr.options
          [:td [:a {:href "#" :on-click (choice-handler 1)} option1]]
          [:td [:a {:href "#" :on-click (choice-handler 2)} option2]]
