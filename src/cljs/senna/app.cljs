@@ -54,7 +54,7 @@
             (case event
               ;; display game board when all resources loaded
               :loaded (do
-                        (draw-scene ch params)
+                        (draw-scene ch (shuffle params) )
                         (if (= (:status @app-state) :initial)
                           (sound/play-sound "m-start")))
               :ready (do
