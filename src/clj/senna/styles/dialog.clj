@@ -17,7 +17,7 @@
   [:.content {:display :inline-block
               :color :white
               :margin-top (percent 25)
-              :padding "50px 25px 0 25px"
+              :padding "30px 25px 0 25px"
               :width (percent 85)
               :height (percent 100)
               :border-radius (px 30)
@@ -26,21 +26,28 @@
 
    [:section {:text-align :left
               :display :block
-              :margin-bottom (px 50)}]
+              :margin-bottom (px 20)}
+    ["&.important" {:font-weight :bold
+                    :font-size (em 1.1)}]]
 
    [:button {:padding "5px 10px"
              :margin (px 10)
              :font-size (px 16)
-             :outline :none
-             :border-radius (px 30)}
+             :outline :none}
+    ["&.black" {:background-color (rgb 70 71 72)
+                :color :white
+                :border "1px solid black"
+                :border-radius (px 8)}]
 
     ["&.red" {:background-color (rgb 214 11 12)
               :background "linear-gradient(180deg,rgb(214,11,12) 0%, rgb(126,16,16) 100%)"
               :border "1px solid yellow"
-              :color (rgb 251 235 14)}]
+              :color (rgb 251 235 14)
+              :border-radius (px 30)}]
     ["&.yellow" {:background-color (rgb 255 218 115)
                  :border "1px solid rgb(226,120,3)"
-                 :color (rgb 180 0 1)}]]])
+                 :color (rgb 180 0 1)
+                 :border-radius (px 30)}]]])
 
 (defstyles game-score-dialog
   [:#score {:background-image "url(../img/dialog/scores.png)"
@@ -88,8 +95,8 @@
                 :padding "5px 30px"
                 :border-radius (px 32)
                 :border-style :dashed
-                :-webkit-transform "translate(-50%,-70px)"
-                :transform "translate(-50%,-70px)"
+                :-webkit-transform "translate(-50%,-50px)"
+                :transform "translate(-50%,-50px)"
                 :background-color (rgb 234 2 3)
                 :background "linear-gradient(180deg,rgb(244,3,2) 0%, rgb(128,15,16) 100%)"}]])
 
