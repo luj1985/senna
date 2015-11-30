@@ -32,11 +32,6 @@
      [:a.control {:className muted
                   :href "#"
                   :on-click toggle-sound}])
-   [:audio {:id "m-countdown" :src "audio/countdown.mp3"}]
-   [:audio {:id "m-correct" :src "audio/correct.mp3"}]
-   [:audio {:id "m-wrong" :src "audio/wrong.mp3"}]
-   [:audio {:id "m-start" :src "audio/start.mp3"}]
-   [:audio {:id "m-finished" :src "audio/finished.mp3"}]
    [:audio {:id "m-bgm" :src "audio/bgm.mp3" :autoPlay true :loop true}]])
 
 (def volume-control

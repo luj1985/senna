@@ -21,6 +21,7 @@
 (defonce app-state (r/atom {:status :initial}))
 
 (def ^:private pages {:rule dialog/rules-page
+                      :prize dialog/tel-page
                       :results dialog/result-page
                       :countdown dialog/countdown-page})
 
@@ -53,23 +54,16 @@
           (let [{:keys [event params]} (<! ch)]
             (case event
               ;; display game board when all resources loaded
-              :loaded (do
-                        (draw-scene ch (shuffle params) )
-                        (if (= (:status @app-state) :initial)
-                          (sound/play-sound "m-start")))
-              :ready (do
-                       (reset! dialog {:dialog :countdown})
-                       (sound/play-sound "m-countdown"))
+              :loaded (draw-scene ch (shuffle params) )
+              :ready (reset! dialog {:dialog :countdown})
+              :prize (reset! dialog {:dialog :prize})
               :reset (do
                        (game/reset)
                        (dialog/reset-countdown)
-                       (reset! dialog {:dialog :countdown})
-                       (sound/play-sound "m-countdown"))
+                       (reset! dialog {:dialog :countdown}))
               :start (do
                        (game/start)
                        (reset! dialog nil))
-              :finished (do
-                          (save-score params)
-                          (sound/play-sound "m-finished"))
+              :finished (save-score params)
               (js/console.warn "unhandled event:" event)))))
     (loader/init ch)))

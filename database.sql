@@ -35,3 +35,6 @@ create table if not exists results (
   result float not null,
   primary key (id)
 ) engine=innodb default charset=utf8;
+
+
+alter table users add mobile varchar(200);

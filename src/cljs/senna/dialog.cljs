@@ -80,6 +80,17 @@
      [:div.container
       [:button.black {:on-click #(put! chan {:event :reset})} "再玩一次"]
       [:button.black "低调炫耀"]
-      [:button.black "我要领奖"]]
+      [:button.black {:on-click #(put! chan {:event :prize})} "我要领奖"]]
      [:div.container
       [:a.more {:href "/brands"} "了解更多"]]]))
+
+
+(defn tel-page [chan params]
+  [:div#tel.content
+   [:section
+    [:p "请输入您的手机号码，以便中奖后我们及时与您联系！"]
+    [:center
+     [:form {:method :post :action "/mobile"}
+      [:input {:id "mobile" :name "mobile" :type :tel}]
+      [:input.yellow {:id "submit" :type :submit
+                      :value "下一步"}]]]]])

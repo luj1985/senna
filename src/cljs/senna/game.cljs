@@ -217,7 +217,7 @@
 
 (defn- navigate-next [ch correct?]
   (let [status (if correct? :correct :wrong)
-        delay (if correct? 500 3000)]
+        delay (if correct? 500 1000)]
     (go
       (swap! candidates assoc :status status)
       (<! (timeout delay))

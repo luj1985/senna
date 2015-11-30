@@ -9,9 +9,10 @@
    [ring.middleware.keyword-params :refer [wrap-keyword-params]]
    [ring.middleware.nested-params :refer [wrap-nested-params]]
    [ring.middleware.cookies :refer [wrap-cookies]]
-   [ring.util.response :refer [response]]
+   [ring.util.response :refer [response redirect]]
    [senna.index :refer [index-page]]
-   [senna.brands :refer [brands-page brand-page]])
+   [senna.brands :refer [brands-page brand-page]]
+   [senna.prize :refer [prize-page]])
   (:gen-class))
 
 ;; TODO: read password from environment variable ?
@@ -71,11 +72,19 @@
       (response {:global rank
                  :best best}))))
 
+(defn- save-mobile-number [request]
+  (let [number (get-in request [:form-params "mobile"])
+        uid (extract-uid request)]
+    (jdbc/update! mysql-db :users {:mobile number} ["uid = ?" uid]))
+  (redirect "/prizes"))
+
 (defroutes app-routes
   (GET "/" [] index-page)
   (GET "/questions" [] random-questions)
   (GET "/brands" [] brands-page)
   (GET "/brands/:id" [id] (brand-page id))
+  (POST "/mobile" [] save-mobile-number)
+  (GET "/prizes" [] prize-page)
   (POST "/score" [] rank-score)
   (resources "/")
   (not-found "Page not found"))

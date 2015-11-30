@@ -40,12 +40,15 @@
             :background-repeat :no-repeat
             :background-size "80px auto"}]
 
-   [:button {:padding "5px 10px"
+   ;; TODO: make serveral selector share same rules
+
+   [:button "input[type=\"submit\"]" {:padding "5px 10px"
              :font-size (px 16)
              :outline :none}
 
     ["&.black" {:background-color :transparent
                 :background-image "url(../img/dialog/btn.png)"
+                :background-repeat :no-repeat
                 :background-size "100% auto"
                 :padding "10px 20px"
                 :color :white
@@ -117,8 +120,21 @@
                 :background-color (rgb 234 2 3)
                 :background "linear-gradient(180deg,rgb(244,3,2) 0%, rgb(128,15,16) 100%)"}]])
 
+(defstyles tel-page-dialog
+  [:#tel {:background-color (rgb 229 3 18)
+          :position :relative
+          :color :white
+          :height :auto}]
+  [:#mobile {:display :block
+             :width (percent 90)
+             :font-size (px 18)
+             :margin "10px 0"}]
+  [:#submit {:margin "10px 0 10px 0"
+             :padding "5px 20px"}])
+
 (defstyles dialog-styles
   dialog-dimmer
   game-score-dialog
   game-rules-dialog
+  tel-page-dialog
   score-dialog-media)
