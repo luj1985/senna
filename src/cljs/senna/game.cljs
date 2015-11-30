@@ -282,9 +282,9 @@
            :className (name status)}
           (str question " (" answer ")")]]
         [:tr.options
-         [:td.option1 [:a {:href "#" :on-click (choice-handler 1)} option1]]
-         [:td.option2 [:a {:href "#" :on-click (choice-handler 2)} option2]]
-         [:td.option3 [:a {:href "#" :on-click (choice-handler 3)} option3]]]]])))
+         [:td [:a {:href "#" :on-click (choice-handler 1)} option1]]
+         [:td [:a {:href "#" :on-click (choice-handler 2)} option2]]
+         [:td [:a {:href "#" :on-click (choice-handler 3)} option3]]]]])))
 
 (defn- game-layout [ch tasks l t s]
   [:div#scene

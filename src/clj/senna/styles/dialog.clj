@@ -31,19 +31,22 @@
                     :font-size (em 1.1)}]]
 
    [:button {:padding "5px 10px"
-             :margin (px 10)
              :font-size (px 16)
              :outline :none}
-    ["&.black" {:background-color (rgb 70 71 72)
+
+    ["&.black" {:background-color :transparent
+                :background-image "url(../img/dialog/btn.png)"
+                :background-size "100% auto"
+                :padding "10px 20px"
                 :color :white
-                :border "1px solid black"
-                :border-radius (px 8)}]
+                :border :none}]
 
     ["&.red" {:background-color (rgb 214 11 12)
               :background "linear-gradient(180deg,rgb(214,11,12) 0%, rgb(126,16,16) 100%)"
               :border "1px solid yellow"
               :color (rgb 251 235 14)
               :border-radius (px 30)}]
+
     ["&.yellow" {:background-color (rgb 255 218 115)
                  :border "1px solid rgb(226,120,3)"
                  :color (rgb 180 0 1)
@@ -54,25 +57,21 @@
             :background-size "100% auto"
             :background-repeat :no-repeat
             :background-position "top center"
-            :text-align :center}]
+            :text-align :center
+            :padding-top 0}]
 
-  [:.usage {:text-align :center}
-   [(& before) {:content "''"
-                :background-image "url(../img/dialog/achieve.png)"
-                :background-size "100% 100%"
-                :position :absolute
-                :-webkit-transform "translate(-40px,-15px)"
-                :transform "translate(-40px,-15px)"
-                :display :inline-block
-                :width (px 60)
-                :height (px 60)}]
+  [:.score {:padding-left (px 85)
+            :padding-top (px 60)
+            :background-image "url(../img/dialog/achieve.png)"
+            :background-repeat :no-repeat
+            :background-size "80px auto"}]
+
+  [:.usage {:display :inline-block}
    [:span {:color :white
-           :padding "5px 20px 5px 20px"
            :background-color (rgb 230 1 18)
-           :font-size (px 20)}]]
+           :font-size (px 35)}]]
 
-  [:.rank {:padding-top (px 30)
-           :text-align :center}]
+  [:.rank {:display :inline-block}]
 
   [:.global {:color :white
              :font-size (px 20)}]

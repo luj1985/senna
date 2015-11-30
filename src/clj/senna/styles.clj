@@ -64,18 +64,15 @@
                :padding 0
                :height (px 186)}
     [:td {:text-align :center
-          :vertical-align :center}]
+          :vertical-align :center
+          :background-color (rgb 89 90 91)}]
 
     [:a {:font-size (px 30)
          :padding (px 10)
          :display :inline-block
          :text-align :left
          :text-decoration :none
-         :color :white}]
-
-    [:.option1 {:background-color (rgb 180 0 139)}]
-    [:.option2 {:background-color (rgb 18 117 185)}]
-    [:.option3 {:background-color (rgb 0 82 156)}]]
+         :color :white}]]
 
    [:.main {:background-image "url(../img/game/background.png)"
             :background-size "100% auto"

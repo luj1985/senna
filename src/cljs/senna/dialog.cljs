@@ -63,22 +63,21 @@
   (let [mins (js/parseInt (/ time 60000))
         secs (-> (/ time 1000)
                  (js/parseInt)
-                 (mod 60))
-        millis (two-digit-millisecond time)]
+                 (mod 60))]
     {:mins mins
-     :secs (str secs "." millis) }))
+     :secs (str secs)}))
 
 (defn result-page [chan params]
   (let [{:keys [time global best]} params
         {:keys [mins secs]} (parse-time time)]
     [:div#score.content
-     [:section
+     [:section.score
       [:div.usage
-       [:span (str "用时："mins "分" secs "秒")]]
+       [:span (str mins "分" secs "秒")]]
       [:div.rank
        [:div.global "全球排名：" global]
        [:div.best "历史最好：" best]]]
      [:div.container
-      [:button.yellow {:on-click #(put! chan {:event :reset})} "再玩一次"]
-      [:button.yellow "低调炫耀"]
-      [:button.yellow "我要领奖"]]]))
+      [:button.black {:on-click #(put! chan {:event :reset})} "再玩一次"]
+      [:button.black "低调炫耀"]
+      [:button.black "我要领奖"]]]))
