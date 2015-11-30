@@ -21,14 +21,11 @@
                 :round-3 "img/game/3.svg"
 
                 :volume    "img/game/volume.svg"
+                :mute      "img/game/mute.svg"
                 :dashboard "img/game/dashboard.png"
 
                 :car "img/game/car.png"
                 :background "img/game/background.png"
-
-                :again "img/score/again.svg"
-                :close "img/score/close.svg"
-                :share "img/score/share.svg"
 
                 :rules "img/dialog/rules.png"
                 :scores "img/dialog/scores.png"

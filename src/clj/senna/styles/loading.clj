@@ -10,7 +10,7 @@
               :top 0
               :bottom 0
               :width (percent 100)
-              :background-position "top center"
+              :background-position "center center"
               :background-size "100% auto"
               :background-image "url(../img/loading/loading.jpg)"}
 

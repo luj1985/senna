@@ -77,11 +77,8 @@
                :width (percent 100)}
     ["&.unmuted" {:background-image "url(../img/game/volume.svg)"
                   :background-size "30px 30px"}]
-    ["&.muted"
-     ["&:before" {:content "'静音'"
-                  :color :white
-                  :display :inline-block
-                  :width (px 80)}]]]])
+    ["&.muted" {:background-image "url(../img/game/mute.svg)"
+                  :background-size "30px 30px"}]]])
 
 (defstyles game-board-styles
   [(at-font-face
