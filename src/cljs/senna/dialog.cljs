@@ -80,4 +80,6 @@
      [:div.container
       [:button.black {:on-click #(put! chan {:event :reset})} "再玩一次"]
       [:button.black "低调炫耀"]
-      [:button.black "我要领奖"]]]))
+      [:button.black "我要领奖"]]
+     [:div.container
+      [:a.more {:href "/brands"} "了解更多"]]]))

@@ -2,6 +2,7 @@
   (:require
    [garden.def :refer [defstyles]]
    [garden.selectors :refer [& before]]
+   [garden.stylesheet :refer [at-media]]
    [garden.units :refer [px percent em]]
    [garden.color :refer [rgba rgb]]))
 
@@ -17,7 +18,7 @@
   [:.content {:display :inline-block
               :color :white
               :margin-top (percent 25)
-              :padding "30px 25px 0 25px"
+              :padding "30px 20px 0 20px"
               :width (percent 85)
               :height (percent 100)
               :border-radius (px 30)
@@ -29,6 +30,15 @@
               :margin-bottom (px 20)}
     ["&.important" {:font-weight :bold
                     :font-size (em 1.1)}]]
+
+   [:.more {:display :inline-block
+            :padding-left (px 120)
+            :line-height (px 80)
+            :text-decoration :none
+            :color :black
+            :background-image "url(../img/loading/CAFlogo.jpg)"
+            :background-repeat :no-repeat
+            :background-size "80px auto"}]
 
    [:button {:padding "5px 10px"
              :font-size (px 16)
@@ -52,6 +62,14 @@
                  :color (rgb 180 0 1)
                  :border-radius (px 30)}]]])
 
+
+(defstyles score-dialog-media
+  [(at-media {:max-width (px 330)}
+             [:.more {:margin-top (px 5)}])]
+
+  [(at-media {:min-width (px 330)}
+             [:.more {:margin-top (px 50)}])])
+
 (defstyles game-score-dialog
   [:#score {:background-image "url(../img/dialog/scores.png)"
             :background-size "100% auto"
@@ -60,7 +78,7 @@
             :text-align :center
             :padding-top 0}]
 
-  [:.score {:padding-left (px 85)
+  [:.score {:padding-left (px 80)
             :padding-top (px 60)
             :background-image "url(../img/dialog/achieve.png)"
             :background-repeat :no-repeat
@@ -102,4 +120,5 @@
 (defstyles dialog-styles
   dialog-dimmer
   game-score-dialog
-  game-rules-dialog)
+  game-rules-dialog
+  score-dialog-media)
