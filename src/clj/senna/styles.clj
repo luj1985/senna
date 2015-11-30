@@ -8,7 +8,8 @@
     [senna.styles.game :refer [game-board-styles]]
     [senna.styles.loading :refer [loading-page-styles]]
     [senna.styles.dialog :refer [dialog-styles]]
-    [senna.styles.countdown :refer [countdown-styles]]))
+    [senna.styles.countdown :refer [countdown-styles]]
+    [senna.styles.presentation :refer [presentation-styles]]))
 
 (defstyles base-styles
   [:body {:font-family "Helvetica Neue"
@@ -23,6 +24,8 @@
   countdown-styles
   loading-page-styles
   game-board-styles
+  presentation-styles
+
 
   [:#scene {:position :fixed
             :top 0

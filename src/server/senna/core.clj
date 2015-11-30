@@ -10,7 +10,8 @@
    [ring.middleware.nested-params :refer [wrap-nested-params]]
    [ring.middleware.cookies :refer [wrap-cookies]]
    [ring.util.response :refer [response]]
-   [senna.index :refer [index-page]])
+   [senna.index :refer [index-page]]
+   [senna.brands :refer [brands-page brand-page]])
   (:gen-class))
 
 ;; TODO: read password from environment variable ?
@@ -73,6 +74,8 @@
 (defroutes app-routes
   (GET "/" [] index-page)
   (GET "/questions" [] random-questions)
+  (GET "/brands" [] brands-page)
+  (GET "/brands/:id" [id] (brand-page id))
   (POST "/score" [] rank-score)
   (resources "/")
   (not-found "Page not found"))
