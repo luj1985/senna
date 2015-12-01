@@ -35,5 +35,4 @@
       [:div.logo]]]
     [:div#dialog]
     [:div#panel]
-    (include-js "js/app.js")
-    (include-js "//res.wx.qq.com/open/js/jweixin-1.0.0.js")]))
+    (include-js "js/app.js")]))

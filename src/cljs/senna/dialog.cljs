@@ -79,6 +79,11 @@
 
 (defonce ^:private last-score (atom {}))
 
+(defn parse-score-response [{:keys [time global best]}]
+  (let [{:keys [mins secs mss]} (parse-time time)
+        message (str mins "分" secs "秒" mss)]
+    {:global global :message message}))
+
 (defn get-last-score []
   @last-score)
 

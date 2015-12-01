@@ -53,7 +53,6 @@
         (.getSelection)
         (.removeAllRanges))))
 
-
 (defn- share-qq [e]
   (.preventDefault e)
   (let [{:keys [global message]} (dialog/get-last-score)
@@ -76,8 +75,14 @@
                  "url=" (js/encodeURIComponent link)
                  "&title=" (js/encodeURIComponent title)
                  "&summary=" (js/encodeURIComponent qzone-message))]
-    (set! (.-href js/location) url)
-    #_(js/console.log url)))
+    (set! (.-href js/location) url)))
+
+
+(defn- initialize-result-sharing [params]
+  (when-let [wx (.-wx js/window)]
+    (let [{:keys [global message]} (dialog/parse-score-response params)
+          desc (str  "我在《小车跑跑跑》游戏中用时" message "，全球排名" global "名。处女座，可敢一战？")]
+      (set! (.-title js/document) desc))))
 
 (defn- share-weibo [e]
   (.preventDefault e)
@@ -98,30 +103,23 @@
       [:table
        [:tr
         [:td
-         [:a.share {:href "#"}
-          [:img {:src "img/social/wechat.png"}]
-          [:h5 "微信"]]]
-        [:td
-         [:a.share {:href "#"}
-          [:img {:src "img/social/friend-circle.png"}]
-          [:h5 "微信朋友圈"]]]
-        [:td
          [:a.share {:href "#" :on-click share-qq}
           [:img {:src "img/social/qq.png"}]
-          [:h5 "QQ"]]]]
-       [:tr
-        [:td
-         [:a.share {:href "#" :on-click share-qzone}
-          [:img {:src "img/social/qzone.png"}]
-          [:h5 "QQ空间"]]]
+          [:h5 "QQ"]]]
+        [:td [:a.share {:href "#" :on-click share-qzone}
+              [:img {:src "img/social/qzone.png"}]
+              [:h5 "QQ空间"]]]
         [:td
          [:a.share {:href "#" :on-click share-weibo}
           [:img {:src "img/social/weibo.png"}]
-          [:h5 "微博"]]]
+          [:h5 "微博"]]]]
+       [:tr
         [:td
          [:a.share {:href "#" :on-click copy-link}
           [:img {:src "img/social/copy-link.png"}]
-          [:h5 "复制链接地址"]]]]]
+          [:h5 "复制链接地址"]]]
+        [:td]
+        [:td]]]
       [:button.cancel {:on-click #(reset! sharing false)} "取 消"]]]))
 
 (defn- draw-scene [ch params]
@@ -137,11 +135,13 @@
     (r/render-component [social-component ch]
                         (.querySelector js/document "#panel"))))
 
+
 (defn- save-score [{time :time}]
   (go
     (let [resp (<! (http/post "/score" {:json-params {:score time}}))
           model (assoc (:body resp) :time time)]
-      (reset! dialog {:dialog :results :params model}))))
+      (reset! dialog {:dialog :results :params model})
+      (initialize-result-sharing model))))
 
 (defn init []
   (let [ch (async/chan)]
