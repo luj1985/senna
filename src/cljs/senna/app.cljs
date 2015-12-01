@@ -32,9 +32,29 @@
       [:div.dimmer
        [page ch params]])))
 
+
+
+(defn- copy-link [e]
+  (let [href (.-href js/location)
+        target (.querySelector js/document "#social-link")
+        range (.createRange js/document)]
+
+    (.preventDefault e)
+
+    (set! (.-innerText target) href)
+    (.selectNode range target)
+    (-> js/window
+        (.getSelection)
+        (.addRange range))
+    (.execCommand js/document  "copy")
+    (-> js/window
+        (.getSelection)
+        (.removeAllRanges))))
+
 (defn social-component [chan params]
   (if @sharing
     [:div.dimmer
+     [:span#social-link]
      [:div#social
       [:h4 "分享至"]
       [:table
@@ -61,7 +81,7 @@
           [:img {:src "img/social/weibo.svg"}]
           [:h5 "微博"]]]
         [:td
-         [:a.share {:href "#"}
+         [:a.share {:href "#" :on-click copy-link}
           [:img {:src "img/social/copy-link.svg"}]
           [:h5 "复制链接地址"]]]]]
       [:button.cancel {:on-click #(reset! sharing false)} "取 消"]]]))

@@ -123,6 +123,8 @@
 
 (defstyles social-page
   [:#panel {:text-align :center}]
+  [:#copy {:display :none}]
+  [:#social-link {:color :transparent}]
   [:#social {:width (percent 100)
              :position :fixed
              :bottom 0
