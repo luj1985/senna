@@ -24,10 +24,16 @@
          :font-weight :bold
          :font-style :normal}]
 
-   [:table {:background-color (rgb 233 233 233)
-            :border-collapse :seperate
+   [:.branding {:text-align :center
+                :padding-top (px 24)
+                :margin "0 24px"
+                :border-top "1px solid rgb(128,128,128)"}
+
+    [:img {:width (px 80) :height (px 80)}]]
+
+   [:table {:border-collapse :seperate
             :border-spacing (px 4)
-            :margin "0 24px 50px 24px"}
+            :margin (px 24)}
     [:td {:box-sizing :border-box}]
     [:img {:width (percent 100)
            :float :left}]]
