@@ -14,10 +14,8 @@
 ;; Used to indidate the speed dashboard
 (def ^:const SPEED-LIMIT 15)
 (def ^:const SPEED-NORMAL 5)
-#_(def ^:const SPEED-LIMIT 100)
-#_(def ^:const SPEED-NORMAL 80)
 
-(def ^:const ACC-TIME 70)
+(def ^:const ACC-TIME 35)
 (def ^:const ACC-UP 0.2)
 (def ^:const ACC-DECAY 2)
 (def ^:const ACC-DOWN (- (/ ACC-UP ACC-DECAY)))
