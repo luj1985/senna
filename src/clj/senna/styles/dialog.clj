@@ -99,8 +99,9 @@
             :background-size "80px auto"
             :background-image "url(../img/dialog/achieve.png)"
             :background-repeat :no-repeat}
-   [:.num {:font-size (px 30)}]
-   [:.txt {:font-size (px 15)}]]
+
+   [:.usage {:font-size (px 30)}
+    [:.txt {:font-size (px 15)}]]   ]
 
   [:.global {:color :white
              :font-size (px 20)}]

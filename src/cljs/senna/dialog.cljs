@@ -78,12 +78,7 @@
     [:div#score.content
      [:section.score
       [:div.usage
-       [:span.num mins]
-       [:span.txt "分"]
-       [:span.num secs]
-       [:span.txt "秒"]
-       [:span.num mss]
-       [:span.txt "毫秒"]]
+       mins [:span.txt "分"] secs [:span.txt "秒"] mss [:span.txt "毫秒"]]
       [:div.rank
        [:div.global "全球排名：" global]
        [:div.best "历史最好：" best]]]
