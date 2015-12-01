@@ -37,4 +37,5 @@ create table if not exists results (
 ) engine=innodb default charset=utf8;
 
 
-alter table users add mobile varchar(200);
+alter table users add column mobile varchar(200);
+alter table questions add column rank float not null;
