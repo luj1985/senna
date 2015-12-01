@@ -32,13 +32,20 @@
                     :font-size (em 1.1)}]]
 
    [:.more {:display :inline-block
-            :padding-left (px 120)
+            :padding-left (px 90)
             :line-height (px 80)
             :text-decoration :none
+            :white-space :nowrap
             :color :black
             :background-image "url(../img/loading/CAFlogo.jpg)"
             :background-repeat :no-repeat
-            :background-size "80px auto"}]
+            :background-size "80px auto"}
+    [:.left {:padding-left (px 25)
+             :display :inline-block
+             :background-image "url(../img/click.png)"
+             :background-repeat :no-repeat
+             :background-size "25px 25px"
+             :background-position "left center"}]]
 
    ;; TODO: make serveral selector share same rules
 
@@ -68,10 +75,15 @@
 
 (defstyles score-dialog-media
   [(at-media {:max-width (px 330)}
-             [:.more {:margin-top (px 5)}])]
+             [:.more {:margin-top (px 20)}])]
 
   [(at-media {:min-width (px 330)}
-             [:.more {:margin-top (px 50)}])])
+             [:.more {:margin-top (px 80)}]
+             [:.score {:margin-left (px 20)}])]
+
+  [(at-media {:min-width (px 400)}
+             [:.more {:margin-top (px 120)}]
+             [:.score {:margin-left (px 50)}])])
 
 (defstyles game-score-dialog
   [:#score {:background-image "url(../img/dialog/scores.png)"
@@ -81,18 +93,14 @@
             :text-align :center
             :padding-top 0}]
 
-  [:.score {:padding-left (px 80)
+  [:.score {:padding-left (px 90)
             :padding-top (px 60)
+            :color :white
+            :background-size "80px auto"
             :background-image "url(../img/dialog/achieve.png)"
-            :background-repeat :no-repeat
-            :background-size "80px auto"}]
-
-  [:.usage {:display :inline-block}
-   [:span {:color :white
-           :background-color (rgb 230 1 18)
-           :font-size (px 35)}]]
-
-  [:.rank {:display :inline-block}]
+            :background-repeat :no-repeat}
+   [:.num {:font-size (px 30)}]
+   [:.txt {:font-size (px 15)}]]
 
   [:.global {:color :white
              :font-size (px 20)}]

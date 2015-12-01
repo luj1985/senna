@@ -41,6 +41,7 @@
             :left (px 259)}
 
     [:table {:table-layout :fixed
+             :border-collapse :collapse
              :width (percent 100)
              :height (percent 100)}]]
 
