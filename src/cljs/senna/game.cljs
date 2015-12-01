@@ -226,9 +226,6 @@
 (defn- normal-speed [speed]
   (if (< speed SPEED-NORMAL) (+ speed 0.05) speed))
 
-#_(defn- debug-log [obj]
-  (js/console.log (.stringify js/JSON (clj->js obj)) ))
-
 (defn- accelerate-speed [speed]
   (let [results (->> @accelerators
                      (map (fn [{:keys [remain delta]}]

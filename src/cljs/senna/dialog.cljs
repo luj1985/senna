@@ -3,7 +3,8 @@
    [cljs.core.async :as async :refer [chan >! <! timeout]]
    [cljs-http.client :as http]
    [reagent.core :refer [atom]]
-   [cljs.core.async :refer [put!]])
+   [cljs.core.async :refer [put!]]
+   [senna.users :as user])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defonce ^:private countdown (atom 3))
@@ -130,11 +131,11 @@
      [:input.black {:id "submit" :type :submit
                     :on-click (fn [e]
                                 (let [input (.getElementById js/document "mobile")
-                                      value (.-value input)]
+                                      value (.-value input)
+                                      headers (user/get-uid-headers)]
                                   (if (re-matches #"\d{11}" value)
                                     (go
-                                      (let [resp (<! (http/post "/mobile" {:json-params {:number value}}))]
-                                        (js/console.log (clj->js resp))
+                                      (let [resp (<! (http/post "/mobile" {:json-params {:number value}} headers))]
                                         (put! chan {:event :prize})))
                                     (js/alert "手机号码输入有误"))))
                     :value "确 定"}]]]])

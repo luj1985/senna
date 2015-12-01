@@ -3,6 +3,7 @@
    [cljs.core.async :as async :refer [chan >! <! timeout]]
    [cljs-http.client :as http]
    [reagent.core :as r]
+   [senna.users :as user]
    [senna.loader :as loader]
    [senna.dialog :as dialog]
    [senna.game :as game]
@@ -136,11 +137,12 @@
                         (.querySelector js/document "#panel"))))
 
 (defn- save-score [{time :time}]
-  (go
-    (let [resp (<! (http/post "/score" {:json-params {:score time}}))
-          model (assoc (:body resp) :time time)]
-      (reset! dialog {:dialog :results :params model})
-      (initialize-result-sharing model))))
+  (let [headers (user/get-uid-headers)]
+    (go
+      (let [resp (<! (http/post "/score" {:json-params {:score time}} headers))
+            model (assoc (:body resp) :time time)]
+        (reset! dialog {:dialog :results :params model})
+        (initialize-result-sharing model)))))
 
 (defn init []
   (let [ch (async/chan)]

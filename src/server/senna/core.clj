@@ -30,7 +30,8 @@
   (str (java.util.UUID/randomUUID)))
 
 (defn- extract-uid [request]
-  (get-in request [:cookies "uid" :value] ))
+  (let [headers (:headers request)]
+    (get headers "uid")))
 
 (defn- create-user! []
   (let [uid (generate-random-uid)]
@@ -41,12 +42,9 @@
   (jdbc/insert! mysql-db :results {:uid uid :result score}))
 
 (defn- random-questions [request]
-  (let [uid (extract-uid request)
+  (let [uid (or (extract-uid request) (create-user!))
         res (response (jdbc/query mysql-db ["select * from questions"]))]
-    (if uid
-      res
-      (let [new-id (create-user!)]
-        (assoc res :cookies {:uid new-id})))))
+    (assoc res :headers {"UID" uid})))
 
 (defn- search-rank [score]
   (let [rs (jdbc/query mysql-db ["select count(id) as rank from results where result < ?" score])]
@@ -64,17 +62,14 @@
 (defn- rank-score [request]
   (let [uid (or (extract-uid request) (create-user!))
         score (get-in request [:body "score"])]
-
     (save-score! uid score)
-
     (let [rank (search-rank score)
           best (search-best uid)]
-      (response {:global rank
-                 :best best}))))
+      (response {:global rank :best best}))))
 
 (defn- save-mobile-number [request]
   (let [number (get-in request [:body "number"])
-        uid (extract-uid request)]
+        uid (or (extract-uid request) (create-user!))]
     (jdbc/update! mysql-db :users {:mobile number} ["uid = ?" uid])
     (response {:uid uid :mobile number})))
 

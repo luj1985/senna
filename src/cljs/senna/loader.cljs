@@ -3,7 +3,8 @@
    [reagent.core :as r]
    [cljs-http.client :as http]
    [cljs.core.async :as async :refer [>! <! chan]]
-   [clojure.browser.event :as event :refer [listen-once listen]])
+   [clojure.browser.event :as event :refer [listen-once listen]]
+   [senna.users :as user])
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:import [goog.net ImageLoader EventType]
            [goog.events.EventType]))
@@ -53,11 +54,14 @@
          :total (inc (count resources))
          :progress 1)
   (let [progress (preload-images resources)
-        qch (http/get "/questions")]
+        headers (user/get-uid-headers)
+        qch (http/get "/questions" headers )]
     (go
       (while true
         (case (<! progress)
           :load (swap! loading-state update-in [:progress] inc)
-          :complete (let [{questions :body} (<! qch)]
+          :complete (let [{questions :body headers :headers} (<! qch)
+                          uid (get headers "uid")]
+                      (user/set-uid uid)
                       (>! ch {:event :loaded
                               :params questions})))))))
