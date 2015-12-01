@@ -54,12 +54,14 @@
         (.removeAllRanges))))
 
 (def ^:private weibo-message
-  "#逼死处女座#我在《小车跑跑跑》游戏中用时5分59秒，全球排名1596名。处女座，可敢一战？（来自@CAF汽车后市场论坛）")
+  )
 
 (defn- share-weibo [e]
   (.preventDefault e)
-  (let [link (js/encodeURIComponent (get-game-link))
+  (let [{:keys [global message]} (dialog/get-last-score)
+        weibo-message (str  "#逼死处女座#我在《小车跑跑跑》游戏中用时" message "，全球排名" global "名。处女座，可敢一战？（来自@CAF汽车后市场论坛）")
         title (js/encodeURIComponent weibo-message)
+        link (js/encodeURIComponent (get-game-link))
         url (str "http://service.weibo.com/share/share.php?"
                  "title=" title "&url=" link)]
     (set! (.-href js/location) url)))

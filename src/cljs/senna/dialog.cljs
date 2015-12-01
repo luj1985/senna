@@ -77,9 +77,15 @@
      :secs secs
      :mss mss}))
 
+(defonce ^:private last-score (atom {}))
+
+(defn get-last-score []
+  @last-score)
+
 (defn result-page [chan params]
   (let [{:keys [time global best]} params
-        {:keys [mins secs mss]} (parse-time time)]
+        {:keys [mins secs mss]} (parse-time time)
+        message (str mins "分" secs "秒" mss)]
     [:div#score.content
      [:section.score
       [:div.usage
@@ -88,6 +94,9 @@
        [:div "全球排名：" [:span.history global] "名"]
        [:div "历史最好：" [:span.history
                            (let [{:keys [mins secs mss]} (parse-time best)]
+                             (swap! last-score assoc
+                                    :global global
+                                    :message message )
                              [:span.best
                               mins
                               [:span.txt "分"]
