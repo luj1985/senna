@@ -64,7 +64,7 @@
                  "&desc=" (js/encodeURIComponent qq-message)
                  "&title=" (js/encodeURIComponent "#逼死处女座#（来自@CAF汽车后市场论坛）")
                  "&summary=" (js/encodeURIComponent "看一款游戏怎样逼死处女座！"))]
-    (js/console.log url)))
+    (set! (.-href js/location) url)))
 
 (defn- share-qzone [e]
   (.preventDefault e)
@@ -76,7 +76,8 @@
                  "url=" (js/encodeURIComponent link)
                  "&title=" (js/encodeURIComponent title)
                  "&summary=" (js/encodeURIComponent qzone-message))]
-    (js/console.log url)))
+    (set! (.-href js/location) url)
+    #_(js/console.log url)))
 
 (defn- share-weibo [e]
   (.preventDefault e)

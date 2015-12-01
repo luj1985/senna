@@ -124,6 +124,6 @@
   [:div.presentation.fullscreen
    [:img.header {:src "img/prize.jpg"}]
    [:h4 "法兰克福展，边玩边拿奖"]
-   [:p "截止到12月5日下午15点整排名排名前10的玩家，就能赢取价值惊喜好礼一份！"]
+   [:p "截止到2015年12月5日下午15点整排名前10的玩家，就能赢取惊喜好礼一份！"]
    [:p [:em "还有幸运大抽奖，更多好礼送不停！"]]
    [:div.share [:button.black {:on-click #(put! chan {:event :share})} "分 享"]]])
