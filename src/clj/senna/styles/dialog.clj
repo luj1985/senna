@@ -56,26 +56,20 @@
     ["&.black" {:background-color :transparent
                 :background-image "url(../img/dialog/btn.png)"
                 :background-repeat :no-repeat
-                :background-size "100% auto"
-                :padding "10px 20px"
+                :background-size "100% 100%"
+                :padding "12px 20px"
                 :color :white
-                :border :none}]
-
-    ["&.red" {:background-color (rgb 214 11 12)
-              :background "linear-gradient(180deg,rgb(214,11,12) 0%, rgb(126,16,16) 100%)"
-              :border "1px solid yellow"
-              :color (rgb 251 235 14)
-              :border-radius (px 30)}]
-
-    ["&.yellow" {:background-color (rgb 255 218 115)
-                 :border "1px solid rgb(226,120,3)"
-                 :color (rgb 180 0 1)
-                 :border-radius (px 30)}]]])
+                :border :none}]]])
 
 
+(defstyles responsive-dialog
+  [(at-media {:max-height (px 400)})
+
+   ]
+  )
 (defstyles score-dialog-media
   [(at-media {:max-width (px 330)}
-             [:.more {:margin-top (px 20)}])]
+             [:.more {:margin-top (px 30)}])]
 
   [(at-media {:min-width (px 330)}
              [:.more {:margin-top (px 80)}]
@@ -100,14 +94,18 @@
             :background-image "url(../img/dialog/achieve.png)"
             :background-repeat :no-repeat}
 
-   [:.usage {:font-size (px 30)}
-    [:.txt {:font-size (px 15)}]]   ]
-
-  [:.global {:color :white
-             :font-size (px 20)}]
-  [:.best {:color :white
-           :font-size (px 20)}])
-
+   [:.usage {:font-size (px 30)
+             :white-space :nowrap}
+    [:.txt {:font-size (px 15)
+            :padding "0 2px"}]]
+   [:.rank {:font-size (px 12)
+            :white-space :nowrap}
+    [:.history {:font-size (px 18)
+                :padding "0 2px"}
+     [:.best {:font-size (px 18)}
+      [:.txt {:font-size (px 12)
+              :padding "0 2px"}
+       ]]]]])
 
 (defstyles game-rules-dialog
   [:#rules {:background-image "url(../img/dialog/rules.png)"

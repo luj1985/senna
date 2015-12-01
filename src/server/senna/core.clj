@@ -56,9 +56,9 @@
         (inc))))
 
 (defn- search-best [uid]
-  (let [rs (jdbc/query mysql-db ["select count(id) as rank from results where result < (select min(result) from results where uid=?)" uid])]
+  (let [rs (jdbc/query mysql-db ["select min(result) as best from results where uid=?" uid])]
     (-> (first rs)
-        (get :rank)
+        (get :best)
         (inc))))
 
 (defn- rank-score [request]

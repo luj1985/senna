@@ -59,15 +59,20 @@
   (let [milliseconds (mod time 1000)]
     (js/parseInt (/ milliseconds 10))))
 
+(defn- two-digit-number [digit]
+  (if (< digit 10) (str "0" digit) digit))
+
 (defn- parse-time [time]
   (let [mins (js/parseInt (/ time 60000))
         mss (-> time
                 (mod 1000)
                 (/ 10)
-                (js/parseInt))
+                (js/parseInt)
+                (two-digit-number))
         secs (-> (/ time 1000)
                  (js/parseInt)
-                 (mod 60))]
+                 (mod 60)
+                 (two-digit-number))]
     {:mins mins
      :secs secs
      :mss mss}))
@@ -78,10 +83,16 @@
     [:div#score.content
      [:section.score
       [:div.usage
-       mins [:span.txt "分"] secs [:span.txt "秒"] mss [:span.txt "毫秒"]]
+       mins [:span.txt "分"] secs [:span.txt "秒"] mss]
       [:div.rank
-       [:div.global "全球排名：" global]
-       [:div.best "历史最好：" best]]]
+       [:div "全球排名：" [:span.history global] "名"]
+       [:div "历史最好：" [:span.history
+                           (let [{:keys [mins secs mss]} (parse-time best)]
+                             [:span.best
+                              mins
+                              [:span.txt "分"]
+                              secs [:span.txt "秒"]
+                              mss])]]]]
      [:div.container
       [:button.black {:on-click #(put! chan {:event :reset})} "再玩一次"]
       [:button.black {:on-click #(put! chan {:event :prize})} "我要抽奖"]]
@@ -97,5 +108,8 @@
     [:center
      [:form {:method :post :action "/mobile"}
       [:input {:id "mobile" :name "mobile" :type :tel}]
-      [:input.yellow {:id "submit" :type :submit
-                      :value "下一步"}]]]]])
+      [:input.black {:id "submit" :type :submit :required true
+                     :on-submit (fn [e]
+                                  (.preventDefault e)
+                                  (js/console.log "before submit"))
+                      :value "确定"}]]]]])
