@@ -18,6 +18,19 @@
           :margin 0
           :line-height 1.5}])
 
+(defstyles button-styles
+  [:button "input[type=\"submit\"]" {:padding "5px 10px"
+                                     :font-size (px 16)
+                                     :outline :none}
+
+   ["&.black" {:background-color :transparent
+               :background-image "url(../img/dialog/btn.png)"
+               :background-repeat :no-repeat
+               :background-size "100% 100%"
+               :padding "12px 20px"
+               :color :white
+               :border :none}]])
+
 (defstyles screen
   base-styles
   dialog-styles
@@ -25,6 +38,7 @@
   loading-page-styles
   game-board-styles
   presentation-styles
+  button-styles
 
 
   [:#scene {:position :fixed

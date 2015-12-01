@@ -10,10 +10,15 @@
 (declare caculate-speed)
 
 (def ^:const MAX-ROUNDS 3)
-(def ^:const FPS 60)
+(def ^:const FPS 30)
 ;; Used to indidate the speed dashboard
-(def ^:const SPEED-LIMIT 10)
-(def ^:const SPEED-NORMAL 3.6)
+(def ^:const SPEED-LIMIT 15)
+(def ^:const SPEED-NORMAL 5)
+
+(def ^:const ACC-TIME 70)
+(def ^:const ACC-UP 0.2)
+(def ^:const ACC-DECAY 2)
+(def ^:const ACC-DOWN (- (/ ACC-UP ACC-DECAY)))
 
 (defonce game-state (r/atom {:status :ready
                              :position {:x 0 :y 0 :r 0}
@@ -213,16 +218,8 @@
            :current 0
            :status :normal}))
 
-(def ^:const ACC-TIME 57)
 
-(defn- navigate-next [ch correct?]
-  (let [status (if correct? :correct :wrong)
-        delay (if correct? 500 1000)]
-    (go
-      (swap! candidates assoc :status status)
-      (<! (timeout delay))
-      (swap! candidates assoc :status :normal)
-      (swap! candidates update-in [:current] inc))))
+
 
 (defn- normal-speed [speed]
   (if (< speed SPEED-NORMAL) (+ speed 0.05) speed))
@@ -234,9 +231,9 @@
   (let [results (->> @accelerators
                      (map (fn [{:keys [remain delta]}]
                             (let [d (cond
-                                      (and (< (* 2 ACC-TIME) remain)
-                                           (<= remain (* 3 ACC-TIME))) 0.1
-                                      (<= 0 remain (* 2 ACC-TIME)) -0.05
+                                      (and (< (* ACC-DECAY ACC-TIME) remain)
+                                           (<= remain (* (inc ACC-DECAY) ACC-TIME))) ACC-UP
+                                      (<= 0 remain (* ACC-DECAY ACC-TIME)) ACC-DOWN
                                       :else 0)]
                               {:remain (dec remain) :delta d}))))
         delta (->> (map :delta results) (reduce +))
@@ -253,6 +250,20 @@
   (when correct?
     (swap! accelerators conj {:remain (* 3 ACC-TIME) :delta 0})))
 
+(defn- navigate-next [ch correct?]
+  (let [status (if correct? :correct :wrong)
+        delay (if correct? 500 1000)]
+    (go
+      (swap! candidates assoc :status status)
+      (<! (timeout delay))
+      (swap! candidates assoc :status :normal)
+      (let [{:keys [total current questions]} @candidates]
+        (if (>= (inc current) total)
+          (swap! candidates assoc
+                 :questions (shuffle questions)
+                 :current 0)
+          (swap! candidates update-in [:current] inc))))))
+
 (defn- answer-effect [responser correct?]
   (let [sound (if correct? "m-correct" "m-wrong")]
     (sound/play-sound sound))
@@ -260,7 +271,9 @@
   (navigate-next responser correct?))
 
 (defn- ipad-control [questions l t s]
-  (swap! candidates assoc :questions questions)
+  (swap! candidates assoc
+         :questions questions
+         :total (count questions))
 
   (let [responser (async/chan)
         {:keys [questions current status]} @candidates
@@ -271,21 +284,17 @@
                           (if (= (:status @candidates) :normal)
                             (answer-effect responser (= answer %))))]
 
-    (if (nil? question)
-      [:div.ipad {:style {:zoom s :top (str (+ 625 t) "px")}}
-       [:div.message "没有了"]]
-
-      [:div.ipad {:style {:zoom s :top (str (+ 625 t) "px")}}
-       [:table
-        [:tr
-         [:td.question
-          {:colSpan 3
-           :className (name status)}
-          question]]
-        [:tr.options
-         [:td [:a {:href "#" :on-click (choice-handler 1)} option1]]
-         [:td [:a {:href "#" :on-click (choice-handler 2)} option2]]
-         [:td [:a {:href "#" :on-click (choice-handler 3)} option3]]]]])))
+    [:div.ipad {:style {:zoom s :top (str (+ 625 t) "px")}}
+     [:table
+      [:tr
+       [:td.question
+        {:colSpan 3
+         :className (name status)}
+        question]]
+      [:tr.options
+       [:td [:a {:href "#" :on-click (choice-handler 1)} option1]]
+       [:td [:a {:href "#" :on-click (choice-handler 2)} option2]]
+       [:td [:a {:href "#" :on-click (choice-handler 3)} option3]]]]]))
 
 (defn- game-layout [ch tasks l t s]
   [:div#scene

@@ -37,10 +37,4 @@
     [:td {:box-sizing :border-box}]
     [:img {:width (percent 100)
            :float :left}]]
-   [:footer.fixed {:position :fixed
-                   :width (percent 100)
-                   :line-height (px 50)
-                   :bottom 0
-                   :background-color (rgb 232 0 21)
-                   :color :white
-                   :text-align :center}]])
+   [:.share {:text-align :center}]])

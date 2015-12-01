@@ -17,7 +17,6 @@
 
   [:.content {:display :inline-block
               :color :white
-              :margin-top (percent 25)
               :padding "30px 20px 0 20px"
               :width (percent 85)
               :height (percent 100)
@@ -45,28 +44,21 @@
              :background-image "url(../img/click.png)"
              :background-repeat :no-repeat
              :background-size "25px 25px"
-             :background-position "left center"}]]
-
-   ;; TODO: make serveral selector share same rules
-
-   [:button "input[type=\"submit\"]" {:padding "5px 10px"
-             :font-size (px 16)
-             :outline :none}
-
-    ["&.black" {:background-color :transparent
-                :background-image "url(../img/dialog/btn.png)"
-                :background-repeat :no-repeat
-                :background-size "100% 100%"
-                :padding "12px 20px"
-                :color :white
-                :border :none}]]])
+             :background-position "left center"}]]])
 
 
 (defstyles responsive-dialog
-  [(at-media {:max-height (px 400)})
+  [(at-media {:max-device-height (px 480)}
+             [:.content {:margin-top (px 25)}])]
 
-   ]
+  [(at-media {:min-device-height 481 :max-device-height (px 568)}
+             [:.content {:margin-top (px 60)}])]
+
+  [(at-media {:min-device-height (px 579)}
+             [:.content {:margin-top (percent 25)}])]
   )
+
+
 (defstyles score-dialog-media
   [(at-media {:max-width (px 330)}
              [:.more {:margin-top (px 30)}])]
@@ -104,8 +96,7 @@
                 :padding "0 2px"}
      [:.best {:font-size (px 18)}
       [:.txt {:font-size (px 12)
-              :padding "0 2px"}
-       ]]]]])
+              :padding "0 2px"}]]]]])
 
 (defstyles game-rules-dialog
   [:#rules {:background-image "url(../img/dialog/rules.png)"
@@ -144,4 +135,5 @@
   game-score-dialog
   game-rules-dialog
   tel-page-dialog
-  score-dialog-media)
+  score-dialog-media
+  responsive-dialog)
