@@ -1,7 +1,10 @@
 (ns senna.dialog
   (:require
+   [cljs.core.async :as async :refer [chan >! <! timeout]]
+   [cljs-http.client :as http]
    [reagent.core :refer [atom]]
-   [cljs.core.async :refer [put!]]))
+   [cljs.core.async :refer [put!]])
+  (:require-macros [cljs.core.async.macros :refer [go]]))
 
 (defonce ^:private countdown (atom 3))
 
@@ -115,14 +118,25 @@
        [:span.left "猛戳这里了解更多"]]]]))
 
 
+
 (defn tel-page [chan params]
   [:div#tel.content
    [:section
     [:p "请输入您的手机号码，以便中奖后我们及时与您联系！"]
     [:center
-     [:input {:id "mobile" :name "mobile" :type :tel}]
+     [:input {:id "mobile"
+              :type :tel
+              :maxlength 11}]
      [:input.black {:id "submit" :type :submit
-                    :on-click #(put! chan {:event :prize})
+                    :on-click (fn [e]
+                                (let [input (.getElementById js/document "mobile")
+                                      value (.-value input)]
+                                  (if (re-matches #"\d{11}" value)
+                                    (go
+                                      (let [resp (<! (http/post "/mobile" {:json-params {:number value}}))]
+                                        (js/console.log (clj->js resp))
+                                        (put! chan {:event :prize})))
+                                    (js/alert "手机号码输入有误"))))
                     :value "确 定"}]]]])
 
 (defn prize-page [chan params]

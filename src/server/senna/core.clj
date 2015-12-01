@@ -73,10 +73,10 @@
                  :best best}))))
 
 (defn- save-mobile-number [request]
-  (let [number (get-in request [:form-params "mobile"])
+  (let [number (get-in request [:body "number"])
         uid (extract-uid request)]
-    (jdbc/update! mysql-db :users {:mobile number} ["uid = ?" uid]))
-  (redirect "/prizes"))
+    (jdbc/update! mysql-db :users {:mobile number} ["uid = ?" uid])
+    (response {:uid uid :mobile number})))
 
 (defroutes app-routes
   (GET "/" [] index-page)

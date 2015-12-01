@@ -135,7 +135,6 @@
     (r/render-component [social-component ch]
                         (.querySelector js/document "#panel"))))
 
-
 (defn- save-score [{time :time}]
   (go
     (let [resp (<! (http/post "/score" {:json-params {:score time}}))
