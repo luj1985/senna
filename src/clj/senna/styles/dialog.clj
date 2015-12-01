@@ -15,6 +15,10 @@
              :height (percent 100)
              :background-color (rgba 0 0 0 0.7)}]
 
+  [:.fullscreen {:height (percent 100)
+                 :width (percent 100)
+                 :background-color :white}]
+
   [:.content {:display :inline-block
               :color :white
               :padding "30px 20px 0 20px"
@@ -55,8 +59,7 @@
              [:.content {:margin-top (px 60)}])]
 
   [(at-media {:min-device-height (px 579)}
-             [:.content {:margin-top (percent 25)}])]
-  )
+             [:.content {:margin-top (percent 25)}])])
 
 
 (defstyles score-dialog-media
@@ -118,6 +121,29 @@
                 :background-color (rgb 234 2 3)
                 :background "linear-gradient(180deg,rgb(244,3,2) 0%, rgb(128,15,16) 100%)"}]])
 
+(defstyles social-page
+  [:#panel {:text-align :center}]
+  [:#social {:width (percent 100)
+             :position :fixed
+             :bottom 0
+             :background :white
+             :box-sizing :border-box}
+
+   [:h4 {:color (rgb 86 86 86)
+         :margin (px 16)}]
+   [:h5 {:margin "10px 0"}]
+   [:table {:width (percent 100)
+            :vertical-align :top
+            :table-layout :fixed}]
+   [:a.share {:color (rgb 139 139 139)
+              :text-decoration :none}]
+   [:.cancel {:color (rgb 133 133 133)
+              :background-color (rgb 236 236 236)
+              :border :none
+              :margin-top (px 10)
+              :height (px 50)
+              :width (percent 100)}]])
+
 (defstyles tel-page-dialog
   [:#tel {:background-color (rgb 229 3 18)
           :position :relative
@@ -136,4 +162,5 @@
   game-rules-dialog
   tel-page-dialog
   score-dialog-media
-  responsive-dialog)
+  responsive-dialog
+  social-page)

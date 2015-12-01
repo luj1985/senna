@@ -9,7 +9,8 @@
                    :margin 0}
    [:img.header {:width (percent 100)}]
 
-   [:p {:margin (px 24)}]
+   [:p {:margin (px 24)
+        :text-align :left}]
 
    [:h3 {:font-size (px 24)
          :margin "50px 24px 0 24px"

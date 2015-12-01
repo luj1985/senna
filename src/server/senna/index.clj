@@ -34,4 +34,5 @@
      [:div#loading
       [:div.logo]]]
     [:div#dialog]
+    [:div#panel]
     (include-js "js/app.js")]))

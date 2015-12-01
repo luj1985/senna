@@ -35,7 +35,7 @@
                 :link "img/social/copy-link.svg"
                 :weibo "img/social/weibo.svg"
                 :wechat "img/social/wechat.svg"
-                :qq-space "img/social/qq-space.svg"
+                :qq-space "img/social/qzone.svg"
                 :friend-circle "img/social/friend-circle.svg"})
 
 (defn- preload-images [resources]

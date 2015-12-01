@@ -95,7 +95,7 @@
                               mss])]]]]
      [:div.container
       [:button.black {:on-click #(put! chan {:event :reset})} "再玩一次"]
-      [:button.black {:on-click #(put! chan {:event :prize})} "我要抽奖"]]
+      [:button.black {:on-click #(put! chan {:event :mobile})} "我要抽奖"]]
      [:div.container
       [:a.more {:href "/brands"}
        [:span.left "猛戳这里了解更多"]]]]))
@@ -106,10 +106,15 @@
    [:section
     [:p "请输入您的手机号码，以便中奖后我们及时与您联系！"]
     [:center
-     [:form {:method :post :action "/mobile"}
-      [:input {:id "mobile" :name "mobile" :type :tel}]
-      [:input.black {:id "submit" :type :submit :required true
-                     :on-submit (fn [e]
-                                  (.preventDefault e)
-                                  (js/console.log "before submit"))
-                      :value "确定"}]]]]])
+     [:input {:id "mobile" :name "mobile" :type :tel}]
+     [:input.black {:id "submit" :type :submit
+                    :on-click #(put! chan {:event :prize})
+                    :value "确 定"}]]]])
+
+(defn prize-page [chan params]
+  [:div.presentation.fullscreen
+   [:img.header {:src "img/prize.jpg"}]
+   [:h4 "法兰克福展，边玩边拿奖"]
+   [:p "截止到12月5日下午15点整排名排名前10的玩家，就能赢取价值惊喜好礼一份！"]
+   [:p [:em "还有幸运大抽奖，更多好礼送不停！"]]
+   [:div.share [:button.black {:on-click #(put! chan {:event :share})} "分 享"]]])
