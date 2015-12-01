@@ -33,9 +33,11 @@
        [page ch params]])))
 
 
+(defn- get-game-link []
+  (.-href js/location))
 
 (defn- copy-link [e]
-  (let [href (.-href js/location)
+  (let [href (get-game-link)
         target (.querySelector js/document "#social-link")
         range (.createRange js/document)]
 
@@ -51,6 +53,17 @@
         (.getSelection)
         (.removeAllRanges))))
 
+(def ^:private weibo-message
+  "#逼死处女座#我在《小车跑跑跑》游戏中用时5分59秒，全球排名1596名。处女座，可敢一战？（来自@CAF汽车后市场论坛）")
+
+(defn- share-weibo [e]
+  (.preventDefault e)
+  (let [link (js/encodeURIComponent (get-game-link))
+        title (js/encodeURIComponent weibo-message)
+        url (str "http://service.weibo.com/share/share.php?"
+                 "title=" title "&url=" link)]
+    (set! (.-href js/location) url)))
+
 (defn social-component [chan params]
   (if @sharing
     [:div.dimmer
@@ -61,28 +74,28 @@
        [:tr
         [:td
          [:a.share {:href "#"}
-          [:img {:src "img/social/wechat.svg"}]
+          [:img {:src "img/social/wechat.png"}]
           [:h5 "微信"]]]
         [:td
          [:a.share {:href "#"}
-          [:img {:src "img/social/friend-circle.svg"}]
+          [:img {:src "img/social/friend-circle.png"}]
           [:h5 "微信朋友圈"]]]
         [:td
          [:a.share {:href "#"}
-          [:img {:src "img/social/qq.svg"}]
+          [:img {:src "img/social/qq.png"}]
           [:h5 "QQ"]]]]
        [:tr
         [:td
          [:a.share {:href "#"}
-          [:img {:src "img/social/qzone.svg"}]
+          [:img {:src "img/social/qzone.png"}]
           [:h5 "QQ空间"]]]
         [:td
-         [:a.share {:href "#"}
-          [:img {:src "img/social/weibo.svg"}]
+         [:a.share {:href "#" :on-click share-weibo}
+          [:img {:src "img/social/weibo.png"}]
           [:h5 "微博"]]]
         [:td
          [:a.share {:href "#" :on-click copy-link}
-          [:img {:src "img/social/copy-link.svg"}]
+          [:img {:src "img/social/copy-link.png"}]
           [:h5 "复制链接地址"]]]]]
       [:button.cancel {:on-click #(reset! sharing false)} "取 消"]]]))
 

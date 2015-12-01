@@ -29,14 +29,7 @@
 
                 :rules "img/dialog/rules.png"
                 :scores "img/dialog/scores.png"
-                :achievement "img/dialog/achieve.png"
-
-                :qq "img/social/qq.svg"
-                :link "img/social/copy-link.svg"
-                :weibo "img/social/weibo.svg"
-                :wechat "img/social/wechat.svg"
-                :qq-space "img/social/qzone.svg"
-                :friend-circle "img/social/friend-circle.svg"})
+                :achievement "img/dialog/achieve.png"})
 
 (defn- preload-images [resources]
   (let [progress (async/chan)
