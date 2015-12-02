@@ -135,7 +135,7 @@
                                       headers (user/get-uid-headers)]
                                   (if (re-matches #"\d{11}" value)
                                     (go
-                                      (let [resp (<! (http/post "/mobile" {:json-params {:number value}} headers))]
+                                      (let [resp (<! (http/post "/mobile" (merge {:json-params {:number value}} headers) ))]
                                         (put! chan {:event :prize})))
                                     (js/alert "手机号码输入有误"))))
                     :value "确 定"}]]]])

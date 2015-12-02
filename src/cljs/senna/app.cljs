@@ -139,7 +139,7 @@
 (defn- save-score [{time :time}]
   (let [headers (user/get-uid-headers)]
     (go
-      (let [resp (<! (http/post "/score" {:json-params {:score time}} headers))
+      (let [resp (<! (http/post "/score" (merge {:json-params {:score time}} headers) ))
             model (assoc (:body resp) :time time)]
         (reset! dialog {:dialog :results :params model})
         (initialize-result-sharing model)))))
