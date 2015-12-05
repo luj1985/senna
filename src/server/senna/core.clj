@@ -12,7 +12,8 @@
    [ring.util.response :refer [response redirect]]
    [senna.index :refer [index-page]]
    [senna.brands :refer [brands-page brand-page]]
-   [senna.prize :refer [prize-page]])
+   [senna.prize :refer [prize-page]]
+   [senna.dashboard :refer [dashboard-page]])
   (:gen-class))
 
 ;; TODO: read password from environment variable ?
@@ -73,6 +74,11 @@
     (jdbc/update! mysql-db :users {:mobile number} ["uid = ?" uid])
     (response {:uid uid :mobile number})))
 
+(defn- render-dashboard [request]
+  ;; select mobile, result from users, results where users.uid = results.uid group by users.uid
+  (let [rs (jdbc/query mysql-db ["select mobile, best from users a, (select uid, min(result) as best from results group by uid) b where a.uid = b.uid order by best asc"])]
+    (dashboard-page rs)))
+
 (defroutes app-routes
   (GET "/" [] index-page)
   (GET "/questions" [] random-questions)
@@ -81,6 +87,7 @@
   (POST "/mobile" [] save-mobile-number)
   (GET "/prizes" [] prize-page)
   (POST "/score" [] rank-score)
+  (GET "/_dashboard" [] render-dashboard)
   (resources "/")
   (not-found "Page not found"))
 
@@ -92,7 +99,6 @@
       wrap-params
       wrap-nested-params
       wrap-cookies))
-
 
 (defn init []
   (println "initializing data"))
