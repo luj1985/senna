@@ -76,14 +76,21 @@
 
 (defn- render-dashboard [request]
   ;; select mobile, result from users, results where users.uid = results.uid group by users.uid
-  (let [rs (jdbc/query mysql-db ["select mobile, best from users a, (select uid, min(result) as best from results group by uid) b where a.uid = b.uid order by best asc"])]
-    (dashboard-page rs)))
+  (let [rankings (jdbc/query mysql-db ["select mobile, best from users a,
+(select uid, min(result) as best from results group by uid) b
+where a.uid = b.uid order by best asc"])
+        views (jdbc/query mysql-db ["select * from views"])]
+    (dashboard-page rankings views)))
+
+(defn- render-brand-page [id]
+  (jdbc/execute! mysql-db ["update  views set count = count+1 where id = ?" id])
+  (brand-page id))
 
 (defroutes app-routes
   (GET "/" [] index-page)
   (GET "/questions" [] random-questions)
   (GET "/brands" [] brands-page)
-  (GET "/brands/:id" [id] (brand-page id))
+  (GET "/brands/:id" [id] (render-brand-page id))
   (POST "/mobile" [] save-mobile-number)
   (GET "/prizes" [] prize-page)
   (POST "/score" [] rank-score)

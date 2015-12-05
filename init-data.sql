@@ -96,3 +96,17 @@ insert into questions(brand,question,option1,option2,option3,answer,rank) values
 insert into questions(brand,question,option1,option2,option3,answer,rank) values('公共题库', '夏日，汽车水温不断升高，应更换什么？', '冷却液', '空调冷媒', '火花塞 ', 1, 1);
 insert into questions(brand,question,option1,option2,option3,answer,rank) values('公共题库', '驻车时是否应把方向盘回正？', '需要', '无所谓', '看地面情况', 1, 1);
 insert into questions(brand,question,option1,option2,option3,answer,rank) values('公共题库', '频繁踩刹车的影响不包括？', '电压耗损', '耗油', '刹车片磨损', 1, 1);
+
+
+
+
+
+insert into views(id,name,count) values(1, '康迪泰克', 0);
+insert into views(id,name,count) values(2, '岱高', 0);
+insert into views(id,name,count) values(3, '辉门', 0);
+insert into views(id,name,count) values(4, '盖茨', 0);
+insert into views(id,name,count) values(5, '海拉', 0);
+insert into views(id,name,count) values(6, '梅施', 0);
+insert into views(id,name,count) values(7, '舍弗勒', 0);
+insert into views(id,name,count) values(8, 'Truck-Lite', 0);
+insert into views(id,name,count) values(9, '天合', 0);

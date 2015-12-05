@@ -16,7 +16,45 @@
          (two-digit-time sec) "秒"
          (two-digit-ms  ms))))
 
-(defn dashboard-page [rankings]
+(defn- result-section [rankings]
+  [:section
+   [:h2 "《小车跑跑跑》用户成绩"]
+   [:ol
+    [:li "有一些用户完成了游戏，但是没有提交电话号码，用N/A来代替。"]
+    [:li "同一用户只取最好成绩"]]
+
+   [:table
+    [:thead
+     [:tr
+      [:th "排名"]
+      [:th "手机号"]
+      [:th "用时"]
+      [:th "用时（毫秒）"]]]
+    [:tbody
+     (map-indexed (fn [i rank]
+                    [:tr
+                     [:td (inc i)]
+                     [:td (or (:mobile rank) "N/A") ]
+                     [:td (ms->string (:best rank))]
+                     [:td (int (:best rank))]]) rankings)]]])
+
+(defn- view-count [views]
+  [:section
+   [:h2 "品牌点击数统计"]
+   [:ol
+    [:li "由于网络爬虫的访问，点击数会比实际的高"]]
+   [:table
+    [:thead
+     [:tr
+      [:th "品牌"]
+      [:th "点击次数"]]]
+    [:tbody
+     (for [view views]
+       [:tr
+        [:td (:name view)]
+        [:td (:count view)]])]]])
+
+(defn dashboard-page [rankings views]
   (html5
    [:head
     [:meta {:http-equiv "content-type" :content "text/html; charset=utf-8"}]
@@ -28,23 +66,5 @@
     [:title "排行榜"]]
 
    [:body
-    [:section
-     [:h2 "《小车跑跑跑》用户成绩"]
-     [:ol
-      [:li "有一些用户完成了游戏，但是没有提交电话号码，用N/A来代替。"]
-      [:li "同一用户只取最好成绩"]]
-
-     [:table
-      [:thead
-       [:tr
-        [:th "排名"]
-        [:th "手机号"]
-        [:th "用时"]
-        [:th "用时（毫秒）"]]]
-      [:tbody
-       (map-indexed (fn [i rank]
-                      [:tr
-                       [:td (inc i)]
-                       [:td (or (:mobile rank) "N/A") ]
-                       [:td (ms->string (:best rank))]
-                       [:td (int (:best rank))]]) rankings)]]]]))
+    (result-section rankings)
+    (view-count views)]))

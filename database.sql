@@ -39,3 +39,11 @@ create table if not exists results (
 
 alter table users add column mobile varchar(200);
 alter table questions add column rank float not null;
+
+
+create table if not exists views (
+  id int not null auto_increment,
+  name varchar(200) not null,
+  count int not null,
+  primary key (id)
+) engine=innodb default charset=utf8;
