@@ -21,6 +21,7 @@
                  [org.clojure/java.jdbc "0.4.2"]
                  [ring/ring-json "0.4.0"]
                  [ring/ring-core "1.4.0"]
+                 [ring-basic-authentication "1.0.5"]
                  [mysql/mysql-connector-java "5.1.37"]
                  [hiccup "1.0.5"]
                  [compojure "1.4.0"]])

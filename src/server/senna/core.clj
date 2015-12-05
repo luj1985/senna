@@ -9,7 +9,10 @@
    [ring.middleware.keyword-params :refer [wrap-keyword-params]]
    [ring.middleware.nested-params :refer [wrap-nested-params]]
    [ring.middleware.cookies :refer [wrap-cookies]]
+   [ring.middleware.basic-authentication :refer [wrap-basic-authentication]]
    [ring.util.response :refer [response redirect]]
+
+
    [senna.index :refer [index-page]]
    [senna.brands :refer [brands-page brand-page]]
    [senna.prize :refer [prize-page]]
@@ -86,6 +89,13 @@ where a.uid = b.uid order by best asc"])
   (jdbc/execute! mysql-db ["update  views set count = count+1 where id = ?" id])
   (brand-page id))
 
+(defn authenticate? [username password]
+  (and (= username "caf")
+       (= password "caf42")))
+
+(def ^:private render-dashboard-with-auth
+  (wrap-basic-authentication render-dashboard authenticate?))
+
 (defroutes app-routes
   (GET "/" [] index-page)
   (GET "/questions" [] random-questions)
@@ -94,7 +104,7 @@ where a.uid = b.uid order by best asc"])
   (POST "/mobile" [] save-mobile-number)
   (GET "/prizes" [] prize-page)
   (POST "/score" [] rank-score)
-  (GET "/_dashboard" [] render-dashboard)
+  (GET "/_dashboard" [] render-dashboard-with-auth)
   (resources "/")
   (not-found "Page not found"))
 
