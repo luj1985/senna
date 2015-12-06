@@ -1,11 +1,14 @@
 (ns senna.dashboard
   (:use [hiccup.page]))
 
-(defn- two-digit-ms [ms]
-  (int (/ ms 10)))
-
 (defn- two-digit-time [t]
   (if (< t 10) (str "0" t) t))
+
+(defn- two-digit-ms [ms]
+  (-> ms
+      (/ 10)
+      (int)
+      (two-digit-time)))
 
 (defn- ms->string [ms]
   (let [fsec (int (/ ms 1000))
@@ -15,7 +18,6 @@
     (str min "分"
          (two-digit-time sec) "秒"
          (two-digit-ms  ms))))
-
 
 (defn- result-section [rankings totals]
   [:section
