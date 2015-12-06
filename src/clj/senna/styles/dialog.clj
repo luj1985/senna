@@ -55,7 +55,7 @@
   [(at-media {:max-device-height (px 480)}
              [:.content {:margin-top (px 25)}])]
 
-  [(at-media {:min-device-height 481 :max-device-height (px 568)}
+  [(at-media {:min-device-height (px 481) :max-device-height (px 568)}
              [:.content {:margin-top (px 60)}])]
 
   [(at-media {:min-device-height (px 579)}
