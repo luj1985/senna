@@ -82,8 +82,13 @@
   (let [rankings (jdbc/query mysql-db ["select mobile, best from users a,
 (select uid, min(result) as best from results group by uid) b
 where a.uid = b.uid order by best asc"])
-        views (jdbc/query mysql-db ["select * from views"])]
-    (dashboard-page rankings views)))
+        views (jdbc/query mysql-db ["select * from views"])
+        results (jdbc/query mysql-db ["select count(*) as count from users, results where users.uid = results.uid"])
+        users (jdbc/query mysql-db ["select count(*) as count from (select distinct results.uid from users, results where users.uid = results.uid) t"])
+        totals {:user (-> (first users) (get :count))
+                :count (-> (first results) (get :count))}]
+
+    (dashboard-page rankings views totals)))
 
 (defn- render-brand-page [id]
   (jdbc/execute! mysql-db ["update  views set count = count+1 where id = ?" id])

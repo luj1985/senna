@@ -16,13 +16,14 @@
          (two-digit-time sec) "秒"
          (two-digit-ms  ms))))
 
-(defn- result-section [rankings]
+
+(defn- result-section [rankings totals]
   [:section
    [:h2 "《小车跑跑跑》用户成绩"]
    [:ol
-    [:li "有一些用户完成了游戏，但是没有提交电话号码，用N/A来代替。"]
+    [:li (str "总共" (:user totals) "用户提交了" (:count totals) "次成绩") ]
+    [:li "有一些用户完成了游戏，但是没有提交电话号码，显示为N/A"]
     [:li "同一用户只取最好成绩"]]
-
    [:table
     [:thead
      [:tr
@@ -54,7 +55,9 @@
         [:td (:name view)]
         [:td (:count view)]])]]])
 
-(defn dashboard-page [rankings views]
+
+
+(defn dashboard-page [rankings views totals]
   (html5
    [:head
     [:meta {:http-equiv "content-type" :content "text/html; charset=utf-8"}]
@@ -66,5 +69,5 @@
     [:title "排行榜"]]
 
    [:body
-    (result-section rankings)
+    (result-section rankings totals)
     (view-count views)]))
