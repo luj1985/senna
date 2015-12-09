@@ -42,6 +42,7 @@
    [:head
     [:meta {:http-equiv "content-type" :content "text/html; charset=utf-8"}]
     [:meta {:http-equiv "x-ua-compatible" :content "ie=edge"}]
+    [:meta {:http-equiv "pragma" :content "no-cache"}]
     [:meta {:name "description" :content ""}]
     [:meta {:name "keywords" :content ""}]
     [:meta {:name "viewport"
