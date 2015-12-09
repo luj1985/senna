@@ -80,6 +80,7 @@
 
 
 (def home-page "http://caf.shangtao-china.com")
+(def logo-image "http://caf.shangtao-china.com/img/loading/CAFlogo.jpg")
 
 (defn- initialize-result-sharing [params]
   (when-let [wx (.-wx js/window)]
@@ -87,11 +88,11 @@
           title "#逼死处女座#（来自@CAF汽车后市场论坛）"
           desc (str  "我在《小车跑跑跑》游戏中用时" message "，全球排名" global "名。处女座，可敢一战？")]
 
-      (.onMenuShareTimeline js/window.wx (clj->js {:title desc :link home-page}))
-      (.onMenuShareAppMessage js/window.wx (clj->js {:title title :desc desc :link home-page}))
-      (.onMenuShareQQ js/window.wx (clj->js {:title title :desc desc :link home-page}))
-      (.onMenuShareWeibo js/window.wx (clj->js {:title title :desc desc :link home-page}))
-      (.onMenuShareQZone js/window.wx (clj->js {:title title :desc desc :link home-page}))
+      (.onMenuShareTimeline js/window.wx (clj->js {:title desc :link home-page :imgUrl logo-image}))
+      (.onMenuShareAppMessage js/window.wx (clj->js {:title title :desc desc :link home-page :imgUrl logo-image}))
+      (.onMenuShareQQ js/window.wx (clj->js {:title title :desc desc :link home-page :imgUrl logo-image}))
+      (.onMenuShareWeibo js/window.wx (clj->js {:title title :desc desc :link home-page :imgUrl logo-image}))
+      (.onMenuShareQZone js/window.wx (clj->js {:title title :desc desc :link home-page :imgUrl logo-image}))
 
       (set! (.-title js/document) desc))))
 
