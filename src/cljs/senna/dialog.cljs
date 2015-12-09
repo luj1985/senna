@@ -140,6 +140,7 @@
                                     (js/alert "手机号码输入有误"))))
                     :value "确 定"}]]]])
 
+
 (defn prize-page [chan params]
   [:div.presentation.fullscreen
    [:img.header {:src "img/prize.jpg"}]

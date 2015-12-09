@@ -79,10 +79,20 @@
     (set! (.-href js/location) url)))
 
 
+(def home-page "http://caf.shangtao-china.com")
+
 (defn- initialize-result-sharing [params]
   (when-let [wx (.-wx js/window)]
     (let [{:keys [global message]} (dialog/parse-score-response params)
+          title "#逼死处女座#（来自@CAF汽车后市场论坛）"
           desc (str  "我在《小车跑跑跑》游戏中用时" message "，全球排名" global "名。处女座，可敢一战？")]
+
+      (.onMenuShareTimeline js/window.wx (clj->js {:title desc :link home-page}))
+      (.onMenuShareAppMessage js/window.wx (clj->js {:title title :desc desc :link home-page}))
+      (.onMenuShareQQ js/window.wx (clj->js {:title title :desc desc :link home-page}))
+      (.onMenuShareWeibo js/window.wx (clj->js {:title title :desc desc :link home-page}))
+      (.onMenuShareQZone js/window.wx (clj->js {:title title :desc desc :link home-page}))
+
       (set! (.-title js/document) desc))))
 
 (defn- share-weibo [e]
@@ -123,6 +133,7 @@
         [:td]]]
       [:button.cancel {:on-click #(reset! sharing false)} "取 消"]]]))
 
+
 (defn- draw-scene [ch params]
   (let [w (.-innerWidth js/window)
         h (.-innerHeight js/window)
@@ -144,12 +155,7 @@
         (reset! dialog {:dialog :results :params model})
         (initialize-result-sharing model)))))
 
-(defn- initialize-wechat []
-  (.onMenuShareTimeline js/window.wx (clj->js {:title "分享测试"
-                                               :link "http://caf.shangtao-china.com"})))
-
 (defn init []
-  (initialize-wechat)
   (let [ch (async/chan)]
     (go (while true
           (let [{:keys [event params]} (<! ch)]
