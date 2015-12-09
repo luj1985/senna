@@ -144,7 +144,12 @@
         (reset! dialog {:dialog :results :params model})
         (initialize-result-sharing model)))))
 
+(defn- initialize-wechat []
+  (.onMenuShareTimeline js/window.wx (clj->js {:title "分享测试"
+                                               :link "http://caf.shangtao-china.com"})))
+
 (defn init []
+  (initialize-wechat)
   (let [ch (async/chan)]
     (go (while true
           (let [{:keys [event params]} (<! ch)]

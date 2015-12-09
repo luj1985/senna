@@ -1,4 +1,4 @@
 {:require  [senna.loader senna.game senna.app]
  :init-fns [senna.app/init]
  :compiler-options {:asset-path "js/app.out" 
-                    :externs ["externs/svg.js"]}}
+                    :externs ["externs/svg.js" "externs/wx.js"]}}

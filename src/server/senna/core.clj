@@ -12,7 +12,6 @@
    [ring.middleware.basic-authentication :refer [wrap-basic-authentication]]
    [ring.util.response :refer [response redirect]]
 
-
    [senna.index :refer [index-page]]
    [senna.brands :refer [brands-page brand-page]]
    [senna.prize :refer [prize-page]]
@@ -101,8 +100,13 @@ where a.uid = b.uid order by best asc"])
 (def ^:private render-dashboard-with-auth
   (wrap-basic-authentication render-dashboard authenticate?))
 
+
+(defn- wechat-handler [request]
+  (get-in request [:params :echostr]))
+
 (defroutes app-routes
   (GET "/" [] index-page)
+  (GET "/wechat" [] wechat-handler)
   (GET "/questions" [] random-questions)
   (GET "/brands" [] brands-page)
   (GET "/brands/:id" [id] (render-brand-page id))
