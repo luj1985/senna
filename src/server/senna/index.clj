@@ -19,8 +19,7 @@
     [:title "小车跑跑跑"]
     (include-js "//res.wx.qq.com/open/js/jweixin-1.0.0.js")
     (let [sig (w/sign-package request)
-          config {
-                  :appId (:appid sig)
+          config {:appId (:appid sig)
                   :timestamp (:timestamp sig)
                   :nonceStr (:noncestr sig)
                   :signature (:signature sig)

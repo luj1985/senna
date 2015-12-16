@@ -15,7 +15,7 @@
    [senna.index :refer [index-page]]
    [senna.brands :refer [brands-page brand-page]]
    [senna.prize :refer [prize-page]]
-   [senna.dashboard :refer [dashboard-page]])
+   [senna.dashboard :refer [dashboard-page all-results]])
   (:gen-class))
 
 ;; TODO: read password from environment variable ?
@@ -89,6 +89,11 @@ where a.uid = b.uid order by best asc"])
 
     (dashboard-page rankings views totals)))
 
+(defn- render-all-results [request]
+  (let [rankings (jdbc/query mysql-db
+                             ["select result, mobile from results left join users on results.uid = users.uid order by result asc"])]
+    (all-results rankings)))
+
 (defn- render-brand-page [id]
   (jdbc/execute! mysql-db ["update  views set count = count+1 where id = ?" id])
   (brand-page id))
@@ -100,6 +105,9 @@ where a.uid = b.uid order by best asc"])
 (def ^:private render-dashboard-with-auth
   (wrap-basic-authentication render-dashboard authenticate?))
 
+
+(def ^:private render-all-results-with-auth
+  (wrap-basic-authentication render-all-results authenticate?))
 
 (defn- wechat-handler [request]
   (get-in request [:params :echostr]))
@@ -113,7 +121,10 @@ where a.uid = b.uid order by best asc"])
   (POST "/mobile" [] save-mobile-number)
   (GET "/prizes" [] prize-page)
   (POST "/score" [] rank-score)
+
   (GET "/_dashboard" [] render-dashboard-with-auth)
+  (GET "/_all" [] render-all-results-with-auth)
+
   (resources "/")
   (not-found "Page not found"))
 

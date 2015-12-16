@@ -73,3 +73,36 @@
    [:body
     (result-section rankings totals)
     (view-count views)]))
+
+(defn- all-result-section [rankings]
+  [:section
+   [:h2 "《小车跑跑跑》所有提交的成绩"]
+   [:p "总共完成场次：" (count rankings)]
+   [:table
+    [:thead
+     [:tr
+      [:th "排名"]
+      [:th "手机号"]
+      [:th "用时"]
+      [:th "用时（毫秒）"]]]
+    [:tbody
+     (map-indexed (fn [i rank]
+                    [:tr
+                     [:td (inc i)]
+                     [:td (or (:mobile rank) "N/A") ]
+                     [:td (ms->string (:result rank))]
+                     [:td (int (:result rank))]]) rankings)]]])
+
+(defn all-results [rankings]
+  (html5
+   [:head
+    [:meta {:http-equiv "content-type" :content "text/html; charset=utf-8"}]
+    [:meta {:http-equiv "x-ua-compatible" :content "ie=edge"}]
+    [:meta {:name "description" :content ""}]
+    [:meta {:name "keywords" :content ""}]
+    [:meta {:name "renderer" :content "webkit"}]
+    [:style "table { width: 400px; text-align: right;}"]
+    [:title "所有成绩"]]
+
+   [:body
+    (all-result-section rankings)]))
