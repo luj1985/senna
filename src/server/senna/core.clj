@@ -91,7 +91,7 @@ where a.uid = b.uid order by best asc"])
 
 (defn- render-all-results [request]
   (let [rankings (jdbc/query mysql-db
-                             ["select result, mobile from results left join users on results.uid = users.uid order by result asc"])]
+                             ["select result, mobile from results, users where results.uid = users.uid order by result asc"])]
     (all-results rankings)))
 
 (defn- render-brand-page [id]
