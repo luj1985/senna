@@ -16,12 +16,16 @@
           :font-size (px 16)
           :padding 0
           :margin 0
-          :line-height 1.5}])
+          :line-height 1.5}]
+  [:a.tel {:color :white
+           }])
 
 (defstyles button-styles
-  [:button "input[type=\"submit\"]" {:padding "5px 10px"
-                                     :font-size (px 16)
-                                     :outline :none}
+  [:a.button :button "input[type=\"submit\"]"
+   {:padding "5px 10px"
+    :text-decoration :none
+    :font-size (px 16)
+    :outline :none}
 
    ["&.black" {:background-color :transparent
                :background-image "url(../img/dialog/btn.png)"
@@ -40,6 +44,8 @@
   presentation-styles
   button-styles
 
+  [:section.back {:text-align :center
+                  :margin-top (px 20)}]
 
   [:#scene {:position :fixed
             :top 0

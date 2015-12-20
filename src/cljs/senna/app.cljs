@@ -1,6 +1,6 @@
 (ns senna.app
   (:require
-   [cljs.core.async :as async :refer [chan >! <! timeout]]
+   [cljs.core.async :as async :refer [chan >! <! timeout put!]]
    [cljs-http.client :as http]
    [reagent.core :as r]
    [senna.users :as user]
@@ -156,13 +156,20 @@
         (reset! dialog {:dialog :results :params model})
         (initialize-result-sharing model)))))
 
+(defn- ignore-rule-page? []
+  (pos? (.indexOf js/location.search "ignore")))
+
+(defn- initialize-game-scene [ch params]
+  (draw-scene ch (shuffle params))
+  (if (ignore-rule-page?)
+    (put! ch {:event :ready})))
 (defn init []
   (let [ch (async/chan)]
     (go (while true
           (let [{:keys [event params]} (<! ch)]
             (case event
               ;; display game board when all resources loaded
-              :loaded (draw-scene ch (shuffle params) )
+              :loaded (initialize-game-scene ch params)
               :ready (reset! dialog {:dialog :countdown})
               :share (reset! sharing true)
               :mobile (reset! dialog {:dialog :mobile})

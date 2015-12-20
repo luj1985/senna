@@ -28,11 +28,16 @@
 (defn rules-page [ch _]
   [:div#rules.content {:title "游戏玩法"}
    [:section.important rule-text]
-   [:section prize]
+   [:section
+    [:p "感谢您参与《小车跑跑跑》法兰克福展活动，根据活动规则，本期共20名玩家获赠礼品，包括10个优胜奖和10个幸运奖。点击“获奖名单”查看获奖详情。近期我们将以电话的方式与中奖玩家联系！尽请关注！"]
+    [:p "联系方式：" [:a.tel {:href "tel:021-54731592"} "021-54731592" ]]
+    ]
    [:button.black
     {:href "#"
      :on-click #(put! ch {:event :ready})}
-    "我知道了"]])
+    "我知道了"]
+   [:a.button.black
+    {:href "/winners"} "获奖名单"]])
 
 (defn reset-countdown []
   (reset! countdown 3))

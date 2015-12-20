@@ -55,6 +55,11 @@
   [(at-media {:max-device-height (px 480)}
              [:.content {:margin-top (px 25)}])]
 
+  [(at-media {:max-device-height (px 568)}
+             [:#dialog
+              [:section {:font-size (px 14)}
+               ["&.important" {:font-size (px 14)}]]])]
+
   [(at-media {:min-device-height (px 481) :max-device-height (px 568)}
              [:.content {:margin-top (px 60)}])]
 
