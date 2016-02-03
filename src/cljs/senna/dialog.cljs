@@ -15,6 +15,7 @@
 
 (def ^:const prize
   "截止到2015年12月5日下午15点整排名前10的玩家，就能赢取惊喜好礼一份！另外，参与游戏就有机会参加抽奖，拼实力，也要拼人品哦！")
+
 (defn- path-circle [rx ry r]
   (str "M" rx "," ry "m" 0 ",-" r
        "a" r "," r ",0,1,1,0," (* 2 r)
@@ -24,7 +25,9 @@
   (* 2 js/Math.PI r))
 
 (defn rules-page [ch _]
-  [:div#rules.content {:title "游戏玩法"}
+  [:div#rules.content
+   [:div.wrapper
+    [:span.rule-head "游戏玩法"]]
    [:section.important
     [:p "发挥你的聪明才智，正确答对问题，让小车加速，最快时间到达终点。"]
     [:p "记住，速度才是王道哦！"]]

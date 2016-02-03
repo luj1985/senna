@@ -117,18 +117,18 @@
             :background-position "top center"
             :text-align :center}
 
-   [(& before) {:content "attr(title) ' '"
-                :position :absolute
-                :display :inline-block
-                :width (px 64)
-                :height (px 24)
-                :padding "5px 30px"
-                :border-radius (px 32)
-                :border-style :dashed
-                :-webkit-transform "translate(-50%,-50px)"
-                :transform "translate(-50%,-50px)"
-                :background-color (rgb 234 2 3)
-                :background "linear-gradient(180deg,rgb(244,3,2) 0%, rgb(128,15,16) 100%)"}]])
+   [:.wrapper {:position :absolute
+               :width "100%"
+               :left 0
+               :-webkit-transform "translate(0, -50px)"
+               :transform "translate(0, -50px)"}]
+
+   [:.rule-head {:display :inline-block
+                 :padding "5px 30px"
+                 :border-radius (px 32)
+                 :border-style :dashed
+                 :background-color (rgb 234 2 3)
+                 :background "linear-gradient(180deg,rgb(244,3,2) 0%, rgb(128,15,16) 100%)"}]])
 
 (defstyles social-page
   [:#panel {:text-align :center}]
