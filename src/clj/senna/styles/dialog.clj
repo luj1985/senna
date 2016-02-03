@@ -24,6 +24,7 @@
               :padding "30px 20px 0 20px"
               :width (percent 85)
               :height (percent 100)
+              :max-width (px 330)
               :border-radius (px 30)
               :box-sizing :border-box
               :text-align :left}
@@ -32,6 +33,7 @@
               :display :block
               :margin-bottom (px 20)}
     ["&.important" {:font-weight :bold
+                    :margin-bottom (px 120)
                     :font-size (em 1.1)}]]
 
    [:.more {:display :inline-block
@@ -64,6 +66,8 @@
              [:.content {:margin-top (px 60)}])]
 
   [(at-media {:min-device-height (px 579)}
+             [:#dialog
+              [:section {:margin-bottom (px 80)}]]
              [:.content {:margin-top (percent 25)}])])
 
 
@@ -72,11 +76,11 @@
              [:.more {:margin-top (px 30)}])]
 
   [(at-media {:min-width (px 330)}
-             [:.more {:margin-top (px 80)}]
+             [:.more {:margin-top (px 30)}]
              [:.score {:margin-left (px 20)}])]
 
   [(at-media {:min-width (px 400)}
-             [:.more {:margin-top (px 120)}]
+             [:.more {:margin-top (px 30)}]
              [:.score {:margin-left (px 50)}])])
 
 (defstyles game-score-dialog

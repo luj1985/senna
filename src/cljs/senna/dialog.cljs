@@ -12,8 +12,6 @@
 (def ^:const colors ["#F9B72B" "#F39900" "#EA5412" "#E93228"])
 (def ^:const radius 80)
 (def ^:const inner 50)
-(def ^:const rule-text
-  "发挥你的聪明才智，正确答对问题，让小车加速，最快时间到达终点。记住，速度才是王道哦！")
 
 (def ^:const prize
   "截止到2015年12月5日下午15点整排名前10的玩家，就能赢取惊喜好礼一份！另外，参与游戏就有机会参加抽奖，拼实力，也要拼人品哦！")
@@ -27,7 +25,9 @@
 
 (defn rules-page [ch _]
   [:div#rules.content {:title "游戏玩法"}
-   [:section.important rule-text]
+   [:section.important
+    [:p "发挥你的聪明才智，正确答对问题，让小车加速，最快时间到达终点。"]
+    [:p "记住，速度才是王道哦！"]]
    [:button.black
     {:href "#"
      :on-click #(put! ch {:event :ready})}
