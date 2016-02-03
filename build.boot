@@ -37,8 +37,7 @@
 
 
 (deftask build []
-  (comp (speak)
-        (cljs)
+  (comp (cljs)
         (garden :styles-var 'senna.styles/screen
                 :veners ["webkit"]
                 :auto-prefix #{:transform :animation}

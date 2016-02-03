@@ -3,3 +3,5 @@
 /.nrepl-port
 .nrepl-history
 /material
+/tel.txt
+/src/server/senna/data.clj
