@@ -15,8 +15,8 @@
 (def ^:const SPEED-LIMIT 15)
 (def ^:const SPEED-NORMAL 5)
 
-(def ^:const ACC-TIME 35)
-(def ^:const ACC-UP 0.2)
+(def ^:const ACC-TIME 40)
+(def ^:const ACC-UP 0.3)
 (def ^:const ACC-DECAY 2)
 (def ^:const ACC-DOWN (- (/ ACC-UP ACC-DECAY)))
 
