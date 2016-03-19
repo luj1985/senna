@@ -70,7 +70,6 @@
                :font-size (px 60)}]
 
    [:.question {:padding "20px 10px 30px 10px"
-                :-webkit-transition "background-color cubic-bezier(.62,.28,.23,.99) .5s"
                 :transition "background-color cubic-bezier(.62,.28,.23,.99) .5s"
                 :vertical-align :top
                 :margin 0

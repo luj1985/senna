@@ -16,7 +16,6 @@
   [:.pointer {:background-image "url(../img/game/pointer.svg)"
               :background-size "100% 100%"
               :position :absolute
-              :-webkit-transform "rotate(-110deg)"
               :transform "rotate(-110deg)"
               :height (px 80)
               :width (px 80)}])
@@ -61,7 +60,6 @@
             :height (px 80)
             :width (px 160)
             :left (px 555)
-            :-webkit-transform "rotate(-14deg)"
             :transform "rotate(-14deg)"}
    [:.ms {:font-size (px 36)}]])
 

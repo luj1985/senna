@@ -7,6 +7,7 @@
                  [pandeiro/boot-http            "0.7.0"      :scope "test"]
                  [org.martinklepsch/boot-garden "1.2.5-7"    :scope "test"]
                  [danielsz/boot-autoprefixer    "0.0.7"      :scope "test"]
+                 [cpmcdaniel/boot-copy          "1.0"        :scope "test"]
                  [com.cemerick/piggieback       "0.2.1"      :scope "test"]
                  [org.clojure/tools.nrepl       "0.2.12"     :scope "test"]
                  [weasel                        "0.7.0"      :scope "test"]
@@ -35,13 +36,17 @@
  '[adzerk.boot-reload            :refer [reload]]
  '[pandeiro.boot-http            :refer [serve]]
  '[org.martinklepsch.boot-garden :refer [garden]]
- '[danielsz.autoprefixer         :refer [autoprefixer]])
+ '[danielsz.autoprefixer         :refer [autoprefixer]]
+ '[cpmcdaniel.boot-copy          :refer [copy]]
+ )
 
 (deftask build []
   (comp (cljs)
      (garden :styles-var 'senna.styles/screen
-             :output-to "public/css/garden.css")
-     (autoprefixer :files #{"public/css/garden.css"})))
+             :output-to "main.css")
+     (autoprefixer :files #{"main.css"})
+     (copy :output-dir "target/public/css"
+           :matching #{#"\.css$"})))
 
 (deftask run []
   (comp (serve :handler 'senna.core/handler

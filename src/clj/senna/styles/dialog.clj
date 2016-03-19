@@ -120,7 +120,6 @@
    [:.wrapper {:position :absolute
                :width "100%"
                :left 0
-               :-webkit-transform "translate(0, -50px)"
                :transform "translate(0, -50px)"}]
 
    [:.rule-head {:display :inline-block

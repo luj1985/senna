@@ -19,18 +19,15 @@
    [:svg.loader {:position :absolute
                  :width (px 160)
                  :height (px 160)
-                 :-webkit-transform "translate(-50%,-50%)"
                  :transform "translate(-50%,-50%)"
                  :top (percent 50)
                  :left (percent 50)}]
 
    [:path {:fill :none
            :stroke-width (px 60)
-           :-webkit-animation [[countdown "1s" :linear 3]]
            :animation [[countdown "1s" :linear 3]]}]
 
-   [:circle {:-webkit-transform "translate(50%,50%)"
-             :transform "translate(50%,50%)"}]
+   [:circle {:transform "translate(50%,50%)"}]
 
    [:.seconds {:font-size (px 40)}]
 
@@ -40,7 +37,6 @@
            :border-radius (percent 50)
            :border "3px solid white"
            :position :absolute
-           :-webkit-transform "translate(-50%,-50%)"
            :transform "translate(-50%,-50%)"
            :top (percent 50)
            :left (percent 50)

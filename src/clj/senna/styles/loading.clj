@@ -1,9 +1,7 @@
 (ns senna.styles.loading
   (:require
    [garden.def :refer [defstyles]]
-   [garden.units :refer [px percent]])
-  (:use
-   [senna.styles.extension]))
+   [garden.units :refer [px percent]]))
 
 (defstyles loading-page-styles
   [:#loading {:position :fixed
