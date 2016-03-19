@@ -1,20 +1,20 @@
 (set-env!
  :source-paths    #{"src/server" "src/cljs" "src/clj"}
  :resource-paths  #{"resources"}
- :dependencies '[[adzerk/boot-cljs              "1.7.170-3"  :scope "test"]
-                 [adzerk/boot-cljs-repl         "0.3.0"      :scope "test"]
-                 [adzerk/boot-reload            "0.4.2"      :scope "test"]
-                 [pandeiro/boot-http            "0.7.0"      :scope "test"]
-                 [org.martinklepsch/boot-garden "1.2.5-7"    :scope "test"]
-                 [danielsz/boot-autoprefixer    "0.0.7"      :scope "test"]
-                 [cpmcdaniel/boot-copy          "1.0"        :scope "test"]
-                 [com.cemerick/piggieback       "0.2.1"      :scope "test"]
-                 [org.clojure/tools.nrepl       "0.2.12"     :scope "test"]
-                 [weasel                        "0.7.0"      :scope "test"]
+ :dependencies '[[adzerk/boot-cljs "1.7.228-1" :scope "boot"]
+                 [adzerk/boot-cljs-repl "0.3.0" :scope "boot"]
+                 [adzerk/boot-reload "0.4.5" :scope "boot"]
+                 [pandeiro/boot-http "0.7.3" :scope "boot"]
+                 [org.martinklepsch/boot-garden "1.3.0-0" :scope "boot"]
+                 [danielsz/boot-autoprefixer "0.0.7" :scope "boot"]
+                 [org.clojure/tools.nrepl "0.2.12" :scope "boot"]
+                 [cpmcdaniel/boot-copy "1.0" :scope "boot"]
+                 [com.cemerick/piggieback "0.2.1" :scope "boot"]
+                 [weasel "0.7.0" :scope "boot"]
 
                  ;; after build, clojurescript/garden will be translated
                  ;; into assets, no need to include them in war file
-                 [garden "1.3.0-SNAPSHOT"             :scope "client"]
+                 [garden "1.3.2"                      :scope "client"]
                  [reagent "0.5.1"                     :scope "client"]
                  [org.clojure/clojurescript "1.7.170" :scope "client"]
                  [org.clojure/core.async "0.2.374"    :scope "client"]
@@ -31,13 +31,13 @@
                  [compojure "1.4.0"]])
 
 (require
- '[adzerk.boot-cljs              :refer [cljs]]
- '[adzerk.boot-cljs-repl         :refer [cljs-repl start-repl]]
- '[adzerk.boot-reload            :refer [reload]]
- '[pandeiro.boot-http            :refer [serve]]
+ '[adzerk.boot-cljs :refer [cljs]]
+ '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
+ '[adzerk.boot-reload :refer [reload]]
+ '[pandeiro.boot-http :refer [serve]]
  '[org.martinklepsch.boot-garden :refer [garden]]
- '[danielsz.autoprefixer         :refer [autoprefixer]]
- '[cpmcdaniel.boot-copy          :refer [copy]]
+ '[danielsz.autoprefixer :refer [autoprefixer]]
+ '[cpmcdaniel.boot-copy :refer [copy]]
  )
 
 (deftask build []
@@ -51,10 +51,11 @@
 (deftask run []
   (comp (serve :handler 'senna.core/handler
             :reload true)
-     (watch)
+     (watch :quiet true)
      (cljs-repl)
      (reload)
-     (build)))
+     (build)
+     ))
 
 (deftask production []
   (task-options! cljs {:optimizations :advanced}
@@ -77,7 +78,7 @@
                        'senna.index
                        'senna.dashboard})
      (web :serve 'senna.core/handler)
-     (uber :exclude-scope #{"provided" "test" "client"})
+     (uber :exclude-scope #{"provided" "boot" "client"})
      (jar :file "senna.jar")))
 
 (deftask dev
