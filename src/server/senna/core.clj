@@ -12,9 +12,7 @@
    [ring.middleware.basic-authentication :refer [wrap-basic-authentication]]
    [ring.util.response :refer [response redirect]]
 
-   [senna.index :refer [index-page winner-page]]
-   [senna.brands :refer [brands-page brand-page]]
-   [senna.prize :refer [prize-page]]
+   [senna.index :refer [index-page brands-page brand-page prize-page]]
    [senna.dashboard :refer [dashboard-page all-results]])
   (:gen-class))
 
@@ -105,7 +103,6 @@ where a.uid = b.uid order by best asc"])
 (def ^:private render-dashboard-with-auth
   (wrap-basic-authentication render-dashboard authenticate?))
 
-
 (def ^:private render-all-results-with-auth
   (wrap-basic-authentication render-all-results authenticate?))
 
@@ -121,7 +118,6 @@ where a.uid = b.uid order by best asc"])
   (POST "/mobile" [] save-mobile-number)
   (GET "/prizes" [] prize-page)
   (POST "/score" [] rank-score)
-  (GET "/winners" [] winner-page)
 
   (GET "/_dashboard" [] render-dashboard-with-auth)
   (GET "/_all" [] render-all-results-with-auth)
