@@ -1,9 +1,8 @@
 (ns senna.index
   (:require
+   [hiccup.page :refer :all]
    [clojure.data.json :as json]
-   [wechat.core :as w])
-  (:use
-   [hiccup.page]))
+   [wechat.core :as w]))
 
 (defn- wx-integration [req]
   (let [sig (w/sign-package req)]
@@ -16,8 +15,7 @@
                                       "onMenuSharAppMessage"
                                       "onMenuShareQQ"
                                       "onMenuShareQZone"
-                                      "onMenuShareWeibo"]})
-         ");")))
+                                      "onMenuShareWeibo"]}) ");")))
 
 (defn index-page [request]
   (html5
@@ -29,7 +27,7 @@
     [:title "小车跑跑跑"]
     (include-js "//res.wx.qq.com/open/js/jweixin-1.0.0.js")
     [:script (wx-integration request)]
-    [:link {:href "css/garden.css"
+    [:link {:href "css/main.css"
             :rel "stylesheet"
             :type "text/css"
             :media "screen"}]

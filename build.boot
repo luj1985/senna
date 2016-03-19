@@ -1,5 +1,5 @@
 (set-env!
- :source-paths    #{"src/server" "src/cljs" "src/clj"}
+ :source-paths    #{"src/server" "src/cljs" "src/garden"}
  :resource-paths  #{"resources"}
  :dependencies '[[adzerk/boot-cljs "1.7.228-1" :scope "boot"]
                  [adzerk/boot-cljs-repl "0.3.0" :scope "boot"]
@@ -14,19 +14,19 @@
 
                  ;; after build, clojurescript/garden will be translated
                  ;; into assets, no need to include them in war file
-                 [garden "1.3.2"                      :scope "client"]
-                 [reagent "0.5.1"                     :scope "client"]
-                 [org.clojure/clojurescript "1.7.170" :scope "client"]
-                 [org.clojure/core.async "0.2.374"    :scope "client"]
+                 [garden "1.3.2" :scope "cljs"]
+                 [reagent "0.5.1" :scope "cljs"]
+                 [cljs-http "0.1.38" :scope "cljs"]
+                 [org.clojure/clojurescript "1.7.170" :scope "cljs"]
+                 [org.clojure/core.async "0.2.374" :scope "cljs"]
 
-                 [org.clojure/data.json "0.2.6"]
                  [org.clojure/java.jdbc "0.4.2"]
+                 [mysql/mysql-connector-java "5.1.37"]
+                 [org.clojure/data.json "0.2.6"]
                  [ring/ring-json "0.4.0"]
                  [ring/ring-core "1.4.0"]
                  [ring-basic-authentication "1.0.5"]
-                 [mysql/mysql-connector-java "5.1.37"]
                  [wechat "0.1.1"]
-                 [cljs-http "0.1.38"]
                  [hiccup "1.0.5"]
                  [compojure "1.4.0"]])
 
@@ -37,21 +37,20 @@
  '[pandeiro.boot-http :refer [serve]]
  '[org.martinklepsch.boot-garden :refer [garden]]
  '[danielsz.autoprefixer :refer [autoprefixer]]
- '[cpmcdaniel.boot-copy :refer [copy]]
- )
+ '[cpmcdaniel.boot-copy :refer [copy]])
 
 (deftask build []
   (comp (cljs)
      (garden :styles-var 'senna.styles/screen
              :output-to "main.css")
-     (autoprefixer :files #{"main.css"})
-     (copy :output-dir "target/public/css"
+     (autoprefixer :files ["main.css"])
+     (copy :output-dir "target/public/css/"
            :matching #{#"\.css$"})))
 
 (deftask run []
   (comp (serve :handler 'senna.core/handler
             :reload true)
-     (watch :quiet true)
+     (watch)
      (cljs-repl)
      (reload)
      (build)
@@ -64,8 +63,7 @@
 
 (deftask development []
   (task-options! cljs {:optimizations :none
-                       :source-map true
-                       :pretty-print true}
+                       :source-map true}
                  garden {:pretty-print true}
                  reload {:on-jsload 'senna.app/init
                          :asset-path "public"})
@@ -78,11 +76,9 @@
                        'senna.index
                        'senna.dashboard})
      (web :serve 'senna.core/handler)
-     (uber :exclude-scope #{"provided" "boot" "client"})
+     (uber :exclude-scope #{"provided" "boot" "cljs"})
      (jar :file "senna.jar")))
 
-(deftask dev
-  "Simple alias to run application in development mode"
-  []
+(deftask dev []
   (comp (development)
      (run)))
