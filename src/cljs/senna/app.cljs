@@ -23,7 +23,6 @@
 
 (def ^:private pages {:rule dialog/rules-page
                       :mobile dialog/tel-page
-                      :prize dialog/prize-page
                       :results dialog/result-page
                       :countdown dialog/countdown-page})
 
@@ -173,7 +172,6 @@
               :ready (reset! dialog {:dialog :countdown})
               :share (reset! sharing true)
               :mobile (reset! dialog {:dialog :mobile})
-              :prize (reset! dialog {:dialog :prize})
               :reset (do
                        (game/reset)
                        (dialog/reset-countdown)

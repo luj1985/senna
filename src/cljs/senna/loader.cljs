@@ -12,7 +12,6 @@
 (defonce ^:private loading-state (r/atom {:total 100
                                           :progress 1}))
 
-;; TODO: use macro to read file name at compile time
 (def resources {:loading "img/loading/loading.jpg"
                 :logo "img/loading/CAFlogo.jpg"
 

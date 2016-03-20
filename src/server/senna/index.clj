@@ -17,28 +17,17 @@
                                       "onMenuShareQZone"
                                       "onMenuShareWeibo"]}) ");")))
 
+(defn- header [title]
+  [:head
+   [:meta {:charset "utf-8"}]
+   [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"}]
+   [:meta {:name "renderer" :content "webkit"}]
+   [:title title]
+   (include-css "css/main.css")])
+
 (defn index-page [request]
   (html5
-   [:head
-    [:meta {:charset "utf-8"}]
-    [:meta {:name "viewport"
-            :content "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"}]
-    [:meta {:name "renderer" :content "webkit"}]
-    [:title "小车跑跑跑"]
-    (include-js "//res.wx.qq.com/open/js/jweixin-1.0.0.js")
-    [:script (wx-integration request)]
-    [:link {:href "css/main.css"
-            :rel "stylesheet"
-            :type "text/css"
-            :media "screen"}]
-    ;; This is just a workaround, seems like auto-prefix in garden doesnt' work.
-    ;; Have not time to investigate, just provide the prefixed animation
-    [:style {:type "text/css"}
-"@-webkit-keyframes countdown {
-  to {
-    stroke-dashoffset: 0;
-  }
-}"]]
+   (header "小车跑跑跑")
    [:body
     [:div#main
      ;; This "loading" html fragment will be replaced by React loader component
@@ -48,26 +37,15 @@
       [:div.logo]]]
     [:div#dialog]
     [:div#panel]
+    (include-js "//res.wx.qq.com/open/js/jweixin-1.0.0.js")
+    [:script (wx-integration request)]
     (include-js "js/app.js")]))
 
 (defn brands-page [_]
   (html5
-   [:head
-    [:meta {:http-equiv "content-type" :content "text/html; charset=utf-8"}]
-    [:meta {:http-equiv "x-ua-compatible" :content "ie=edge"}]
-    [:meta {:name "description" :content ""}]
-    [:meta {:name "keywords" :content ""}]
-    [:meta {:name "viewport"
-            :content "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"}]
-    [:meta {:name "renderer" :content "webkit"}]
-    [:link {:href "/css/garden.css"
-            :rel "stylesheet"
-            :type "text/css"
-            :media "screen"}]
-    [:title "CAF中国后市场论坛"]]
+   (header "CAF中国后市场论坛")
    [:body.presentation
     [:img.header {:src "img/header.jpg"}]
-
     [:table
      [:tr
       [:td [:a {:href "brands/1"} [:img {:src "img/logos/1.jpg"}]]]
@@ -87,37 +65,11 @@
 
 (defn brand-page [id]
   (html5
-   [:head
-    [:meta {:http-equiv "content-type" :content "text/html; charset=utf-8"}]
-    [:meta {:http-equiv "x-ua-compatible" :content "ie=edge"}]
-    [:meta {:http-equiv "pragma" :content "no-cache"}]
-    [:meta {:name "description" :content ""}]
-    [:meta {:name "keywords" :content ""}]
-    [:meta {:name "viewport"
-            :content "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"}]
-    [:meta {:name "renderer" :content "webkit"}]
-    [:link {:href "/css/garden.css"
-            :rel "stylesheet"
-            :type "text/css"
-            :media "screen"}]
-    [:title "CAF中国后市场论坛"]]
+   (header "CAF中国后市场论坛")
    [:body.presentation
     [:img.header {:src (str "/img/brands/" id ".jpg")}]]))
 
 (defn prize-page [_]
   (html5
-   [:head
-    [:meta {:http-equiv "content-type" :content "text/html; charset=utf-8"}]
-    [:meta {:http-equiv "x-ua-compatible" :content "ie=edge"}]
-    [:meta {:name "description" :content ""}]
-    [:meta {:name "keywords" :content ""}]
-    [:meta {:name "viewport"
-            :content "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"}]
-    [:meta {:name "renderer" :content "webkit"}]
-    [:title "法兰克福展"]
-    [:link {:href "css/garden.css"
-            :rel "stylesheet"
-            :type "text/css"
-            :media "screen"}]]
-
+   (header "法兰克福展")
    [:body.presentation]))

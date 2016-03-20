@@ -16,7 +16,7 @@
                  [garden "1.3.2" :scope "cljs"]
                  [reagent "0.5.1" :scope "cljs"]
                  [cljs-http "0.1.38" :scope "cljs"]
-                 [org.clojure/clojurescript "1.7.170" :scope "cljs"]
+                 [org.clojure/clojurescript "1.8.34" :scope "cljs"]
                  [org.clojure/core.async "0.2.374" :scope "cljs"]
 
                  [org.clojure/java.jdbc "0.4.2"]
