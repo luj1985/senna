@@ -72,7 +72,7 @@
                        'senna.dashboard})
      (web :serve 'senna.core/handler)
      (uber :exclude-scope #{"provided" "boot" "cljs"})
-     (jar :file "senna.jar")))
+     (war :file "senna.war")))
 
 (deftask dev []
   (comp (development)

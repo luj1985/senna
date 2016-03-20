@@ -10,3 +10,9 @@
 (defn get-uid-headers []
   (let [uid (get-uid)]
     (if uid {:headers {"UID" uid}} {})))
+
+(defn set-tel [tel]
+  (.setItem js/localStorage "tel" tel))
+
+(defn get-tel []
+  (.getItem js/localStorage "tel"))

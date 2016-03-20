@@ -113,7 +113,8 @@
     [:center
      [:input {:id "mobile"
               :type :tel
-              :maxlength 11}]
+              :value (user/get-tel)
+              :maxLength 11}]
      [:input.black {:id "submit" :type :submit
                     :on-click (fn [e]
                                 (let [input (.getElementById js/document "mobile")
@@ -122,6 +123,7 @@
                                   (if (re-matches #"\d{11}" value)
                                     (go
                                       (let [resp (<! (http/post "/mobile" (merge {:json-params {:number value}} headers) ))]
+                                        (user/set-tel value)
                                         (put! chan {:event :confirm})))
                                     (js/alert "手机号码输入有误"))))
                     :value "确 定"}]]]])
