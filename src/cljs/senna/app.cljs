@@ -10,7 +10,7 @@
    [senna.sound :as sound])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
-(defonce ^:private dialog (r/atom {:dialog :rule}))
+(defonce ^:private dialog (r/atom nil))
 (defonce ^:private sharing (r/atom false))
 
 ;; debug timer
@@ -24,6 +24,7 @@
 (def ^:private pages {:rule dialog/rules-page
                       :mobile dialog/tel-page
                       :results dialog/result-page
+                      :confirm dialog/confirm-page
                       :countdown dialog/countdown-page})
 
 (defn- popup [ch]
@@ -162,23 +163,60 @@
   (draw-scene ch (shuffle params))
   (if (ignore-rule-page?)
     (put! ch {:event :ready})))
-(defn init []
-  (let [ch (async/chan)]
-    (go (while true
-          (let [{:keys [event params]} (<! ch)]
-            (case event
-              ;; display game board when all resources loaded
-              :loaded (initialize-game-scene ch params)
-              :ready (reset! dialog {:dialog :countdown})
-              :share (reset! sharing true)
-              :mobile (reset! dialog {:dialog :mobile})
-              :reset (do
-                       (game/reset)
-                       (dialog/reset-countdown)
-                       (reset! dialog {:dialog :countdown}))
-              :start (do
-                       (game/start)
-                       (reset! dialog nil))
-              :finished (save-score params)
-              (js/console.warn "unhandled event:" event)))))
+
+(defn- attach-event-handlers [ch]
+  (go
+    (while true
+      (let [{:keys [event params]} (<! ch)]
+        (case event
+          ;; display game board when all resources loaded
+          :loaded (initialize-game-scene ch params)
+          :ready (reset! dialog {:dialog :countdown})
+          :share (reset! sharing true)
+          :mobile (reset! dialog {:dialog :mobile})
+          :reset (do
+                   (game/reset)
+                   (dialog/reset-countdown)
+                   (reset! dialog {:dialog :countdown}))
+          :confirm (reset! dialog {:dialog :confirm})
+          :close (reset! dialog nil)
+          :start (do
+                   (game/start)
+                   (reset! dialog nil))
+          :finished (save-score params)
+          (js/console.warn "unhandled event:" event))))))
+
+(defn- init-game []
+  (let [ch (chan)]
+    (reset! dialog {:dialog :rule})
+    (attach-event-handlers ch)
     (loader/init ch)))
+
+(defn- mobile-for-draw-dialog [id ch params]
+  [:div
+   [:img.header {:src (str "/img/brands/" id ".jpg")}]
+   (if (= id 7)
+     [:div.actions
+      [:button.black {:on-click #(put! ch {:event :mobile})}
+       "申请抽奖" ]])])
+
+(defn- init-brand-page [id]
+  (let [ch (chan)]
+    (attach-event-handlers ch)
+    (r/render-component [mobile-for-draw-dialog id ch]
+                        (.querySelector js/document "#main"))
+    (r/render-component [popup ch]
+                        (.querySelector js/document "#dialog"))))
+
+(defn- pick-brand-id [path]
+  (let [matches (re-find #"/brands/(\d+)" path)]
+    (js/parseInt (get matches 1))))
+
+(defn init []
+  (let [path (-> js/document
+                 .-location
+                 .-pathname)]
+    (cond
+      (= path "/") (init-game)
+      (.match path #"/brands/\d+") (init-brand-page (pick-brand-id path))
+      :else (js/alert (str "Unknow page: " path)))))

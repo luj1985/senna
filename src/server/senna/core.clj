@@ -12,7 +12,7 @@
    [ring.middleware.basic-authentication :refer [wrap-basic-authentication]]
    [ring.util.response :refer [response redirect]]
 
-   [senna.index :refer [index-page brands-page brand-page prize-page]]
+   [senna.index :refer [index-page brands-page brand-page]]
    [senna.dashboard :refer [dashboard-page all-results]])
   (:gen-class))
 
@@ -114,9 +114,8 @@ where a.uid = b.uid order by best asc"])
   (GET "/wechat" [] wechat-handler)
   (GET "/questions" [] random-questions)
   (GET "/brands" [] brands-page)
-  (GET "/brands/:id" [id] (render-brand-page id))
+  (GET "/brands/:id" [id] (render-brand-page (Integer/parseInt id)))
   (POST "/mobile" [] save-mobile-number)
-  (GET "/prizes" [] prize-page)
   (POST "/score" [] rank-score)
 
   (GET "/_dashboard" [] render-dashboard-with-auth)

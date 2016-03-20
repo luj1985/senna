@@ -44,6 +44,8 @@
   presentation-styles
   button-styles
 
+  [:.actions {:text-align :center
+              :margin-bottom (px 50)}]
   [:section.back {:text-align :center
                   :margin-top (px 20)}]
 

@@ -22,6 +22,7 @@
    [:meta {:charset "utf-8"}]
    [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"}]
    [:meta {:name "renderer" :content "webkit"}]
+   [:base {:href "/"}]
    [:title title]
    (include-css "css/main.css")])
 
@@ -30,9 +31,6 @@
    (header "小车跑跑跑")
    [:body
     [:div#main
-     ;; This "loading" html fragment will be replaced by React loader component
-     ;; after javascript file was loaded.
-     ;; Here is used to prevent initial blank page.
      [:div#loading
       [:div.logo]]]
     [:div#dialog]
@@ -67,9 +65,8 @@
   (html5
    (header "CAF中国后市场论坛")
    [:body.presentation
-    [:img.header {:src (str "/img/brands/" id ".jpg")}]]))
+    [:div#main]
+    [:div#dialog]
+    (include-js "js/app.js")]))
 
-(defn prize-page [_]
-  (html5
-   (header "法兰克福展")
-   [:body.presentation]))
+

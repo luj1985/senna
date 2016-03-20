@@ -122,8 +122,16 @@
                                   (if (re-matches #"\d{11}" value)
                                     (go
                                       (let [resp (<! (http/post "/mobile" (merge {:json-params {:number value}} headers) ))]
-                                        (put! chan {:event :prize})))
+                                        (put! chan {:event :confirm})))
                                     (js/alert "手机号码输入有误"))))
                     :value "确 定"}]]]])
 
 
+
+(defn confirm-page [ch params]
+  [:div#tel.content
+   [:section
+    [:p "信息已提交，感谢您的申请！"]
+    [:center
+     [:button.black {:on-click #(put! ch {:event :close})}
+      "返 回"]]]])

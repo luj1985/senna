@@ -162,8 +162,10 @@
   [:#mobile {:display :block
              :width (percent 90)
              :font-size (px 18)
+             :padding (px 5)
              :margin "10px 0"}]
-  [:#submit {:margin "10px 0 10px 0"
+  [:#submit {:margin-top (px 20)}]
+  #_[:#submit {:margin "10px 0 10px 0"
              :padding "5px 20px"}])
 
 (defstyles dialog-styles
