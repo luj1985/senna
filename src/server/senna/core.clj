@@ -60,13 +60,24 @@
         (get :best)
         (inc))))
 
+(defn- search-quantile [score]
+  (let [count-rs (jdbc/query mysql-db ["select count(*) as count from results"])
+        rank-rs (jdbc/query mysql-db ["select count(*) as count from results where result > ?" score])
+        total (-> (first count-rs) (get :count) double)
+        beat (-> (first rank-rs) (get :count) double)]
+    (-> (/ beat total)
+        (* 10000)
+        Math/ceil
+        (/ 100))))
+
 (defn- rank-score [request]
   (let [uid (or (extract-uid request) (create-user!))
         score (get-in request [:body "score"])]
     (save-score! uid score)
     (let [rank (search-rank score)
-          best (search-best uid)]
-      (response {:global rank :best best}))))
+          best (search-best uid)
+          quantile (search-quantile score)]
+      (response {:global rank :best best :percent quantile}))))
 
 (defn- save-mobile-number [request]
   (let [number (get-in request [:body "number"])

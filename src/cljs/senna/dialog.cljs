@@ -76,7 +76,7 @@
   @last-score)
 
 (defn result-page [chan params]
-  (let [{:keys [time global best]} params
+  (let [{:keys [time global best percent]} params
         {:keys [mins secs mss]} (parse-time time)
         message (str mins "分" secs "秒" mss)]
     [:div#score.content
@@ -84,17 +84,12 @@
       [:div.usage
        mins [:span.txt "分"] secs [:span.txt "秒"] mss]
       [:div.rank
-       [:div "全球排名：" [:span.history global] "名"]
-       [:div "历史最好：" [:span.history
-                           (let [{:keys [mins secs mss]} (parse-time best)]
-                             (swap! last-score assoc
-                                    :global global
-                                    :message message )
-                             [:span.best
-                              mins
-                              [:span.txt "分"]
-                              secs [:span.txt "秒"]
-                              mss])]]]]
+       (let [{:keys [mins secs mss]} (parse-time best)]
+         (swap! last-score assoc
+                :global global
+                :message message))
+       [:div "您击败了" [:span.history (str percent "%")] "玩家"]
+       [:div "全球排名：" [:span.history global] "名"]]]
      [:div.container
       [:button.black {:on-click #(put! chan {:event :reset})} "再玩一次"]]
      [:div.container
