@@ -4,8 +4,8 @@
  :dependencies '[[adzerk/boot-cljs "1.7.228-1" :scope "boot"]
                  [adzerk/boot-cljs-repl "0.3.0" :scope "boot"]
                  [adzerk/boot-reload "0.4.5" :scope "boot"]
-                 [pandeiro/boot-http "0.7.0" :scope "boot"]
                  [org.martinklepsch/boot-garden "1.3.0-0" :scope "boot"]
+                 [pandeiro/boot-http "0.7.3" :scope "boot"]
                  [danielsz/boot-autoprefixer "0.0.7" :scope "boot"]
                  [org.clojure/tools.nrepl "0.2.12" :scope "boot"]
                  [com.cemerick/piggieback "0.2.1" :scope "boot"]
@@ -16,12 +16,14 @@
                  [garden "1.3.2" :scope "cljs"]
                  [reagent "0.5.1" :scope "cljs"]
                  [cljs-http "0.1.38" :scope "cljs"]
+
                  [org.clojure/clojurescript "1.7.170" :scope "cljs"]
                  [org.clojure/core.async "0.2.374" :scope "cljs"]
 
+                 [org.clojure/clojure "1.7.0"]
                  [org.clojure/java.jdbc "0.4.2"]
-                 [mysql/mysql-connector-java "5.1.37"]
                  [org.clojure/data.json "0.2.6"]
+                 [mysql/mysql-connector-java "5.1.37"]
                  [ring/ring-json "0.4.0"]
                  [ring/ring-core "1.4.0"]
                  [ring-basic-authentication "1.0.5"]
@@ -71,7 +73,7 @@
                        'senna.index
                        'senna.dashboard})
      (web :serve 'senna.core/handler)
-     (uber :exclude-scope #{"provided" "boot" "cljs"})
+     (uber :exclude-scope #{"boot" "cljs"})
      (war :file "senna.war")))
 
 (deftask dev []

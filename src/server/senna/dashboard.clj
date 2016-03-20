@@ -1,5 +1,6 @@
 (ns senna.dashboard
-  (:use [hiccup.page]))
+  (:use [hiccup.page])
+  (:gen-class))
 
 (defn- two-digit-time [t]
   (if (< t 10) (str "0" t) t))

@@ -2,7 +2,8 @@
   (:require
    [hiccup.page :refer :all]
    [clojure.data.json :as json]
-   [wechat.core :as w]))
+   [wechat.core :as w])
+  (:gen-class))
 
 (defn- wx-integration [req]
   (let [sig (w/sign-package req)]
