@@ -13,7 +13,7 @@
    [ring.util.response :refer [response redirect]]
 
    [senna.index :refer [index-page brands-page brand-page]]
-   [senna.dashboard :refer [dashboard-page all-results]])
+   [senna.dashboard :refer [dashboard-page]])
   (:gen-class))
 
 ;; TODO: read password from environment variable ?
@@ -70,27 +70,44 @@
 
 (defn- save-mobile-number [request]
   (let [number (get-in request [:body "number"])
+        brand (get-in request [:body "brand"])
         uid (or (extract-uid request) (create-user!))]
     (jdbc/update! mysql-db :users {:mobile number} ["uid = ?" uid])
     (response {:uid uid :mobile number})))
 
+(defn- to-number [n]
+  (if (number? n)
+    n
+    (Integer/parseInt n)))
+
 (defn- render-dashboard [request]
-  ;; select mobile, result from users, results where users.uid = results.uid group by users.uid
-  (let [rankings (jdbc/query mysql-db ["select mobile, best from users a,
+  (let [{:strs [page size] :or {page 1 size 20}} (:query-params request)
+        page (to-number page)
+        size (to-number size)
+        start (* (dec page) size)]
+    ;; select mobile, result from users, results where users.uid = results.uid group by users.uid
+    (let [ranking-rs (jdbc/query mysql-db ["select mobile, best from users a,
+(select uid, min(result) as best from results group by uid) b
+where a.uid = b.uid order by best asc limit ?,?" start size])
+          total-rs (jdbc/query mysql-db ["select count(*) as count from users a,
 (select uid, min(result) as best from results group by uid) b
 where a.uid = b.uid order by best asc"])
-        views (jdbc/query mysql-db ["select * from views"])
-        results (jdbc/query mysql-db ["select count(*) as count from users, results where users.uid = results.uid"])
-        users (jdbc/query mysql-db ["select count(*) as count from (select distinct results.uid from users, results where users.uid = results.uid) t"])
-        totals {:user (-> (first users) (get :count))
-                :count (-> (first results) (get :count))}]
+          views-rs (jdbc/query mysql-db ["select * from views"])
+          results-rs (jdbc/query mysql-db ["select count(*) as count from users, results where users.uid = results.uid"])
+          users-rs (jdbc/query mysql-db ["select count(*) as count from (select distinct results.uid from users, results where users.uid = results.uid) t"])
+          users-count (-> (first users-rs) (get :count))
+          results-count (-> (first results-rs) (get :count))
+          total-count (-> (first total-rs) (get :count))
+          page-count (Math/ceil (/ (double total-count) (double size)))
+          statistics {:users-count users-count
+                      :results-count results-count
+                      :pages-count (int page-count)
+                      :current page
+                      :start start
+                      :size size
+                      :total total-count}]
+      (dashboard-page ranking-rs views-rs statistics))))
 
-    (dashboard-page rankings views totals)))
-
-(defn- render-all-results [request]
-  (let [rankings (jdbc/query mysql-db
-                             ["select result, mobile from results, users where results.uid = users.uid order by result asc"])]
-    (all-results rankings)))
 
 (defn- render-brand-page [id]
   (jdbc/execute! mysql-db ["update  views set count = count+1 where id = ?" id])
@@ -103,8 +120,6 @@ where a.uid = b.uid order by best asc"])
 (def ^:private render-dashboard-with-auth
   (wrap-basic-authentication render-dashboard authenticate?))
 
-(def ^:private render-all-results-with-auth
-  (wrap-basic-authentication render-all-results authenticate?))
 
 (defn- wechat-handler [request]
   (get-in request [:params :echostr]))
@@ -119,7 +134,6 @@ where a.uid = b.uid order by best asc"])
   (POST "/score" [] rank-score)
 
   (GET "/_dashboard" [] render-dashboard-with-auth)
-  (GET "/_all" [] render-all-results-with-auth)
 
   (resources "/")
   (not-found "Page not found"))

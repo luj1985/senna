@@ -122,7 +122,9 @@
                                       headers (user/get-uid-headers)]
                                   (if (re-matches #"\d{11}" value)
                                     (go
-                                      (let [resp (<! (http/post "/mobile" (merge {:json-params {:number value}} headers) ))]
+                                      (let [resp (<! (http/post "/mobile"
+                                                                (merge {:json-params {:number value
+                                                                                      :brand (:brand params)}} headers) ))]
                                         (user/set-tel value)
                                         (put! chan {:event :confirm})))
                                     (js/alert "手机号码输入有误"))))

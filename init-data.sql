@@ -110,3 +110,9 @@ insert into views(id,name,count) values(6, '梅施', 0);
 insert into views(id,name,count) values(7, '舍弗勒', 0);
 insert into views(id,name,count) values(8, 'Truck-Lite', 0);
 insert into views(id,name,count) values(9, '天合', 0);
+
+
+
+
+
+alter table results add brand integer;

@@ -173,7 +173,8 @@
           :loaded (initialize-game-scene ch params)
           :ready (reset! dialog {:dialog :countdown})
           :share (reset! sharing true)
-          :mobile (reset! dialog {:dialog :mobile})
+          :mobile (reset! dialog {:dialog :mobile
+                                  :params params})
           :reset (do
                    (game/reset)
                    (dialog/reset-countdown)
@@ -197,7 +198,8 @@
    [:img.header {:src (str "/img/brands/" id ".jpg")}]
    (if (= id 7)
      [:div.actions
-      [:button.black {:on-click #(put! ch {:event :mobile})}
+      [:button.black {:on-click #(put! ch {:event :mobile
+                                           :params {:brand id}})}
        "申请抽奖" ]])])
 
 (defn- init-brand-page [id]
