@@ -4,7 +4,7 @@
    [garden.selectors :refer [& before]]
    [garden.stylesheet :refer [at-media]]
    [garden.units :refer [px percent em]]
-   [garden.color :refer [rgba rgb]]))
+   [garden.color :refer [rgb]]))
 
 (defstyles dialog-dimmer
   [:.dimmer {:position :fixed
@@ -13,7 +13,7 @@
              :left 0
              :width (percent 100)
              :height (percent 100)
-             :background-color (rgba 0 0 0 0.7)}]
+             :background-color "rgba(0,0,0,0.7)"}]
 
   [:.fullscreen {:height (percent 100)
                  :width (percent 100)

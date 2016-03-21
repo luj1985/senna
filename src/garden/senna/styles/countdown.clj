@@ -4,7 +4,7 @@
    [garden.selectors :refer [&]]
    [garden.def :refer [defstyles defkeyframes]]
    [garden.units :refer [px percent em]]
-   [garden.color :refer [rgba rgb]]))
+   [garden.color :refer [rgb]]))
 
 (defkeyframes countdown
   [:to
