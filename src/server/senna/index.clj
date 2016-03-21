@@ -62,12 +62,19 @@
     [:p "由世界顶级汽车供应商、北美最具影响力的汽车后市场供应协会（AASA）创办，致力于中国后市场行业发展，关注后市场行业的人才储备。协会主要职责有：品牌保护、知识产权、中国和地区贸易展、分销渠道、政府关系维护、市场调查、OE部件/应用数据、再制造项目等。"]]))
 
 
-(defn brand-page [id]
+(defn brand-page [id token]
   (html5
    (header "CAF中国后市场论坛")
-   [:body.presentation
-    [:div#main]
-    [:div#dialog]
-    (include-js "js/app.js")]))
+   (if (and (= id 7)
+            token)
+     [:body.presentation
+      [:img.header {:src (str "/img/brands/" id ".jpg")}]
+      [:div.actions]
+      [:img.header {:src (str "/img/draw.jpg")}]
+      [:div#dialog]
+      (include-js "js/app.js")]
+
+     [:body.presentation
+      [:img.header {:src (str "/img/brands/" id ".jpg")}]])))
 
 

@@ -26,6 +26,10 @@
     :text-decoration :none
     :font-size (px 16)
     :outline :none}
+   ["&.red" {:background-color :red
+             :border :none
+             :color :white
+             :padding "10px 20px"}]
 
    ["&.black" {:background-color :transparent
                :background-image "url(../img/dialog/btn.png)"
@@ -44,8 +48,7 @@
   presentation-styles
   button-styles
 
-  [:.actions {:text-align :center
-              :margin-bottom (px 50)}]
+  [:.actions {:text-align :center}]
   [:section.back {:text-align :center
                   :margin-top (px 20)}]
 

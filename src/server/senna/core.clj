@@ -10,6 +10,7 @@
    [ring.middleware.nested-params :refer [wrap-nested-params]]
    [ring.middleware.cookies :refer [wrap-cookies]]
    [ring.middleware.basic-authentication :refer [wrap-basic-authentication]]
+   [ring.middleware.session :refer [wrap-session]]
    [ring.util.response :refer [response redirect]]
 
    [senna.index :refer [index-page brands-page brand-page]]
@@ -40,7 +41,9 @@
     uid))
 
 (defn- save-score! [uid score]
-  (jdbc/insert! mysql-db :results {:uid uid :result score}))
+  (let [[{id :generated_key}]
+        (jdbc/insert! mysql-db :results {:uid uid :result score})]
+    id))
 
 (defn- random-questions [request]
   (let [uid (or (extract-uid request) (create-user!))
@@ -72,19 +75,28 @@
 
 (defn- rank-score [request]
   (let [uid (or (extract-uid request) (create-user!))
-        score (get-in request [:body "score"])]
-    (save-score! uid score)
-    (let [rank (search-rank score)
-          best (search-best uid)
-          quantile (search-quantile score)]
-      (response {:global rank :best best :percent quantile}))))
+        score (get-in request [:body "score"])
+        token (save-score! uid score)
+        best (search-best uid)
+        quantile (search-quantile score)
+        session (assoc (:session request) :token token)]
+    (-> (response {:best best :percent quantile})
+        (assoc :session session))))
 
 (defn- save-mobile-number [request]
   (let [number (get-in request [:body "number"])
         brand (get-in request [:body "brand"])
-        uid (or (extract-uid request) (create-user!))]
+        uid (or (extract-uid request) (create-user!))
+        session (:session request)
+        token (:token session)]
     (jdbc/update! mysql-db :users {:mobile number} ["uid = ?" uid])
-    (response {:uid uid :mobile number})))
+    (if token
+      (do
+        (jdbc/update! mysql-db :results {:brand brand} ["id = ?" token])
+        (let [session (dissoc session :token)]
+          (-> (response {:uid uid :mobile number})
+              (assoc :session session))))
+      (response {:uid uid :mobile number}))))
 
 (defn- to-number [n]
   (if (number? n)
@@ -120,9 +132,9 @@ where a.uid = b.uid order by best asc"])
       (dashboard-page ranking-rs views-rs statistics))))
 
 
-(defn- render-brand-page [id]
+(defn- render-brand-page [id token]
   (jdbc/execute! mysql-db ["update  views set count = count+1 where id = ?" id])
-  (brand-page id))
+  (brand-page id token))
 
 (defn authenticate? [username password]
   (and (= username "caf")
@@ -140,7 +152,10 @@ where a.uid = b.uid order by best asc"])
   (GET "/wechat" [] wechat-handler)
   (GET "/questions" [] random-questions)
   (GET "/brands" [] brands-page)
-  (GET "/brands/:id" [id] (render-brand-page (Integer/parseInt id)))
+  (GET "/brands/:id" {{id :id} :params session :session}
+    (let [token (:token session)]
+      (render-brand-page (Integer/parseInt id) token)))
+
   (POST "/mobile" [] save-mobile-number)
   (POST "/score" [] rank-score)
 
@@ -151,6 +166,7 @@ where a.uid = b.uid order by best asc"])
 
 (def handler
   (-> app-routes
+      wrap-session
       wrap-keyword-params
       wrap-json-response
       wrap-json-body

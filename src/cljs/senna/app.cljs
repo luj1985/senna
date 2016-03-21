@@ -194,19 +194,16 @@
     (loader/init ch)))
 
 (defn- mobile-for-draw-dialog [id ch params]
-  [:div
-   [:img.header {:src (str "/img/brands/" id ".jpg")}]
-   (if (= id 7)
-     [:div.actions
-      [:button.black {:on-click #(put! ch {:event :mobile
-                                           :params {:brand id}})}
-       "申请抽奖" ]])])
+  [:button.red
+   {:on-click #(put! ch {:event :mobile
+                         :params {:brand id}})}
+   "申请抽奖" ])
 
 (defn- init-brand-page [id]
   (let [ch (chan)]
     (attach-event-handlers ch)
     (r/render-component [mobile-for-draw-dialog id ch]
-                        (.querySelector js/document "#main"))
+                        (.querySelector js/document ".actions"))
     (r/render-component [popup ch]
                         (.querySelector js/document "#dialog"))))
 
