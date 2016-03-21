@@ -131,7 +131,7 @@
         page (to-number page)
         size (to-number size)
         start (* (dec page) size)]
-    (let [ranking-rs (jdbc/query mysql-db ["select results.uid, results.result,users.mobile from results left join users on results.uid = users.uid order by result asc limit ?,?" start size])
+    (let [ranking-rs (jdbc/query mysql-db ["select results.result,users.mobile from results left join users on results.uid = users.uid order by result asc limit ?,?" start size])
           total-rs (jdbc/query mysql-db ["select count(*) as count from results left join users on results.uid = users.uid"])
           users-rs (jdbc/query mysql-db ["select count(distinct uid) as count from results"])
           views-rs (jdbc/query mysql-db ["select * from views"])
@@ -167,10 +167,10 @@
 
 (defn- read-results [brand]
   (if (zero? brand)
-    (jdbc/query mysql-db ["select * from results order by result asc"])
-    (jdbc/query mysql-db ["select * from results where brand = ? order by result asc" brand])))
+    (jdbc/query mysql-db ["select results.result,users.mobile from results left join users on results.uid = users.uid order by result asc"])
+    (jdbc/query mysql-db ["select results.result,users.mobile from results left join users on results.uid = users.uid where results.brand = ? order by result asc" brand])))
 
-(defn- to-csv [{:keys [mobile result result-str]}]
+(defn- to-csv [{:keys [mobile result result-str] :as record}]
   [(or mobile "N/A") (str result) result-str])
 
 (defn- export-results [request]
