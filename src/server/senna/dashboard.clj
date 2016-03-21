@@ -10,7 +10,8 @@
    [:h2 "《小车跑跑跑》用户成绩"]
    [:ol
     [:li (str "总共" users-count "用户提交了" results-count "次成绩") ]
-    [:li "完成了游戏，但是没有提交电话号码，显示为N/A"]]
+    [:li "完成了游戏，但是没有提交电话号码，显示为N/A"]
+    [:li "因为没有用户注册，使用设备作为用户标示"]]
    [:div.export
     [:form {:method "POST" :action "/_export"}
      [:select {:name "brand"}

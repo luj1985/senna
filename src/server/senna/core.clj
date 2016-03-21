@@ -167,8 +167,8 @@
 
 (defn- read-results [brand]
   (if (zero? brand)
-    (jdbc/query mysql-db ["select * from results"])
-    (jdbc/query mysql-db ["select * from results where brand = ?" brand])))
+    (jdbc/query mysql-db ["select * from results order by result asc"])
+    (jdbc/query mysql-db ["select * from results where brand = ? order by result asc" brand])))
 
 (defn- to-csv [{:keys [mobile result result-str]}]
   [(or mobile "N/A") (str result) result-str])
