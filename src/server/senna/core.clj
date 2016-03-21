@@ -179,8 +179,8 @@
         data (->> (read-results id)
                   (map append-readable-time)
                   (map to-csv))]
-    {:headers {"Context-Type" "text/csv"
-               "Content-disposition" "attachment;filename=results.csv"}
+    {:headers {"Content-Type" "text/csv"
+               "Content-Disposition" "attachment;filename=results.csv"}
      :body (csv/write-csv data :force-quote true)}))
 
 (defroutes app-routes
