@@ -203,7 +203,7 @@
   (let [ch (chan)]
     (attach-event-handlers ch)
     (r/render-component [mobile-for-draw-dialog id ch]
-                        (.querySelector js/document ".actions"))
+                        (.querySelector js/document "#actions"))
     (r/render-component [popup ch]
                         (.querySelector js/document "#dialog"))))
 

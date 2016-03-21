@@ -69,7 +69,7 @@
             token)
      [:body.presentation
       [:img.header {:src (str "/img/brands/" id ".jpg")}]
-      [:div.actions]
+      [:div#actions ""]
       [:img.header {:src (str "/img/draw.jpg")}]
       [:div#dialog]
       (include-js "js/app.js")]

@@ -65,7 +65,7 @@
 
 (defn- search-quantile [score]
   (let [count-rs (jdbc/query mysql-db ["select count(*) as count from results"])
-        rank-rs (jdbc/query mysql-db ["select count(*) as count from results where result > ?" score])
+        rank-rs (jdbc/query mysql-db ["select count(*) as count from results where result >= ?" score])
         total (-> (first count-rs) (get :count) double)
         beat (-> (first rank-rs) (get :count) double)]
     (-> (/ beat total)
@@ -79,8 +79,9 @@
         token (save-score! uid score)
         best (search-best uid)
         quantile (search-quantile score)
-        session (assoc (:session request) :token token)]
-    (-> (response {:best best :percent quantile})
+        session (assoc (:session request) :token token)
+        rank (search-rank score)]
+    (-> (response {:global rank :best best :percent quantile})
         (assoc :session session))))
 
 (defn- save-mobile-number [request]
