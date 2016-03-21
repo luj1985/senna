@@ -2,23 +2,6 @@
   (:use [hiccup.page])
   (:gen-class))
 
-(defn- two-digit-time [t]
-  (if (< t 10) (str "0" t) t))
-
-(defn- two-digit-ms [ms]
-  (-> ms
-      (/ 10)
-      (int)
-      (two-digit-time)))
-
-(defn- ms->string [ms]
-  (let [fsec (int (/ ms 1000))
-        min (int (/ fsec 60))
-        sec (int (mod fsec 60))
-        ms (mod ms 1000)]
-    (str min "分"
-         (two-digit-time sec) "秒"
-         (two-digit-ms  ms))))
 
 (defn- result-section
   [rankings
@@ -27,8 +10,21 @@
    [:h2 "《小车跑跑跑》用户成绩"]
    [:ol
     [:li (str "总共" users-count "用户提交了" results-count "次成绩") ]
-    [:li "有一些用户完成了游戏，但是没有提交电话号码，显示为N/A"]
-    [:li "同一用户只取最好成绩"]]
+    [:li "完成了游戏，但是没有提交电话号码，显示为N/A"]]
+   [:div.export
+    [:form {:method "POST" :action "/_export"}
+     [:select {:name "brand"}
+      [:option {:value "0" :selected true} "全部"]
+      [:option {:value "1" :disabled true} "康迪泰克"]
+      [:option {:value "2" :disabled true} "岱高"]
+      [:option {:value "3" :disabled true} "辉门"]
+      [:option {:value "4" :disabled true} "盖茨"]
+      [:option {:value "5" :disabled true} "海拉"]
+      [:option {:value "6" :disabled true} "梅施"]
+      [:option {:value "7"} "舍弗勒"]
+      [:option {:value "8" :disabled true} "Truck-Lite"]
+      [:option {:value "9" :disabled true} "天合"]]
+     [:input {:type :submit :value "导出"}]]]
    [:table
     [:thead
      [:tr
@@ -58,8 +54,8 @@
                     [:tr
                      [:td (+ start (inc i))]
                      [:td (or (:mobile rank) "N/A") ]
-                     [:td (ms->string (:best rank))]
-                     [:td (int (:best rank))]]) rankings)]]])
+                     [:td (:result-str rank)]
+                     [:td (int (:result rank))]]) rankings)]]])
 
 (defn- view-count [views]
   [:section

@@ -2,6 +2,7 @@
   (:require
    [clojure.pprint :refer [pprint]]
    [clojure.java.jdbc :as jdbc]
+   [clojure-csv.core :as csv]
    [compojure.core :refer [defroutes POST GET]]
    [compojure.route :refer [resources not-found]]
    [ring.middleware.params :refer [wrap-params]]
@@ -104,33 +105,48 @@
     n
     (Integer/parseInt n)))
 
+(defn- two-digit-time [t]
+  (if (< t 10) (str "0" t) t))
+
+(defn- two-digit-ms [ms]
+  (-> ms
+      (/ 10)
+      (int)
+      (two-digit-time)))
+
+(defn- ms->string [ms]
+  (let [fsec (int (/ ms 1000))
+        min (int (/ fsec 60))
+        sec (int (mod fsec 60))
+        ms (mod ms 1000)]
+    (str min ":"
+         (two-digit-time sec) ":"
+         (two-digit-ms  ms))))
+
+(defn- append-readable-time [{:keys [result] :as datum}]
+  (assoc datum :result-str (ms->string result)))
+
 (defn- render-dashboard [request]
   (let [{:strs [page size] :or {page 1 size 20}} (:query-params request)
         page (to-number page)
         size (to-number size)
         start (* (dec page) size)]
-    ;; select mobile, result from users, results where users.uid = results.uid group by users.uid
-    (let [ranking-rs (jdbc/query mysql-db ["select mobile, best from users a,
-(select uid, min(result) as best from results group by uid) b
-where a.uid = b.uid order by best asc limit ?,?" start size])
-          total-rs (jdbc/query mysql-db ["select count(*) as count from users a,
-(select uid, min(result) as best from results group by uid) b
-where a.uid = b.uid order by best asc"])
+    (let [ranking-rs (jdbc/query mysql-db ["select results.uid, results.result,users.mobile from results left join users on results.uid = users.uid order by result asc limit ?,?" start size])
+          total-rs (jdbc/query mysql-db ["select count(*) as count from results left join users on results.uid = users.uid"])
+          users-rs (jdbc/query mysql-db ["select count(distinct uid) as count from results"])
           views-rs (jdbc/query mysql-db ["select * from views"])
-          results-rs (jdbc/query mysql-db ["select count(*) as count from users, results where users.uid = results.uid"])
-          users-rs (jdbc/query mysql-db ["select count(*) as count from (select distinct results.uid from users, results where users.uid = results.uid) t"])
           users-count (-> (first users-rs) (get :count))
-          results-count (-> (first results-rs) (get :count))
           total-count (-> (first total-rs) (get :count))
           page-count (Math/ceil (/ (double total-count) (double size)))
           statistics {:users-count users-count
-                      :results-count results-count
+                      :results-count total-count
                       :pages-count (int page-count)
                       :current page
                       :start start
                       :size size
-                      :total total-count}]
-      (dashboard-page ranking-rs views-rs statistics))))
+                      :total total-count}
+          data (map append-readable-time ranking-rs)]
+      (dashboard-page data views-rs statistics))))
 
 
 (defn- render-brand-page [id token]
@@ -148,6 +164,25 @@ where a.uid = b.uid order by best asc"])
 (defn- wechat-handler [request]
   (get-in request [:params :echostr]))
 
+
+(defn- read-results [brand]
+  (if (zero? brand)
+    (jdbc/query mysql-db ["select * from results"])
+    (jdbc/query mysql-db ["select * from results where brand = ?" brand])))
+
+(defn- to-csv [{:keys [mobile result result-str]}]
+  [(or mobile "N/A") (str result) result-str])
+
+(defn- export-results [request]
+  (let [brand (get-in request [:params :brand])
+        id (Integer/parseInt brand)
+        data (->> (read-results id)
+                  (map append-readable-time)
+                  (map to-csv))]
+    {:headers {"Context-Type" "text/csv"
+               "Content-disposition" "attachment;filename=results.csv"}
+     :body (csv/write-csv data :force-quote true)}))
+
 (defroutes app-routes
   (GET "/" [] index-page)
   (GET "/wechat" [] wechat-handler)
@@ -159,6 +194,7 @@ where a.uid = b.uid order by best asc"])
 
   (POST "/mobile" [] save-mobile-number)
   (POST "/score" [] rank-score)
+  (POST "/_export" [] export-results)
 
   (GET "/_dashboard" [] render-dashboard-with-auth)
 

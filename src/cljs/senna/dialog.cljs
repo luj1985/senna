@@ -108,7 +108,7 @@
     [:center
      [:input {:id "mobile"
               :type :tel
-              :value (user/get-tel)
+              :defaultValue (user/get-tel)
               :maxLength 11}]
      [:input.black {:id "submit" :type :submit
                     :on-click (fn [e]

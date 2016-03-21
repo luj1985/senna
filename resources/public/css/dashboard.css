@@ -16,3 +16,18 @@ a.disabled {
   color : #DDD;
   pointer-events: none;
 }
+
+.export {
+    padding: 10px;
+}
+.export select {
+    margin: 10px;
+}
+
+.export input, .export select {
+    font-size: 20px;
+}
+
+option:disabled {
+    color: #EFEFEF;
+}
