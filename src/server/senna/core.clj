@@ -179,9 +179,11 @@
         data (->> (read-results id)
                   (map append-readable-time)
                   (map to-csv))]
-    {:headers {"Content-Type" "text/csv"
-               "Content-Disposition" "attachment;filename=results.csv"}
-     :body (csv/write-csv data :force-quote true)}))
+    (if (zero? (count data))
+      "没有数据"
+      {:headers {"Content-Type" "text/csv"
+                 "Content-Disposition" "attachment;filename=results.csv"}
+       :body (csv/write-csv data :force-quote true)})))
 
 (defroutes app-routes
   (GET "/" [] index-page)
