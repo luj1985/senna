@@ -65,8 +65,7 @@
 (defn brand-page [id token]
   (html5
    (header "CAF中国后市场论坛")
-   (if (and (= id 7)
-            token)
+   (if token
      [:body.presentation
       [:img.header {:src (str "/img/brands/" id ".jpg")}]
       [:div#actions ""]

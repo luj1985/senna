@@ -16,15 +16,15 @@
     [:form {:method "POST" :action "/_export"}
      [:select {:name "brand"}
       [:option {:value "0" :selected true} "全部"]
-      [:option {:value "1" :disabled true} "康迪泰克"]
-      [:option {:value "2" :disabled true} "岱高"]
-      [:option {:value "3" :disabled true} "辉门"]
-      [:option {:value "4" :disabled true} "盖茨"]
-      [:option {:value "5" :disabled true} "海拉"]
-      [:option {:value "6" :disabled true} "梅施"]
+      [:option {:value "1"} "康迪泰克"]
+      [:option {:value "2"} "岱高"]
+      [:option {:value "3"} "辉门"]
+      [:option {:value "4"} "盖茨"]
+      [:option {:value "5"} "海拉"]
+      [:option {:value "6"} "梅施"]
       [:option {:value "7"} "舍弗勒"]
-      [:option {:value "8" :disabled true} "Truck-Lite"]
-      [:option {:value "9" :disabled true} "天合"]]
+      [:option {:value "8"} "Truck-Lite"]
+      [:option {:value "9"} "天合"]]
      [:input {:type :submit :value "导出"}]]]
    [:table
     [:thead
