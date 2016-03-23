@@ -116,3 +116,5 @@ insert into views(id,name,count) values(9, '天合', 0);
 
 
 alter table results add brand integer;
+
+alter table views add draw boolean;

@@ -1,10 +1,21 @@
 (ns senna.dashboard
-  (:use [hiccup.page])
+  (:require
+   [clojure.pprint :refer [pprint]]
+   [hiccup.page :refer :all])
   (:gen-class))
 
+(defn- generate-selector [views]
+  (->> views
+       (filter :draw)
+       (map (fn [v]
+              [:option {:value (:id v)} (:name v)]))
+       (list* :select {:name "brand"}
+              [:option {:value "0" :selected true} "全部"])
+       vec))
 
 (defn- result-section
   [rankings
+   views
    {:keys [users-count results-count pages-count start current] :as statistics}]
   [:section
    [:h2 "《小车跑跑跑》用户成绩"]
@@ -14,17 +25,7 @@
     [:li "因为没有用户注册，使用设备作为用户标示"]]
    [:div.export
     [:form {:method "POST" :action "/_export"}
-     [:select {:name "brand"}
-      [:option {:value "0" :selected true} "全部"]
-      [:option {:value "1"} "康迪泰克"]
-      [:option {:value "2"} "岱高"]
-      [:option {:value "3"} "辉门"]
-      [:option {:value "4"} "盖茨"]
-      [:option {:value "5"} "海拉"]
-      [:option {:value "6"} "梅施"]
-      [:option {:value "7"} "舍弗勒"]
-      [:option {:value "8"} "Truck-Lite"]
-      [:option {:value "9"} "天合"]]
+     (generate-selector views)
      [:input {:type :submit :value "导出"}]]]
    [:table
     [:thead
@@ -67,12 +68,17 @@
     [:thead
      [:tr
       [:th "品牌"]
-      [:th "点击次数"]]]
+      [:th "点击次数"]
+      [:th "抽奖"]]]
     [:tbody
      (for [view views]
        [:tr
         [:td (:name view)]
-        [:td (:count view)]])]]])
+        [:td (:count view)]
+        [:td
+         [:input {:type :checkbox
+                  :disabled true
+                  :checked (not (nil? (:draw view)))}]]])]]])
 
 
 
@@ -86,5 +92,5 @@
     [:title "排行榜"]]
    [:body
     (view-count views)
-    (result-section rankings totals)]))
+    (result-section rankings views totals)]))
 

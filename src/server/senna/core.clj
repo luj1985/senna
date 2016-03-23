@@ -185,14 +185,20 @@
                  "Content-Disposition" "attachment;filename=results.csv"}
        :body (csv/write-csv data :force-quote true)})))
 
+(defn- check-draw-option [id]
+  (let [[{allowed :draw}] (jdbc/query mysql-db ["select draw from views where id = ?" id])]
+    allowed))
+
 (defroutes app-routes
   (GET "/" [] index-page)
   (GET "/wechat" [] wechat-handler)
   (GET "/questions" [] random-questions)
   (GET "/brands" [] brands-page)
   (GET "/brands/:id" {{id :id} :params session :session}
-    (let [token (:token session)]
-      (render-brand-page (Integer/parseInt id) token)))
+    (let [token (:token session)
+          id (Integer/parseInt id)
+          allowed (check-draw-option id)]
+      (render-brand-page id (and allowed token))))
 
   (POST "/mobile" [] save-mobile-number)
   (POST "/score" [] rank-score)
